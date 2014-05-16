@@ -11,11 +11,15 @@ public class AerialDrone extends Drone {
 		
 		setOffsetY(speed);
 		
+		updateSensors();
+		
 	}
 	
 	public void goDown() {
 		
 		setOffsetY(-speed);
+		
+		updateSensors();
 		
 	}
 		

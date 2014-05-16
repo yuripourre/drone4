@@ -96,12 +96,12 @@ public class CleanEnvironment extends GridApplication {
 		
 		cameraGL = new CameraGL(0, 16, 1);
 				
-		//cameraGL.setTarget(000);
+		//cameraGL.setTarget(0, 0, 0);
 
 		//Start PipCamera
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		image.createGraphics();
-
+		
 		pipCamera = image;
 
 		//Load Road Texture
@@ -184,34 +184,31 @@ public class CleanEnvironment extends GridApplication {
 			downPressed = false;
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)){
+		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 			
 			angleX += 5;
 
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)){
+		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
 			angleX -= 5;
 
 		}
 
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)){
+		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
 
 			angleY += 5;
 
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)){
+		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
 
 			angleY -= 5;
 
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_M)){
+		if(event.isKeyDown(KeyEvent.TSK_M)) {
 
 			angleZ -= 5;
 
-		}
-		else if(event.isKeyDown(KeyEvent.TSK_N)){
+		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
 
 			angleZ += 5;
 
@@ -223,15 +220,17 @@ public class CleanEnvironment extends GridApplication {
 	public GUIEvent updateMouse(PointerEvent event) {
 
 		mx = event.getX();
+		
 		my = event.getY();
 
-		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)){
+		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()+0.1f);
 			click = true;
 		}
 
-		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)){
+		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()-0.1f);
+			
 			click = false;
 		}
 
@@ -245,28 +244,36 @@ public class CleanEnvironment extends GridApplication {
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
-
+		
 		//Update Camera View
 		updateCamera(gl, cameraGL);
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
+		
+		drawScene(gl);
+		
+		gl.glViewport(0, h-40-h/4, w/4, h/4);
+		gl.glLoadIdentity();
+		updateCamera(gl, droneCamera);
+		
+		//Draw Drone Camera
+		pipCamera = Screenshot.readToBufferedImage(0, h-40-h/4, w/4, h/4, false);
+		
+		drawScene(gl);
+
+	}
+	
+	private void drawScene(GL2 gl) {
 
 		//Draw Scene
-
 		drawFloor(gl);
 
-		//gl.glFlush();
 		drone.getModel().draw(gl);
-
-		pipCamera = Screenshot.readToBufferedImage(w, h, false);
-
-		//Erasing Window Title Black Rectangle
-		//pipCamera.getGraphics().setColor(Color.WHITE);
-
-		pipCamera.getGraphics().fillRect(0, 0, w, 50);
-
+		
+		gl.glFlush();
+		
 	}
 
 	protected void drawSphere(GL2 gl) {
@@ -390,11 +397,11 @@ public class CleanEnvironment extends GridApplication {
 
 		g.drawShadow(20,60, "AngleY: "+(angleY),Color.BLACK);
 
-		drawPipCamera(g);
+		drawPipCamera(g, pipCamera);
 
 	}
 
-	protected void drawPipCamera(Graphic g) {
+	protected void drawPipCamera(Graphic g, BufferedImage pipCamera) {
 
 		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
 		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
