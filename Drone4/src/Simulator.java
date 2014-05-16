@@ -1,6 +1,6 @@
+import br.com.drone4.environment.outdoor.CleanEnvironment;
 import br.com.luvia.Luvia;
 import br.com.luvia.core.ApplicationGL;
-import br.com.luvmotion.CleanEnvironment;
 
 
 public class Simulator extends Luvia {

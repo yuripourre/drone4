@@ -1,4 +1,4 @@
-package br.com.luvmotion;
+package br.com.drone4.environment.outdoor;
 
 import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_TEXTURE_2D;
