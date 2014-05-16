@@ -16,6 +16,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
+import br.com.drone4.drone.PhantomDJI;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -30,10 +31,14 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class CleanEnvironment extends GridApplication {
 
+	private CameraGL droneCamera;
+	
 	//Scene Stuff
 	private Texture road;
 
 	protected CameraGL cameraGL;
+	
+	protected PhantomDJI drone;
 
 	protected float mx = 0;
 
@@ -50,6 +55,14 @@ public class CleanEnvironment extends GridApplication {
 	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
+	
+	boolean upPressed = false;
+	
+	boolean downPressed = false;
+	
+	boolean rightPressed = false;
+	
+	boolean leftPressed = false;
 	
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
@@ -68,14 +81,22 @@ public class CleanEnvironment extends GridApplication {
 		gl.glShadeModel(GL2.GL_SMOOTH);
 		
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-
+		
 	}
 
 	@Override
 	public void load() {
-
-		//Size in meters
-		cameraGL = new CameraGL(0,10,1);
+		
+		//Size in meters		
+		drone = new PhantomDJI(0, 10, 1);
+		
+		drone.setAngleY(-90);
+		
+		droneCamera = drone.getCamera();
+		
+		cameraGL = new CameraGL(0, 16, 1);
+				
+		//cameraGL.setTarget(000);
 
 		//Start PipCamera
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
@@ -85,6 +106,8 @@ public class CleanEnvironment extends GridApplication {
 
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
+		
+		updateAtFixedRate(300);
 		
 	}
 
@@ -130,15 +153,39 @@ public class CleanEnvironment extends GridApplication {
 
 		float aspect = (float)width / (float)height; 
 
-		glu.gluPerspective(60,aspect,1,100);
+		glu.gluPerspective(60, aspect, 1, 100);
 
-	}	
+	}
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
+		if(event.isKeyDown(KeyEvent.TSK_W)) {
+			upPressed = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_W)) {
+			upPressed = false;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_D)) {
+			rightPressed = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
+			rightPressed = false;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_A)) {
+			leftPressed = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
+			leftPressed = false;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_S)) {
+			downPressed = true;
+		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
+			downPressed = false;
+		}
+		
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)){
-
+			
 			angleX += 5;
 
 		}
@@ -211,6 +258,7 @@ public class CleanEnvironment extends GridApplication {
 		drawFloor(gl);
 
 		//gl.glFlush();
+		drone.getModel().draw(gl);
 
 		pipCamera = Screenshot.readToBufferedImage(w, h, false);
 
@@ -247,7 +295,7 @@ public class CleanEnvironment extends GridApplication {
 		gl.glPopMatrix();
 	}
 
-	protected void drawCube(GL2 gl){
+	protected void drawCube(GL2 gl) {
 
 		float x = 0;
 
@@ -309,6 +357,26 @@ public class CleanEnvironment extends GridApplication {
 		gl.glVertex2f(-size,size);     //   at (0,0,0).
 		gl.glEnd();
 
+	}
+		
+	public void timeUpdate(long now) {
+				
+		if(upPressed) {
+			drone.goForward();			
+		}
+		
+		if(downPressed) {
+			drone.goBackward();			
+		}
+		
+		if(rightPressed) {
+			drone.goRight();			
+		}
+		
+		if(leftPressed) {
+			drone.goLeft();			
+		}
+		
 	}
 
 	@Override
