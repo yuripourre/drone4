@@ -1,9 +1,9 @@
 package br.com.drone4.model;
 
 
-public class AeroDrone extends Drone {
+public class AerialDrone extends Drone {
 	
-	public AeroDrone() {
+	public AerialDrone() {
 		super();
 	}
 	
