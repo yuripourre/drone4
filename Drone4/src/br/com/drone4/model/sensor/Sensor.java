@@ -6,4 +6,6 @@ public interface Sensor {
 
 	public void updateSensor(Drone drone);
 	
+	public double getWeight();
+	
 }

@@ -3,14 +3,14 @@ package br.com.drone4.drone;
 import java.awt.Color;
 
 import br.com.drone4.model.AerialDrone;
-import br.com.drone4.model.sensor.GPSSensor;
+import br.com.drone4.model.sensor.gps.PreciseGPSSensor;
 import br.com.luvia.linear.Mesh;
 import br.com.luvia.loader.mesh.MeshLoader;
 import br.com.luvia.util.CameraGL;
 
 public class PhantomDJI extends AerialDrone {
 
-	private GPSSensor gps;
+	private PreciseGPSSensor gps;
 	
 	private CameraGL camera;
 	
@@ -50,7 +50,7 @@ public class PhantomDJI extends AerialDrone {
 		
 	}
 
-	public GPSSensor getGps() {
+	public PreciseGPSSensor getGps() {
 		return gps;
 	}
 		

@@ -1,8 +1,8 @@
-package br.com.drone4.model.sensor;
+package br.com.drone4.model.sensor.gps;
 
 import br.com.drone4.model.Drone;
 
-public class GPSSensor implements Sensor {
+public class PreciseGPSSensor implements GPSSensor {
 
 	private double x = 0;
 	
@@ -31,6 +31,12 @@ public class GPSSensor implements Sensor {
 
 	public double getZ() {
 		return z;
+	}
+
+	@Override
+	public double getWeight() {
+		// TODO Auto-generated method stub
+		return 0;
 	}	
 	
 }
