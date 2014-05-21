@@ -3,6 +3,7 @@ package br.com.drone4.drone;
 import java.awt.Color;
 
 import br.com.drone4.model.AerialDrone;
+import br.com.drone4.model.sensor.gps.GPSSensor;
 import br.com.drone4.model.sensor.gps.PreciseGPSSensor;
 import br.com.luvia.linear.Mesh;
 import br.com.luvia.loader.mesh.MeshLoader;
@@ -19,7 +20,13 @@ public class PhantomDJI extends AerialDrone {
 	public PhantomDJI(double x, double y, double z) {
 		super(x, y, z);
 		
+		this.speed = .5;
+		
+		this.turnSpeed = 10;
+		
 		camera = new CameraGL(x, y, z);
+		
+		gps = new PreciseGPSSensor();
 		
 		model = MeshLoader.getInstance().loadModel("aerial/quad.obj");
 		model.setDrawTexture(false);
@@ -50,7 +57,7 @@ public class PhantomDJI extends AerialDrone {
 		
 	}
 
-	public PreciseGPSSensor getGps() {
+	public GPSSensor getGps() {
 		return gps;
 	}
 		
