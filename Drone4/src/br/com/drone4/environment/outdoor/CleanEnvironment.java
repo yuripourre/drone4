@@ -46,15 +46,19 @@ public class CleanEnvironment extends GridApplication {
 
 	protected boolean click = false;
 
-	protected double angleX = 0;
+	protected double angleX = -40;
 
-	protected double angleY = 0;
+	protected double angleY = -30;
 	
 	protected double angleZ = 0;
 
 	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
+	
+	boolean forwardPressed = false;
+	
+	boolean backwardPressed = false;
 	
 	boolean upPressed = false;
 	
@@ -88,7 +92,7 @@ public class CleanEnvironment extends GridApplication {
 	public void load() {
 		
 		//Size in meters		
-		drone = new PhantomDJI(0, 10, 1);
+		drone = new PhantomDJI(0, 8, 1);
 		
 		drone.setAngleY(-90);
 		
@@ -183,14 +187,25 @@ public class CleanEnvironment extends GridApplication {
 		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
 			downPressed = false;
 		}
-		
+				
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 			
-			angleX += 5;
+			forwardPressed = true;
+			//angleX += 5;
 
-		} else if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
+			forwardPressed = false;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
-			angleX -= 5;
+			backwardPressed = true;
+			//angleY += 5;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
+
+			backwardPressed = false;
+			//angleY -= 5;
 
 		}
 
@@ -369,11 +384,11 @@ public class CleanEnvironment extends GridApplication {
 	public void timeUpdate(long now) {
 				
 		if(upPressed) {
-			drone.goForward();			
+			drone.goUp();			
 		}
 		
 		if(downPressed) {
-			drone.goBackward();			
+			drone.goDown();			
 		}
 		
 		if(rightPressed) {
@@ -382,6 +397,14 @@ public class CleanEnvironment extends GridApplication {
 		
 		if(leftPressed) {
 			drone.goLeft();			
+		}
+		
+		if(forwardPressed) {
+			drone.goForward();			
+		}
+		
+		if(backwardPressed) {
+			drone.goBackward();
 		}
 		
 	}
