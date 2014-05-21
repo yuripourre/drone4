@@ -1,4 +1,2 @@
 # Pre-Compiled Files #
 *.class
-!/bin/assets/*
-/bin
