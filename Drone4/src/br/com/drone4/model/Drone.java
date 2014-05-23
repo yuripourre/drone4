@@ -6,7 +6,7 @@ public class Drone extends Point3D {
 
 	protected double speed = .1;
 	
-	protected double turnSpeed = .1;
+	protected double turnSpeed = 5;//in angles
 	
 	protected double angleX = 0;
 	
@@ -66,7 +66,7 @@ public class Drone extends Point3D {
 		
 		double distance = speed;
 		
-		moveByAngle(angleY, distance);
+		moveByAngle(-angleY, distance);
 						
 		updateSensors();
 	}
@@ -75,7 +75,7 @@ public class Drone extends Point3D {
 		
 		double distance = speed;
 		
-		moveByAngle(angleY+180, distance);
+		moveByAngle(-angleY+180, distance);
 	
 		updateSensors();		
 	}
@@ -84,7 +84,7 @@ public class Drone extends Point3D {
 		
 		double distance = speed;
 		
-		double angle = angleY+90;
+		double angle = -angleY+90;
 		
 		moveByAngle(angle, distance);
 								
@@ -95,7 +95,7 @@ public class Drone extends Point3D {
 				
 		double distance = speed;
 		
-		double angle = angleY-90;
+		double angle = -angleY-90;
 		
 		moveByAngle(angle, distance);
 			
@@ -113,7 +113,7 @@ public class Drone extends Point3D {
 
 	public void turnRight() {
 		
-		angleY += turnSpeed;
+		angleY -= turnSpeed;
 		
 		updateSensors();
 		
@@ -121,7 +121,7 @@ public class Drone extends Point3D {
 	
 	public void turnLeft() {
 		
-		angleY -= turnSpeed;
+		angleY += turnSpeed;
 		
 		updateSensors();
 	}

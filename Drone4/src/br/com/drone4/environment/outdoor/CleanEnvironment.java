@@ -60,6 +60,10 @@ public class CleanEnvironment extends GridApplication {
 	
 	boolean backwardPressed = false;
 	
+	boolean turnLeftPressed = false;
+	
+	boolean turnRightPressed = false;
+		
 	boolean upPressed = false;
 	
 	boolean downPressed = false;
@@ -94,7 +98,7 @@ public class CleanEnvironment extends GridApplication {
 		//Size in meters		
 		drone = new PhantomDJI(0, 8, 1);
 		
-		drone.setAngleY(-90);
+		drone.setAngleY(90);
 		
 		droneCamera = drone.getCamera();
 		
@@ -211,12 +215,21 @@ public class CleanEnvironment extends GridApplication {
 
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
 
-			angleY += 5;
+			turnLeftPressed = true;
+			//angleY += 5;
 
-		} else if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
+			
+			turnLeftPressed = false;
+			
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
 
-			angleY -= 5;
-
+			turnRightPressed = true;
+			//angleY -= 5;
+		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
+			turnRightPressed = false;
 		}
 		
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
@@ -405,6 +418,14 @@ public class CleanEnvironment extends GridApplication {
 		
 		if(backwardPressed) {
 			drone.goBackward();
+		}
+		
+		if(turnRightPressed) {
+			drone.turnRight();
+		}
+		
+		if(turnLeftPressed) {
+			drone.turnLeft();
 		}
 		
 	}

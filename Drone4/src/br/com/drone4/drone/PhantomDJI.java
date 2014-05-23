@@ -49,7 +49,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		model.setCoordinates(x, y, z);
 		
-		model.setAngleY(angleY);
+		model.setAngleY(angleY);//angle in degrees
 		
 		camera.setCoordinates(x, y, z);
 		
