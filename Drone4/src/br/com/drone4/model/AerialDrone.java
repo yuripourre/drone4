@@ -6,7 +6,8 @@ public class AerialDrone extends Drone {
 	public AerialDrone(double x, double y, double z) {
 		super(x, y, z);
 	}
-		
+
+	@Override
 	public void goUp() {
 		
 		setOffsetY(speed);
@@ -15,6 +16,7 @@ public class AerialDrone extends Drone {
 		
 	}
 	
+	@Override
 	public void goDown() {
 		
 		setOffsetY(-speed);
