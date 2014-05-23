@@ -9,6 +9,10 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -16,12 +20,19 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
+import br.com.drone4.automated.action.GoToAction;
+import br.com.drone4.automated.action.MoveAction;
+import br.com.drone4.automated.action.MoveActionType;
+import br.com.drone4.automated.action.TurnAction;
+import br.com.drone4.automated.strategy.SimpleStrategyInterpolator;
+import br.com.drone4.automated.strategy.StrategyInterpolator;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
+import br.com.etyllica.linear.Point3D;
 import br.com.luvia.grid.GridApplication;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvia.util.CameraGL;
@@ -32,12 +43,14 @@ import com.jogamp.opengl.util.texture.Texture;
 public class CleanEnvironment extends GridApplication {
 
 	private CameraGL droneCamera;
-	
+
 	//Scene Stuff
 	private Texture road;
 
+	private List<MoveAction> pointList;
+
 	protected CameraGL cameraGL;
-	
+
 	protected PhantomDJI drone;
 
 	protected float mx = 0;
@@ -46,32 +59,35 @@ public class CleanEnvironment extends GridApplication {
 
 	protected boolean click = false;
 
-	protected double angleX = -40;
+	protected double angleX = 0;
 
-	protected double angleY = -30;
-	
+	protected double angleY = 0;
+
 	protected double angleZ = 0;
 
 	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
-	
+
 	boolean forwardPressed = false;
-	
+
 	boolean backwardPressed = false;
-	
+
 	boolean turnLeftPressed = false;
-	
+
 	boolean turnRightPressed = false;
-		
+
 	boolean upPressed = false;
-	
+
 	boolean downPressed = false;
-	
+
 	boolean rightPressed = false;
-	
+
 	boolean leftPressed = false;
-	
+
+
+	private Map<MoveActionType, StrategyInterpolator> mapa;
+
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
 	}
@@ -83,39 +99,65 @@ public class CleanEnvironment extends GridApplication {
 
 		// Global settings
 		gl.glEnable(GL.GL_DEPTH_TEST);
-		
+
 		gl.glDepthFunc(GL.GL_LEQUAL);
-		
+
 		gl.glShadeModel(GL2.GL_SMOOTH);
-		
+
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-		
+
 	}
+
+	int currentPoint = 0;
+
 
 	@Override
 	public void load() {
-		
+
 		//Size in meters		
-		drone = new PhantomDJI(0, 8, 1);
-		
-		drone.setAngleY(90);
-		
+		drone = new PhantomDJI(1, 8, 0);
+
+		drone.setAngleY(180);
+
 		droneCamera = drone.getCamera();
+
+		pointList = new ArrayList<MoveAction>();
+
+		pointList.add(new GoToAction(0, 8, 5));
 		
-		cameraGL = new CameraGL(0, 16, 1);
-				
-		//cameraGL.setTarget(0, 0, 0);
+		pointList.add(new TurnAction(0, 540, 0));
+		
+		pointList.add(new GoToAction(0, 5, 7));
+		pointList.add(new GoToAction(0, 10, 10));
+		pointList.add(new GoToAction(0, 5, 20));
+
+		cameraGL = new CameraGL(0, 20, -10);
+
+		cameraGL.setTarget(drone);
 
 		//Start PipCamera
 		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
 		image.createGraphics();
-		
+
 		pipCamera = image;
 
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
-		
+
+		createInterpolationMap();
+
 		updateAtFixedRate(300);
+
+	}
+	
+	private void createInterpolationMap() {
+		
+		mapa = new HashMap<MoveActionType, StrategyInterpolator>();  
+
+		SimpleStrategyInterpolator interpolator = new SimpleStrategyInterpolator();
+		
+		mapa.put(MoveActionType.GO_TO, interpolator);
+		mapa.put(MoveActionType.TURN, interpolator);
 		
 	}
 
@@ -137,11 +179,11 @@ public class CleanEnvironment extends GridApplication {
 		road.enable(gl);
 		road.bind(gl);
 
-		double startX = -.5;
-				
+		double startX = 0;
+
 		for(int i=0;i<60;i++) {
-			
-			drawTile(gl, startX, -i, tileSize);
+
+			drawTile(gl, startX, i, tileSize);
 
 		}
 
@@ -173,34 +215,34 @@ public class CleanEnvironment extends GridApplication {
 		} else if(event.isKeyUp(KeyEvent.TSK_W)) {
 			upPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
 			rightPressed = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
 			rightPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_A)) {
 			leftPressed = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
 			leftPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_S)) {
 			downPressed = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
 			downPressed = false;
 		}
-				
+
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-			
+
 			forwardPressed = true;
 			//angleX += 5;
 
 		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
 			forwardPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 
 			backwardPressed = true;
@@ -219,11 +261,11 @@ public class CleanEnvironment extends GridApplication {
 			//angleY += 5;
 
 		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
-			
+
 			turnLeftPressed = false;
-			
+
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
 
 			turnRightPressed = true;
@@ -231,7 +273,7 @@ public class CleanEnvironment extends GridApplication {
 		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
 			turnRightPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_M)) {
 
 			angleZ -= 5;
@@ -248,7 +290,7 @@ public class CleanEnvironment extends GridApplication {
 	public GUIEvent updateMouse(PointerEvent event) {
 
 		mx = event.getX();
-		
+
 		my = event.getY();
 
 		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
@@ -258,7 +300,7 @@ public class CleanEnvironment extends GridApplication {
 
 		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()-0.1f);
-			
+
 			click = false;
 		}
 
@@ -272,36 +314,36 @@ public class CleanEnvironment extends GridApplication {
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
-		
+
 		//Update Camera View
 		updateCamera(gl, cameraGL);
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
-		
+
 		drawScene(gl);
-		
+
 		gl.glViewport(0, h-40-h/4, w/4, h/4);
 		gl.glLoadIdentity();
 		updateCamera(gl, droneCamera);
-		
+
 		//Draw Drone Camera
 		pipCamera = Screenshot.readToBufferedImage(0, h-40-h/4, w/4, h/4, false);
-		
+
 		drawScene(gl);
 
 	}
-	
+
 	private void drawScene(GL2 gl) {
 
 		//Draw Scene
 		drawFloor(gl);
 
 		drone.getModel().draw(gl);
-		
+
 		gl.glFlush();
-		
+
 	}
 
 	protected void drawSphere(GL2 gl) {
@@ -393,41 +435,73 @@ public class CleanEnvironment extends GridApplication {
 		gl.glEnd();
 
 	}
+
+
+	private void automatedFlight() {
+
+		MoveAction action = pointList.get(currentPoint);
+
+		StrategyInterpolator strategy = mapa.get(action.getActionType());
 		
-	public void timeUpdate(long now) {
+		boolean nextPoint = false;
+		
+		switch(action.getActionType()) {
+		
+			case GO_TO:
 				
+				nextPoint = strategy.handleGoTo(drone, action);
+				break;
+				
+			case TURN:
+				
+				nextPoint = strategy.handleTurn(drone, action);
+				break;
+		}
+						
+		if( nextPoint ) {
+			if(currentPoint<pointList.size()-1) {
+				currentPoint++;
+			}
+		}
+
+	}
+
+	public void timeUpdate(long now) {
+
+		automatedFlight();
+
 		if(upPressed) {
 			drone.goUp();			
 		}
-		
+
 		if(downPressed) {
 			drone.goDown();			
 		}
-		
+
 		if(rightPressed) {
 			drone.goRight();			
 		}
-		
+
 		if(leftPressed) {
 			drone.goLeft();			
 		}
-		
+
 		if(forwardPressed) {
 			drone.goForward();			
 		}
-		
+
 		if(backwardPressed) {
 			drone.goBackward();
 		}
-		
+
 		if(turnRightPressed) {
 			drone.turnRight();
 		}
-		
+
 		if(turnLeftPressed) {
 			drone.turnLeft();
 		}
-		
+
 	}
 
 	@Override
@@ -440,6 +514,10 @@ public class CleanEnvironment extends GridApplication {
 		g.drawShadow(20,40, "AngleX: "+(angleX-5),Color.BLACK);
 
 		g.drawShadow(20,60, "AngleY: "+(angleY),Color.BLACK);
+
+		g.drawShadow(20,100, "DroneX: "+(drone.getX()),Color.BLACK);
+		g.drawShadow(20,120, "DroneY: "+(drone.getY()),Color.BLACK);
+		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);
 
 		drawPipCamera(g, pipCamera);
 
