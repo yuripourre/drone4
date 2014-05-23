@@ -1,12 +1,13 @@
 package br.com.drone4.model;
 
+import br.com.drone4.control.Sensitivity;
 import br.com.luvia.linear.Point3D;
 
 public class Drone extends Point3D {
 
 	protected double speed = .1;
 	
-	protected double turnSpeed = 5;//in angles
+	protected double turnSpeed = 5;
 	
 	protected double angleX = 0;
 	
@@ -62,7 +63,7 @@ public class Drone extends Point3D {
 		this.angleZ = angleZ;
 	}
 
-	public void goForward() {
+	public void goForward(double sensitivity) {
 		
 		double distance = speed;
 		
@@ -71,7 +72,7 @@ public class Drone extends Point3D {
 		updateSensors();
 	}
 	
-	public void goBackward() {
+	public void goBackward(double sensitivity) {
 		
 		double distance = speed;
 		
@@ -80,22 +81,22 @@ public class Drone extends Point3D {
 		updateSensors();		
 	}
 	
-	public void goRight() {
+	public void goRight(double sensitivity) {
 		
 		double distance = speed;
 		
-		double angle = -angleY+90;
+		double angle = angleY+90;
 		
 		moveByAngle(angle, distance);
 								
 		updateSensors();
 	}
 	
-	public void goLeft() {
+	public void goLeft(double sensitivity) {
 				
 		double distance = speed;
 		
-		double angle = -angleY-90;
+		double angle = angleY-90;
 		
 		moveByAngle(angle, distance);
 			
@@ -111,31 +112,58 @@ public class Drone extends Point3D {
 		
 	}
 
-	public void turnRight() {
+	public void turnLeft(double sensitivity) {
 		
-		angleY -= turnSpeed;
+		roll(sensitivity);
+	}
+	
+	public void turnRight(double sensitivity) {
+				
+		roll(sensitivity);
+	}
+	
+	public void turnUp(double sensitivity) {
+		
+		pitch(Sensitivity.NEUTRAL);
+	}
+	
+	public void turnDown(double sensitivity) {
+		
+		pitch(Sensitivity.NEUTRAL);
+	}
+		
+	public void roll(double sensitivity) {
+		
+		angleY += turnSpeed*sensitivity;
 		
 		updateSensors();
-		
 	}
 	
-	public void turnLeft() {
+	public void pinch(double sensitivity) {
 		
-		angleY += turnSpeed;
+		angleX += turnSpeed*sensitivity;
 		
 		updateSensors();
 	}
 	
-	public void goUp() {
-		
+	public void goUp(double sensitivity) {
+		throttle(sensitivity);
 	}
 	
-	public void goDown() {
+	public void goDown(double sensitivity) {
+		throttle(sensitivity);
+	}
+	
+	public void throttle(double sensitivity) {
 		
 	}
 	
 	public void updateSensors() {
 		
 	}
+	
+	public void pitch(double sensitivity) {
 		
+	}
+			
 }

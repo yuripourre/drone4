@@ -26,13 +26,13 @@ import br.com.drone4.automated.action.MoveActionType;
 import br.com.drone4.automated.action.TurnAction;
 import br.com.drone4.automated.strategy.SimpleStrategyInterpolator;
 import br.com.drone4.automated.strategy.StrategyInterpolator;
+import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
-import br.com.etyllica.linear.Point3D;
 import br.com.luvia.grid.GridApplication;
 import br.com.luvia.loader.TextureLoader;
 import br.com.luvia.util.CameraGL;
@@ -471,35 +471,35 @@ public class CleanEnvironment extends GridApplication {
 		automatedFlight();
 
 		if(upPressed) {
-			drone.goUp();			
+			drone.goUp(Sensitivity.FULL_POSITIVE);
 		}
 
 		if(downPressed) {
-			drone.goDown();			
+			drone.goDown(Sensitivity.FULL_NEGATIVE);
 		}
 
 		if(rightPressed) {
-			drone.goRight();			
+			drone.goRight(Sensitivity.FULL_POSITIVE);
 		}
 
 		if(leftPressed) {
-			drone.goLeft();			
+			drone.goLeft(Sensitivity.FULL_NEGATIVE);
 		}
 
 		if(forwardPressed) {
-			drone.goForward();			
+			drone.goForward(Sensitivity.FULL_POSITIVE);
 		}
 
 		if(backwardPressed) {
-			drone.goBackward();
+			drone.goBackward(Sensitivity.FULL_NEGATIVE);
 		}
 
 		if(turnRightPressed) {
-			drone.turnRight();
+			drone.turnRight(Sensitivity.FULL_POSITIVE);
 		}
 
 		if(turnLeftPressed) {
-			drone.turnLeft();
+			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
 		}
 
 	}

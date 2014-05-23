@@ -8,22 +8,12 @@ public class AerialDrone extends Drone {
 	}
 
 	@Override
-	public void goUp() {
-		
-		setOffsetY(speed);
-		
-		updateSensors();
-		
-	}
-	
-	@Override
-	public void goDown() {
-		
-		setOffsetY(-speed);
+	public void throttle(double sensitivity) {
+
+		setOffsetY(speed*sensitivity);
 		
 		updateSensors();
-		
 	}
-		
+			
 }
 

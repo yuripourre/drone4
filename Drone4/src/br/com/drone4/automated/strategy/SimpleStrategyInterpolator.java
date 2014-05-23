@@ -1,6 +1,7 @@
 package br.com.drone4.automated.strategy;
 
 import br.com.drone4.automated.action.MoveAction;
+import br.com.drone4.control.Sensitivity;
 import br.com.drone4.model.Drone;
 
 public class SimpleStrategyInterpolator implements StrategyInterpolator {
@@ -13,22 +14,26 @@ public class SimpleStrategyInterpolator implements StrategyInterpolator {
 		boolean foundZ = false;
 		
 		if(drone.getZ() < action.getZ()) {
-			drone.goForward();
+			
+			drone.goForward(Sensitivity.FULL_POSITIVE);
+			
 		} else {
+			
 			foundZ = true;
 		}
 
 		if(drone.getY() < action.getY()) {
 
-			drone.goUp();
+			drone.goUp(Sensitivity.FULL_POSITIVE);
 
 		} else if(drone.getY() > action.getY()) {
-			drone.goDown();
+			
+			drone.goDown(Sensitivity.FULL_NEGATIVE);
+			
 		} else {
+			
 			foundY = true;
-		}
-		
-		
+		}		
 
 		if(foundY && foundZ) {
 
@@ -48,12 +53,16 @@ public class SimpleStrategyInterpolator implements StrategyInterpolator {
 		
 		if(drone.getAngleY() < action.getAngleY()) {
 
-			drone.turnLeft();
+			drone.roll(Sensitivity.FULL_POSITIVE);
 
 		} else if(drone.getAngleY() > action.getAngleY()) {
-			drone.turnRight();
+			
+			drone.roll(Sensitivity.FULL_NEGATIVE);
+			
 		} else {
+			
 			foundY = true;
+			
 		}
 		
 		
