@@ -63,8 +63,7 @@ public class SimpleStrategyInterpolator implements StrategyInterpolator {
 			
 			foundY = true;
 			
-		}
-		
+		}		
 		
 
 		if(foundY && foundZ) {
