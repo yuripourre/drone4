@@ -28,6 +28,7 @@ import br.com.drone4.automated.strategy.SimpleStrategyInterpolator;
 import br.com.drone4.automated.strategy.StrategyInterpolator;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
+import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -42,7 +43,7 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class CleanEnvironment extends GridApplication {
 
-	private CameraGL droneCamera;
+	private StandardCamera droneCamera;
 
 	//Scene Stuff
 	private Texture road;
@@ -64,8 +65,6 @@ public class CleanEnvironment extends GridApplication {
 	protected double angleY = 0;
 
 	protected double angleZ = 0;
-
-	protected BufferedImage pipCamera;
 
 	protected Color markerColor = Color.BLACK;
 
@@ -117,8 +116,6 @@ public class CleanEnvironment extends GridApplication {
 		//Size in meters		
 		drone = new PhantomDJI(1, 8, 0);
 
-		drone.setAngleY(180);
-
 		droneCamera = drone.getCamera();
 
 		pointList = new ArrayList<MoveAction>();
@@ -134,12 +131,6 @@ public class CleanEnvironment extends GridApplication {
 		cameraGL = new CameraGL(0, 20, -10);
 
 		cameraGL.setTarget(drone);
-
-		//Start PipCamera
-		BufferedImage image = new BufferedImage(200, 200, BufferedImage.TYPE_INT_RGB);
-		image.createGraphics();
-
-		pipCamera = image;
 
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
@@ -315,24 +306,46 @@ public class CleanEnvironment extends GridApplication {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 
+		captureCamera(gl, droneCamera);
+		
+		gl.glViewport(x, y, w, h);
+				
 		//Update Camera View
 		updateCamera(gl, cameraGL);
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
 		gl.glRotated(angleZ, 0, 0, 1);
-
+		
 		drawScene(gl);
+		
+		
+	}
+	
+	private void captureCamera(GL2 gl, StandardCamera camera) {
+		
+		int w = camera.getWidth();
+		
+		int h = camera.getHeight();
+				
+		gl.glViewport(0, 0, w, h);
+						
+		//Update Camera View
+		updateCamera(gl, camera);
 
-		gl.glViewport(0, h-40-h/4, w/4, h/4);
-		gl.glLoadIdentity();
-		updateCamera(gl, droneCamera);
-
+		gl.glRotated(angleX, 1, 0, 0);
+		gl.glRotated(angleY, 0, 1, 0);
+		gl.glRotated(angleZ, 0, 0, 1);
+		
+		drawScene(gl);
+		
 		//Draw Drone Camera
-		pipCamera = Screenshot.readToBufferedImage(0, h-40-h/4, w/4, h/4, false);
-
-		drawScene(gl);
-
+		camera.setBufferedImage(Screenshot.readToBufferedImage(0, 0, w, h, false));
+		
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+		gl.glClearColor(1f, 1f, 1f, 1);
+		
+		gl.glLoadIdentity();
 	}
 
 	private void drawScene(GL2 gl) {
@@ -416,6 +429,9 @@ public class CleanEnvironment extends GridApplication {
 	@Override
 	public void draw(Graphic g) {
 
+		//Draw PipCamera
+		g.drawImage(drone.getCamera().getBufferedImage(), 0, 60);
+		
 		//Draw Information
 		g.setColor(Color.WHITE);
 		g.drawShadow(20,20, "Scene",Color.BLACK);
@@ -426,9 +442,7 @@ public class CleanEnvironment extends GridApplication {
 
 		g.drawShadow(20,100, "DroneX: "+(drone.getX()),Color.BLACK);
 		g.drawShadow(20,120, "DroneY: "+(drone.getY()),Color.BLACK);
-		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);
-
-		drawPipCamera(g, pipCamera);
+		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);		
 
 	}
 
@@ -441,7 +455,7 @@ public class CleanEnvironment extends GridApplication {
 
 		BufferedImage camera = op.filter(pipCamera, null);
 
-		g.drawImage(camera, 0, 0);
+		g.drawImage(camera, 50, 200);
 
 	}
 

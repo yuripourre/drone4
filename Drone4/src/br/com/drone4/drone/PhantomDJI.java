@@ -3,19 +3,21 @@ package br.com.drone4.drone;
 import java.awt.Color;
 
 import br.com.drone4.model.AerialDrone;
+import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.drone4.model.sensor.gps.GPSSensor;
 import br.com.drone4.model.sensor.gps.PreciseGPSSensor;
 import br.com.luvia.linear.Mesh;
 import br.com.luvia.loader.mesh.MeshLoader;
-import br.com.luvia.util.CameraGL;
 
 public class PhantomDJI extends AerialDrone {
 
 	private PreciseGPSSensor gps;
 	
-	private CameraGL camera;
+	private StandardCamera camera;
 	
 	private Mesh model;
+	
+	private float startAngle = 180;
 		
 	public PhantomDJI(double x, double y, double z) {
 		super(x, y, z);
@@ -24,7 +26,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		this.turnSpeed = 10;
 		
-		camera = new CameraGL(x, y, z);
+		camera = new StandardCamera(x, y, z);
 		
 		gps = new PreciseGPSSensor();
 		
@@ -34,9 +36,11 @@ public class PhantomDJI extends AerialDrone {
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
 		
+		this.angleY = startAngle;
+		
 	}
 
-	public CameraGL getCamera() {
+	public StandardCamera getCamera() {
 		return camera;
 	}
 	
@@ -51,12 +55,12 @@ public class PhantomDJI extends AerialDrone {
 		
 		model.setAngleY(angleY);//angle in degrees
 		
-		camera.setCoordinates(x, y, z);
+		camera.setCoordinates(x, y-1, z);
 		
 		gps.updateSensor(this);
 		
 	}
-
+	
 	public GPSSensor getGps() {
 		return gps;
 	}
