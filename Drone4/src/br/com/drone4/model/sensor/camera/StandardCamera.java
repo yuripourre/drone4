@@ -72,5 +72,29 @@ public class StandardCamera extends CameraGL implements Camera {
 
 		return bufferedImage;
 	}
-	
+
+	public double getAngleX() {
+		return angleX;
+	}
+
+	public void setAngleX(double angleX) {
+		this.angleX = angleX;
+	}
+
+	public double getAngleY() {
+		return angleY;
+	}
+
+	public void setAngleY(double angleY) {
+		this.angleY = angleY;
+	}
+
+	public double getAngleZ() {
+		return angleZ;
+	}
+
+	public void setAngleZ(double angleZ) {
+		this.angleZ = angleZ;
+	}
+		
 }
