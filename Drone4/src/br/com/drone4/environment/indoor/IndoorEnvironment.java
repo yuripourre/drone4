@@ -9,23 +9,11 @@ import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
-import br.com.drone4.automated.action.GoToAction;
-import br.com.drone4.automated.action.MoveAction;
-import br.com.drone4.automated.action.MoveActionType;
-import br.com.drone4.automated.action.TurnAction;
-import br.com.drone4.automated.strategy.SimpleStrategyInterpolator;
-import br.com.drone4.automated.strategy.StrategyInterpolator;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.drone4.model.sensor.camera.StandardCamera;
@@ -33,32 +21,18 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.grid.GridApplication;
-import br.com.luvia.loader.TextureLoader;
 import br.com.luvia.util.CameraGL;
 
 import com.jogamp.opengl.util.awt.Screenshot;
-import com.jogamp.opengl.util.texture.Texture;
 
-public class Environment extends GridApplication {
+public class IndoorEnvironment extends GridApplication {
 
 	private StandardCamera droneCamera;
-
-	//Scene Stuff
-	private Texture road;
-
-	private List<MoveAction> pointList;
 
 	protected CameraGL cameraGL;
 
 	protected PhantomDJI drone;
-
-	protected float mx = 0;
-
-	protected float my = 0;
-
-	protected boolean click = false;
 
 	protected double angleX = 0;
 
@@ -66,29 +40,11 @@ public class Environment extends GridApplication {
 
 	protected double angleZ = 0;
 
-	protected Color markerColor = Color.BLACK;
-
-	boolean forwardPressed = false;
-
-	boolean backwardPressed = false;
-
-	boolean turnLeftPressed = false;
-
-	boolean turnRightPressed = false;
-
-	boolean upPressed = false;
-
-	boolean downPressed = false;
-
-	boolean rightPressed = false;
-
-	boolean leftPressed = false;
-
-	boolean[][] floor;
+	private boolean[][] floor;
 	
-	private Map<MoveActionType, StrategyInterpolator> mapa;
+	private final int tileSize = 10;
 
-	public Environment(int w, int h) {
+	public IndoorEnvironment(int w, int h) {
 		super(w, h);
 	}
 
@@ -107,10 +63,7 @@ public class Environment extends GridApplication {
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
 		
 	}
-
-	int currentPoint = 0;
-
-
+	
 	@Override
 	public void load() {
 
@@ -119,46 +72,16 @@ public class Environment extends GridApplication {
 
 		droneCamera = drone.getCamera();
 
-		pointList = new ArrayList<MoveAction>();
-
-		pointList.add(new GoToAction(0, 8, 5));
-
-		pointList.add(new TurnAction(0, 540, 0));
-
-		pointList.add(new GoToAction(0, 5, 7));
-		pointList.add(new GoToAction(0, 10, 10));
-		pointList.add(new GoToAction(0, 5, 20));
-
 		cameraGL = new CameraGL(0, 20, -10);
 
 		cameraGL.setTarget(drone);
 
-		//Load Road Texture
-		road = TextureLoader.getInstance().loadTexture("road.jpg");
-
 		floor = new boolean[4][3];		
-		
-		createInterpolationMap();
-
+	
 		updateAtFixedRate(300);
 
 	}
 	
-	private void initFloor() {
-		
-	}
-
-	private void createInterpolationMap() {
-
-		mapa = new HashMap<MoveActionType, StrategyInterpolator>();  
-
-		SimpleStrategyInterpolator interpolator = new SimpleStrategyInterpolator();
-
-		mapa.put(MoveActionType.GO_TO, interpolator);
-		mapa.put(MoveActionType.TURN, interpolator);
-
-	}
-
 	private void drawFloor(GL2 gl) {
 
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -212,100 +135,11 @@ public class Environment extends GridApplication {
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
-
-		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			upPressed = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_W)) {
-			upPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			rightPressed = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
-			rightPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_A)) {
-			leftPressed = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
-			leftPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_S)) {
-			downPressed = true;
-		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
-			downPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-
-			forwardPressed = true;
-			//angleX += 5;
-
-		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
-			forwardPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-
-			backwardPressed = true;
-			//angleY += 5;
-
-		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
-
-			backwardPressed = false;
-			//angleY -= 5;
-
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-
-			turnLeftPressed = true;
-			//angleY += 5;
-
-		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
-
-			turnLeftPressed = false;
-
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-
-			turnRightPressed = true;
-			//angleY -= 5;
-		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
-			turnRightPressed = false;
-		}
-
-		if(event.isKeyDown(KeyEvent.TSK_M)) {
-
-			angleZ -= 5;
-
-		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
-
-			angleZ += 5;
-
-		}
-
+		
 		return GUIEvent.NONE;
 	}
 
 	public GUIEvent updateMouse(PointerEvent event) {
-
-		mx = event.getX();
-
-		my = event.getY();
-
-		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()+0.1f);
-			click = true;
-		}
-
-		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()-0.1f);
-
-			click = false;
-		}
 
 		return GUIEvent.NONE;
 	}
@@ -343,7 +177,7 @@ public class Environment extends GridApplication {
 		gl.glViewport(0, 0, w, h);
 
 		//Update Camera View
-		updateCamera(gl, camera);
+		aimCamera(gl, camera);
 
 		gl.glRotated(angleX, 1, 0, 0);
 		gl.glRotated(angleY, 0, 1, 0);
@@ -370,38 +204,7 @@ public class Environment extends GridApplication {
 		gl.glFlush();
 
 	}
-
-	private void automatedFlight() {
-
-		MoveAction action = pointList.get(currentPoint);
-
-		StrategyInterpolator strategy = mapa.get(action.getActionType());
-
-		boolean nextPoint = false;
-
-		switch(action.getActionType()) {
-
-		case GO_TO:
-
-			nextPoint = strategy.handleGoTo(drone, action);
-			break;
-
-		case TURN:
-
-			nextPoint = strategy.handleTurn(drone, action);
-			break;
-		}
-
-		if( nextPoint ) {
-			if(currentPoint<pointList.size()-1) {
-				currentPoint++;
-			}
-		}
-
-	}
-
-	final int tileSize = 10;
-	
+		
 	private void verifyProjection() {
 				
 		final int tx = (int)(drone.getX()/tileSize);
@@ -415,8 +218,6 @@ public class Environment extends GridApplication {
 	}
 	
 	public void timeUpdate(long now) {
-
-		automatedFlight();
 		
 		verifyProjection();
 		
@@ -424,45 +225,10 @@ public class Environment extends GridApplication {
 		
 		final int tz = (int)(drone.getZ()/tileSize);
 
-		if(tx<3) {
+		if(tx<=3) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
-			
-			//drone.goLeft(sensitivity);
-			//drone.goRight(sensitivity);
 		}
 		
-		/*if(upPressed) {
-			drone.goUp(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(downPressed) {
-			drone.goDown(Sensitivity.FULL_NEGATIVE);
-		}
-
-		if(rightPressed) {
-			drone.goRight(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(leftPressed) {
-			drone.goLeft(Sensitivity.FULL_NEGATIVE);
-		}
-
-		if(forwardPressed) {
-			drone.goForward(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(backwardPressed) {
-			drone.goBackward(Sensitivity.FULL_NEGATIVE);
-		}
-
-		if(turnRightPressed) {
-			drone.turnRight(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(turnLeftPressed) {
-			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
-		}*/
-
 	}
 
 	@Override
