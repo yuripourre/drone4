@@ -89,7 +89,7 @@ public class Drone extends AimPoint {
 	
 	public void turnRight(double sensitivity) {
 				
-		roll(sensitivity);
+		roll(-sensitivity);
 	}
 	
 	public void turnUp(double sensitivity) {

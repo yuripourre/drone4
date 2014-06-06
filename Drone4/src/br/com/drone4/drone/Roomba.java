@@ -3,6 +3,8 @@ package br.com.drone4.drone;
 import java.awt.Color;
 
 import br.com.drone4.model.TerrestrialDrone;
+import br.com.drone4.model.sensor.compass.CompassSensor;
+import br.com.drone4.model.sensor.compass.PreciseCompassSensor;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.luvia.linear.Mesh;
 import br.com.luvia.loader.mesh.MeshLoader;
@@ -14,6 +16,8 @@ public class Roomba extends TerrestrialDrone {
 	private Mesh model;
 	
 	private float startAngle = 180;
+	
+	private CompassSensor compass;
 		
 	public Roomba(double x, double y, double z) {
 		super(x, y, z);
@@ -30,6 +34,7 @@ public class Roomba extends TerrestrialDrone {
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
 		
+		compass = new PreciseCompassSensor();
 		camera = new StandardCamera(x, y+0.5, z);
 		
 	}
@@ -51,9 +56,17 @@ public class Roomba extends TerrestrialDrone {
 	public StandardCamera getCamera() {
 		return camera;
 	}
+	
+	public CompassSensor getCompass() {
+		return compass;
+	}
 
 	@Override
 	public void updateSensors() {
+		
+		camera.updateSensor(this);
+		
+		compass.updateSensor(this);
 		
 		model.setCoordinates(x, y, z);
 		
