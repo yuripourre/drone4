@@ -70,7 +70,8 @@ public class IndoorEnvironment extends GridApplication {
 
 		//Size in meters		
 		drone = new Roomba(1, 0, 0);
-
+		drone.setSpeed(1);
+		
 		droneCamera = drone.getCamera();
 
 		cameraGL = new CameraGL(0, 20, -10);
@@ -226,8 +227,25 @@ public class IndoorEnvironment extends GridApplication {
 		
 		final int tz = (int)(drone.getZ()/tileSize);
 
-		if(tx<=3) {
+		System.out.println("tx: "+tx);
+		System.out.println("tz: "+tz);
+		
+		
+		if(tz<2 && tz+1> 0) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
+		}else{
+			
+			if (drone.getCompass().getAngle() > 90){
+				drone.turnRight(Sensitivity.FULL_POSITIVE);
+			}else if(tx < 1){
+				drone.goForward(Sensitivity.FULL_POSITIVE);
+			}else if (drone.getCompass().getAngle() > 0){
+				drone.turnRight(Sensitivity.FULL_POSITIVE);
+			}else if(tz >= 1) { 
+				drone.goForward(Sensitivity.FULL_POSITIVE);
+			}else if(drone.getCompass().getAngle() < 90){
+				drone.turnLeft(Sensitivity.FULL_POSITIVE);
+			}
 		}
 		
 	}
@@ -248,7 +266,9 @@ public class IndoorEnvironment extends GridApplication {
 
 		g.drawShadow(20,100, "DroneX: "+(drone.getX()),Color.BLACK);
 		g.drawShadow(20,120, "DroneY: "+(drone.getY()),Color.BLACK);
-		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);		
+		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);
+		g.drawShadow(20,160, "DroneAngleY: "+(drone.getAngleY()),Color.BLACK);		
+
 
 	}
 
