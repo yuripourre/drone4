@@ -6,26 +6,17 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.awt.Color;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
 
+import br.com.drone4.automated.AutonomousFlight;
 import br.com.drone4.automated.action.GoToAction;
 import br.com.drone4.automated.action.MoveAction;
-import br.com.drone4.automated.action.MoveActionType;
 import br.com.drone4.automated.action.TurnAction;
-import br.com.drone4.automated.strategy.SimpleStrategyInterpolator;
-import br.com.drone4.automated.strategy.StrategyInterpolator;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.drone4.model.sensor.camera.StandardCamera;
@@ -43,12 +34,12 @@ import com.jogamp.opengl.util.texture.Texture;
 
 public class CleanEnvironment extends GridApplication {
 
-	private StandardCamera droneCamera;
+	private AutonomousFlight flight;
+	
+	protected StandardCamera droneCamera;
 
 	//Scene Stuff
 	private Texture road;
-
-	private List<MoveAction> pointList;
 
 	protected CameraGL cameraGL;
 
@@ -60,32 +51,21 @@ public class CleanEnvironment extends GridApplication {
 
 	protected boolean click = false;
 
-	protected double angleX = 0;
+	private boolean forwardPressed = false;
 
-	protected double angleY = 0;
+	private boolean backwardPressed = false;
 
-	protected double angleZ = 0;
+	private boolean turnLeftPressed = false;
 
-	protected Color markerColor = Color.BLACK;
+	private boolean turnRightPressed = false;
 
-	boolean forwardPressed = false;
+	private boolean upPressed = false;
 
-	boolean backwardPressed = false;
+	private boolean downPressed = false;
 
-	boolean turnLeftPressed = false;
+	private boolean rightPressed = false;
 
-	boolean turnRightPressed = false;
-
-	boolean upPressed = false;
-
-	boolean downPressed = false;
-
-	boolean rightPressed = false;
-
-	boolean leftPressed = false;
-
-
-	private Map<MoveActionType, StrategyInterpolator> mapa;
+	private boolean leftPressed = false;
 
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
@@ -107,26 +87,13 @@ public class CleanEnvironment extends GridApplication {
 
 	}
 
-	int currentPoint = 0;
-
-
 	@Override
 	public void load() {
-
+		
 		//Size in meters		
 		drone = new PhantomDJI(1, 8, 0);
 
 		droneCamera = drone.getCamera();
-
-		pointList = new ArrayList<MoveAction>();
-
-		pointList.add(new GoToAction(0, 8, 5));
-		
-		pointList.add(new TurnAction(0, 540, 0));
-		
-		pointList.add(new GoToAction(0, 5, 7));
-		pointList.add(new GoToAction(0, 10, 10));
-		pointList.add(new GoToAction(0, 5, 20));
 
 		cameraGL = new CameraGL(0, 20, -10);
 
@@ -135,23 +102,23 @@ public class CleanEnvironment extends GridApplication {
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
 
-		createInterpolationMap();
+		//Configure Autonomous Flight
+		List<MoveAction> actionList = new ArrayList<MoveAction>();
 
+		actionList.add(new GoToAction(0, 8, 5));
+		
+		actionList.add(new TurnAction(0, 540, 0));
+		
+		actionList.add(new GoToAction(0, 5, 7));
+		actionList.add(new GoToAction(0, 10, 10));
+		actionList.add(new GoToAction(0, 5, 20));
+		
+		flight = new AutonomousFlight(drone, actionList);
+		
 		updateAtFixedRate(300);
 
 	}
 	
-	private void createInterpolationMap() {
-		
-		mapa = new HashMap<MoveActionType, StrategyInterpolator>();  
-
-		SimpleStrategyInterpolator interpolator = new SimpleStrategyInterpolator();
-		
-		mapa.put(MoveActionType.GO_TO, interpolator);
-		mapa.put(MoveActionType.TURN, interpolator);
-		
-	}
-
 	private void drawFloor(GL2 gl) {
 
 		gl.glColor3d(1, 1, 1);
@@ -163,7 +130,7 @@ public class CleanEnvironment extends GridApplication {
 
 	}
 
-	private void drawRoad(GL2 gl, double x, double y) {
+	protected void drawRoad(GL2 gl, double x, double y) {
 
 		double tileSize = 3;
 
@@ -180,7 +147,7 @@ public class CleanEnvironment extends GridApplication {
 
 		road.disable(gl);
 	}
-
+	
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
 
@@ -192,10 +159,10 @@ public class CleanEnvironment extends GridApplication {
 
 		gl.glLoadIdentity();
 
-		float aspect = (float)width / (float)height; 
-
-		glu.gluPerspective(60, aspect, 1, 100);
-
+		float aspect = (float)width / (float)height;
+		
+		glu.gluPerspective(60*zoom, aspect, 1, 100);
+		
 	}
 
 	@Override
@@ -264,17 +231,31 @@ public class CleanEnvironment extends GridApplication {
 		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
 			turnRightPressed = false;
 		}
-
-		if(event.isKeyDown(KeyEvent.TSK_M)) {
-
-			angleZ -= 5;
-
-		} else if(event.isKeyDown(KeyEvent.TSK_N)) {
-
-			angleZ += 5;
-
+		
+		if(event.isKeyDown(KeyEvent.TSK_I)) {
+			
+			//droneCamera.getTarget().setOffsetX(+1);			
+			droneCamera.setOffsetX(+1);
 		}
-
+		
+		if(event.isKeyDown(KeyEvent.TSK_K)) {
+			
+			//droneCamera.getTarget().setOffsetX(-1);			
+			droneCamera.setOffsetX(-1);
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_L)) {
+			
+			//droneCamera.getTarget().setOffsetZ(+1);	
+			droneCamera.setOffsetZ(+1);
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_J)) {
+			
+			//droneCamera.getTarget().setOffsetZ(-1);
+			droneCamera.setOffsetZ(-1);
+		}
+		
 		return GUIEvent.NONE;
 	}
 
@@ -312,30 +293,28 @@ public class CleanEnvironment extends GridApplication {
 				
 		//Update Camera View
 		updateCamera(gl, cameraGL);
-
-		gl.glRotated(angleX, 1, 0, 0);
-		gl.glRotated(angleY, 0, 1, 0);
-		gl.glRotated(angleZ, 0, 0, 1);
 		
 		drawScene(gl);
-		
-		
+				
 	}
 	
-	private void captureCamera(GL2 gl, StandardCamera camera) {
+	protected void captureCamera(GL2 gl, StandardCamera camera) {
 		
 		int w = camera.getWidth();
 		
 		int h = camera.getHeight();
 				
 		gl.glViewport(0, 0, w, h);
-						
+		
 		//Update Camera View
-		updateCamera(gl, camera);
+		aimCamera(gl, camera);
 
-		gl.glRotated(angleX, 1, 0, 0);
-		gl.glRotated(angleY, 0, 1, 0);
-		gl.glRotated(angleZ, 0, 0, 1);
+		//gl.glRotated(angleX, 1, 0, 0);
+		
+		//gl.glRotated(camera.getAngleY(), 0, 1, 0);
+		//gl.glTranslated(camera.getX(), camera.getY(), camera.getZ());
+		
+		//gl.glRotated(angleZ, 0, 0, 1);
 		
 		drawScene(gl);
 		
@@ -346,9 +325,10 @@ public class CleanEnvironment extends GridApplication {
 		gl.glClearColor(1f, 1f, 1f, 1);
 		
 		gl.glLoadIdentity();
+		
 	}
 
-	private void drawScene(GL2 gl) {
+	protected void drawScene(GL2 gl) {
 
 		//Draw Scene
 		drawFloor(gl);
@@ -359,39 +339,17 @@ public class CleanEnvironment extends GridApplication {
 
 	}
 	
-	private void automatedFlight() {
-
-		MoveAction action = pointList.get(currentPoint);
-
-		StrategyInterpolator strategy = mapa.get(action.getActionType());
-		
-		boolean nextPoint = false;
-		
-		switch(action.getActionType()) {
-		
-			case GO_TO:
-				
-				nextPoint = strategy.handleGoTo(drone, action);
-				break;
-				
-			case TURN:
-				
-				nextPoint = strategy.handleTurn(drone, action);
-				break;
-		}
-						
-		if( nextPoint ) {
-			if(currentPoint<pointList.size()-1) {
-				currentPoint++;
-			}
-		}
-
-	}
-
+	@Override
 	public void timeUpdate(long now) {
 
-		automatedFlight();
+		flight.flight();
 
+		manualFlight();
+
+	}
+	
+	private void manualFlight() {
+		
 		if(upPressed) {
 			drone.goUp(Sensitivity.FULL_POSITIVE);
 		}
@@ -423,39 +381,28 @@ public class CleanEnvironment extends GridApplication {
 		if(turnLeftPressed) {
 			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
 		}
-
+		
 	}
 
 	@Override
 	public void draw(Graphic g) {
 
 		//Draw PipCamera
-		g.drawImage(drone.getCamera().getBufferedImage(), 0, 60);
+		g.drawImage(droneCamera.getBufferedImage(), 0, 60);
 		
 		//Draw Information
 		g.setColor(Color.WHITE);
-		g.drawShadow(20,20, "Scene",Color.BLACK);
+		g.drawShadow(20,60, "Scene",Color.BLACK);
 
-		g.drawShadow(20,40, "AngleX: "+(angleX-5),Color.BLACK);
-
-		g.drawShadow(20,60, "AngleY: "+(angleY),Color.BLACK);
-
-		g.drawShadow(20,100, "DroneX: "+(drone.getX()),Color.BLACK);
-		g.drawShadow(20,120, "DroneY: "+(drone.getY()),Color.BLACK);
-		g.drawShadow(20,140, "DroneZ: "+(drone.getZ()),Color.BLACK);		
-
-	}
-
-	protected void drawPipCamera(Graphic g, BufferedImage pipCamera) {
-
-		//AffineTransform transform = AffineTransform.getScaleInstance(640/w, 480/h);
-		AffineTransform transform = AffineTransform.getScaleInstance(0.2, 0.2);
-
-		AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-
-		BufferedImage camera = op.filter(pipCamera, null);
-
-		g.drawImage(camera, 50, 200);
+		g.drawShadow(20,120, "DroneX: "+(drone.getX()),Color.BLACK);
+		g.drawShadow(20,140, "DroneY: "+(drone.getY()),Color.BLACK);
+		g.drawShadow(20,160, "DroneZ: "+(drone.getZ()),Color.BLACK);
+		
+		g.drawShadow(20,200, "DroneAngleY: "+(drone.getAngleY()),Color.BLACK);
+		
+		g.drawShadow(20,220, "CameraAngleX: "+(droneCamera.getAngleX()),Color.BLACK);
+		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera.getAngleY()),Color.BLACK);
+		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera.getAngleZ()),Color.BLACK);
 
 	}
 
