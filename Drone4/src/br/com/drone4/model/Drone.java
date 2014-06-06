@@ -1,20 +1,14 @@
 package br.com.drone4.model;
 
 import br.com.drone4.control.Sensitivity;
-import br.com.luvia.linear.Point3D;
+import br.com.luvia.linear.AimPoint;
 
-public class Drone extends Point3D {
+public class Drone extends AimPoint {
 
 	protected double speed = .1;
 	
 	protected double turnSpeed = 5;
-	
-	protected double angleX = 0;
-	
-	protected double angleY = 0;
-	
-	protected double angleZ = 0;
-	
+		
 	public Drone() {
 		super();
 	}
@@ -37,30 +31,6 @@ public class Drone extends Point3D {
 
 	public void setTurnSpeed(double turnSpeed) {
 		this.turnSpeed = turnSpeed;
-	}
-
-	public double getAngleX() {
-		return angleX;
-	}
-
-	public void setAngleX(double angleX) {
-		this.angleX = angleX;
-	}
-
-	public double getAngleY() {
-		return angleY;
-	}
-
-	public void setAngleY(double angleY) {
-		this.angleY = angleY;
-	}
-
-	public double getAngleZ() {
-		return angleZ;
-	}
-
-	public void setAngleZ(double angleZ) {
-		this.angleZ = angleZ;
 	}
 
 	public void goForward(double sensitivity) {
