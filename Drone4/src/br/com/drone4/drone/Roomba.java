@@ -3,10 +3,13 @@ package br.com.drone4.drone;
 import java.awt.Color;
 
 import br.com.drone4.model.TerrestrialDrone;
+import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.luvia.linear.Mesh;
 import br.com.luvia.loader.mesh.MeshLoader;
 
 public class Roomba extends TerrestrialDrone {
+	
+	private StandardCamera camera;
 	
 	private Mesh model;
 	
@@ -27,6 +30,8 @@ public class Roomba extends TerrestrialDrone {
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
 		
+		camera = new StandardCamera(x, y+0.5, z);
+		
 	}
 
 	@Override
@@ -42,7 +47,11 @@ public class Roomba extends TerrestrialDrone {
 	public Mesh getModel() {
 		return model;
 	}
-		
+			
+	public StandardCamera getCamera() {
+		return camera;
+	}
+
 	@Override
 	public void updateSensors() {
 		
