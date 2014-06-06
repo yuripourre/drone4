@@ -4,8 +4,31 @@ import br.com.drone4.model.sensor.Sensor;
 
 public interface BatterySensor extends Sensor {
 
-	public double getVoltage();
+	public double getLevel();
 	
+	/*
+	 * percentage(0~1) = level / scale
+	 */
+	public double getScale();
+	
+	/*
+	 * power in watts(W)
+	 */
+	public double getMaxPower();
+		
+	/*
+	 * max dischargeCurrent in milliampere (mA)
+	 */
+	public double current();
+		
+	/*
+	 * volts(V)
+	 */
+	public double getVoltage();
+		
+	/*
+	 * milliampere per hour(mAh)
+	 */
 	public double getCapacity();
 			
 }
