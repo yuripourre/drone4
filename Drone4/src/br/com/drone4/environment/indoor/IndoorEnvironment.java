@@ -16,6 +16,7 @@ import javax.media.opengl.GLAutoDrawable;
 
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
+import br.com.drone4.drone.Roomba;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -32,7 +33,7 @@ public class IndoorEnvironment extends GridApplication {
 
 	protected CameraGL cameraGL;
 
-	protected PhantomDJI drone;
+	protected Roomba drone;
 
 	protected double angleX = 0;
 
@@ -68,7 +69,7 @@ public class IndoorEnvironment extends GridApplication {
 	public void load() {
 
 		//Size in meters		
-		drone = new PhantomDJI(1, 8, 0);
+		drone = new Roomba(1, 0, 0);
 
 		droneCamera = drone.getCamera();
 
@@ -87,11 +88,11 @@ public class IndoorEnvironment extends GridApplication {
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-		drawRoad(gl, 200, 120);
+		drawFloor(gl, 200, 120);
 
 	}
 
-	private void drawRoad(GL2 gl, double x, double y) {
+	private void drawFloor(GL2 gl, double x, double y) {
 
 		double tileSize = 10;
 
