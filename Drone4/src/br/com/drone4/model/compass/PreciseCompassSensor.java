@@ -3,16 +3,17 @@ package br.com.drone4.model.compass;
 import br.com.drone4.model.Drone;
 
 public class PreciseCompassSensor implements CompassSensor {
-	private double y = 0;
+	
+	private double angle = 0;
 	
 	@Override
 	public void updateSensor(Drone drone) {
-		this.y = drone.getY();
+		this.angle = drone.getAngleY();
 		
 	}
 
-	public double getY() {
-		return y;
+	public double getAngle() {
+		return angle;
 	}
 
 	@Override
