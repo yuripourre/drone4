@@ -74,11 +74,11 @@ public class IndoorEnvironment extends GridApplication {
 
 		droneCamera = drone.getCamera();
 
-		cameraGL = new CameraGL(0, 20, -10);
+		cameraGL = new CameraGL(3, 10, 18);
 
 		cameraGL.setTarget(drone);
 
-		floor = new boolean[10][5];		
+		floor = new boolean[10][5];
 
 		updateAtFixedRate(300);
 
@@ -236,9 +236,6 @@ public class IndoorEnvironment extends GridApplication {
 		final int maxX = floor.length;
 
 		final int maxZ = floor[0].length;
-
-		//System.out.println("tx: "+tx);
-		//System.out.println("tz: "+tz);
 		
 		if(leftTendency) {
 
