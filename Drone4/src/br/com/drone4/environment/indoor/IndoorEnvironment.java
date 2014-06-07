@@ -42,8 +42,8 @@ public class IndoorEnvironment extends GridApplication {
 	protected double angleZ = 0;
 
 	private boolean[][] floor;
-	
-	private final int tileSize = 10;
+
+	private final int tileSize = 2;
 
 	public IndoorEnvironment(int w, int h) {
 		super(w, h);
@@ -62,28 +62,28 @@ public class IndoorEnvironment extends GridApplication {
 		gl.glShadeModel(GL2.GL_SMOOTH);
 
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-		
+
 	}
-	
+
 	@Override
 	public void load() {
 
 		//Size in meters		
 		drone = new Roomba(1, 0, 0);
 		drone.setSpeed(1);
-		
+
 		droneCamera = drone.getCamera();
 
 		cameraGL = new CameraGL(0, 20, -10);
 
 		cameraGL.setTarget(drone);
 
-		floor = new boolean[4][3];		
-	
+		floor = new boolean[10][5];		
+
 		updateAtFixedRate(300);
 
 	}
-	
+
 	private void drawFloor(GL2 gl) {
 
 		gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -95,20 +95,18 @@ public class IndoorEnvironment extends GridApplication {
 
 	private void drawFloor(GL2 gl, double x, double y) {
 
-		double tileSize = 10;
+		for(int j = 0; j < floor[0].length; j++) {
 
-		for(int j = 0; j < 3; j++) {
-
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < floor.length; i++) {
 
 				if(floor[i][j]) {
-					
+
 					gl.glColor3d(0, 0, 1);
-					
+
 				} else {
-					
+
 					gl.glColor3d(1, 0, 0);
-					
+
 				}				
 
 				drawTile(gl, i, j, tileSize);
@@ -137,7 +135,7 @@ public class IndoorEnvironment extends GridApplication {
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
-		
+
 		return GUIEvent.NONE;
 	}
 
@@ -206,48 +204,166 @@ public class IndoorEnvironment extends GridApplication {
 		gl.glFlush();
 
 	}
-		
+
 	private void verifyProjection() {
-				
+
 		final int tx = (int)(drone.getX()/tileSize);
-		
-		final int tz = (int)(drone.getZ()/tileSize);
-		
-		if((tx >= 0 && tx <= 3) && (tz >= 0 && tz <= 4)) {
-			floor[tx][tz] = true;
-		}
-		
-	}
-	
-	public void timeUpdate(long now) {
-		
-		verifyProjection();
-		
-		final int tx = (int)(drone.getX()/tileSize);
-		
+
 		final int tz = (int)(drone.getZ()/tileSize);
 
-		System.out.println("tx: "+tx);
-		System.out.println("tz: "+tz);
-		
-		
-		if(tz<2 && tz+1> 0) {
-			drone.goForward(Sensitivity.FULL_POSITIVE);
-		}else{
-			
-			if (drone.getCompass().getAngle() > 90){
-				drone.turnRight(Sensitivity.FULL_POSITIVE);
-			}else if(tx < 1){
-				drone.goForward(Sensitivity.FULL_POSITIVE);
-			}else if (drone.getCompass().getAngle() > 0){
-				drone.turnRight(Sensitivity.FULL_POSITIVE);
-			}else if(tz >= 1) { 
-				drone.goForward(Sensitivity.FULL_POSITIVE);
-			}else if(drone.getCompass().getAngle() < 90){
-				drone.turnLeft(Sensitivity.FULL_POSITIVE);
-			}
+		if((tx >= 0 && tx <= floor.length) && (tz >= 0 && tz <= floor[0].length)) {
+			floor[tx][tz] = true;
 		}
+
+	}
+
+	private boolean upTendency = true;
+
+	private boolean leftTendency = false;
+
+	private int nextLeft = 0;
+
+	private boolean needTurn = false;
+
+	public void timeUpdate(long now) {
+
+		verifyProjection();
+
+		final int tx = (int)(drone.getX()/tileSize);
+
+		final int tz = (int)(drone.getZ()/tileSize);
+
+		final int maxX = floor.length;
+
+		final int maxZ = floor[0].length;
+
+		//System.out.println("tx: "+tx);
+		//System.out.println("tz: "+tz);
 		
+		if(leftTendency) {
+
+			if(!needTurn) {
+
+				if(tx < nextLeft) {
+
+					drone.goForward(Sensitivity.FULL_POSITIVE);
+
+				} else {
+
+					needTurn = true;
+
+				}
+				
+			} else {
+
+				//if was going up
+				if(upTendency) {
+
+					if (drone.getCompass().getAngle() > 0){
+						drone.turnRight(Sensitivity.FULL_POSITIVE);
+
+					} else {
+
+						System.out.println("All Turned after Up and Left");
+
+						needTurn = false;
+						leftTendency = false;
+						upTendency = !upTendency;
+
+					}
+
+				}
+				
+				//if was going down
+				if(!upTendency) {
+
+					if (drone.getCompass().getAngle() < 180){
+
+						drone.turnLeft(Sensitivity.FULL_POSITIVE);
+
+					} else {
+
+						System.out.println("All Turned after Down and Left");
+
+						needTurn = false;
+						leftTendency = false;
+						upTendency = !upTendency;
+
+					}
+				}
+				
+			}
+
+		} else {
+
+			if(!needTurn) {
+
+				if(upTendency) {
+
+					if(tz < maxZ-1) {
+
+						drone.goForward(Sensitivity.FULL_POSITIVE);
+
+					} else {
+
+						System.out.println("All up");
+						needTurn = true;
+
+					}
+				}
+
+				if(!upTendency) {
+
+					if(tz > 0) {
+
+						drone.goForward(Sensitivity.FULL_POSITIVE);
+
+					} else {
+						System.out.println("All Down");
+						needTurn = true;
+					}
+				}
+
+			} else {
+
+				if(upTendency) {
+
+					if (drone.getCompass().getAngle() > 90){
+						drone.turnRight(Sensitivity.FULL_POSITIVE);
+
+					} else {
+
+						System.out.println("All Turned after Up");
+
+						needTurn = false;
+						leftTendency = true;
+						nextLeft++;
+
+					}
+
+				}
+
+				if(!upTendency) {
+
+					if (drone.getCompass().getAngle() < 90){
+
+						drone.turnLeft(Sensitivity.FULL_POSITIVE);
+
+					} else {
+
+						System.out.println("All Turned after Down");
+
+						needTurn = false;
+						leftTendency = true;
+						nextLeft++;
+
+					}
+				}
+
+			}
+
+		}
+
 	}
 
 	@Override
