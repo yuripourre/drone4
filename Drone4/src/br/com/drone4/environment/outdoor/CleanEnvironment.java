@@ -13,6 +13,7 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
+import br.com.abby.util.CameraGL;
 import br.com.drone4.automated.AutonomousFlight;
 import br.com.drone4.automated.action.GoToAction;
 import br.com.drone4.automated.action.MoveAction;
@@ -27,7 +28,6 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.grid.GridApplication;
 import br.com.luvia.loader.TextureLoader;
-import br.com.luvia.util.CameraGL;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
@@ -265,12 +265,12 @@ public class CleanEnvironment extends GridApplication {
 
 		my = event.getY();
 
-		if(event.onButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
+		if(event.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()+0.1f);
 			click = true;
 		}
 
-		if(event.onButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
+		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
 			cameraGL.setZ(cameraGL.getZ()-0.1f);
 
 			click = false;
