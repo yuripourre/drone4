@@ -1,5 +1,5 @@
+import br.com.drone4.environment.outdoor.PathEnvironment;
 import br.com.luvia.Luvia;
-import br.com.drone4.environment.indoor.*;
 import br.com.luvia.core.ApplicationGL;
 
 
@@ -23,7 +23,7 @@ public class Simulator extends Luvia {
 	@Override
 	public ApplicationGL startApplication() {
 		
-		return new IndoorEnvironment(w, h);
+		return new PathEnvironment(w, h);
 		
 	}
 
