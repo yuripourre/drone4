@@ -79,10 +79,12 @@ public class PathEnvironment extends GridApplication {
 	public void load() {
 
 		//Size in meters		
-		drone = new PhantomDJI(1, 8, 0);
+		drone = new PhantomDJI(3, 8, -2);
 
 		droneCamera = drone.getCamera();				
-				
+
+		drone.updateSensors();
+
 		cameraGL = new CameraGL(0, 20, -10);
 
 		cameraGL.setTarget(drone);
@@ -107,12 +109,24 @@ public class PathEnvironment extends GridApplication {
 		double tileSize = 3;
 
 		double startX = 0;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			drawTile(gl, startX, i, tileSize);
 		}
 
 		for (int i = 0; i < 10; i++) {
-			drawTile(gl, i, 10, tileSize);
+			drawTile(gl, i, 5, tileSize);
+		}
+
+		for (int i = 0; i < 10; i++) {
+			drawTile(gl, 10, 5+i, tileSize);
+		}
+
+		for (int i = 0; i < 10; i++) {
+			drawTile(gl, 10-i, 15, tileSize);
+		}
+		
+		for (int i = 0; i < 10; i++) {
+			drawTile(gl, 0, 15+i, tileSize);
 		}
 
 	}
@@ -225,6 +239,12 @@ public class PathEnvironment extends GridApplication {
 			droneCamera.setOffsetZ(-1);
 		}
 
+		if(event.isKeyUp(KeyEvent.TSK_SPACE)) {
+
+			ajust = !ajust;
+
+		}
+
 		return GUIEvent.NONE;
 	}
 
@@ -274,7 +294,7 @@ public class PathEnvironment extends GridApplication {
 		int h = camera.getHeight();
 
 		camera.setAngleX(-90);
-		
+
 		gl.glViewport(0, 0, w, h);
 
 		//Update Camera View
@@ -310,30 +330,206 @@ public class PathEnvironment extends GridApplication {
 
 	}
 
-	private BufferedImage buffer;
-	
-	@Override
-	public void timeUpdate(long now) {
+	private float calculateCentroidX(BufferedImage buffer) {
 
-		buffer = drone.getCamera().getBufferedImage();
+		int count = 0;
+		int countX = 0;		
 
-		for(int j=0; j<buffer.getHeight(); j++) {
+		for(int i = 0; i < buffer.getWidth(); i++) {
+			Color color = new Color(buffer.getRGB(i, 0));
 
-			for(int i=0; i<buffer.getWidth(); i++) {
+			if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
 
-				Color color = new Color(buffer.getRGB(i, j));
-				
-				if(color.getRed() == 0) {
-					
-					buffer.setRGB(i, j, Color.BLUE.getRGB());
-					
-				}				
+				count++;
+				countX += i;
 
 			}
 
 		}
 
+		return (float)countX/(float)count;
+	}
+
+	private float calculateCentroidY(int column, BufferedImage buffer) {
+		int count = 0;
+		int countY = 0;
+
+		for(int j = 0; j < buffer.getHeight(); j++) {
+			Color color = new Color(buffer.getRGB(column, j));
+
+			if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
+
+				count++;
+				countY += j;
+
+			}
+
+		}
+
+		return (float)countY/(float)count;
+
+	}
+
+	private boolean checkPixelFirstColumn(BufferedImage buffer) {
+
+		for(int j = 0; j < buffer.getHeight(); j++) {
+			Color color = new Color(buffer.getRGB(0, j));
+
+			if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
+
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+	private boolean checkPixelLastColumn(BufferedImage buffer) {
+
+		int i = buffer.getWidth()-1;
+
+		for(int j = 0; j < buffer.getHeight(); j++) {
+			Color color = new Color(buffer.getRGB(i, j));
+
+			if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
+
+				return true;
+
+			}
+
+		}
+
+		return false;
+
+	}
+	private boolean checkPixelFirstLine(BufferedImage buffer) {
+
+		for(int j = 0; j < buffer.getHeight(); j++) {
+
+			for(int i = 0; i < buffer.getWidth(); i++) {
+
+				Color color = new Color(buffer.getRGB(i, j));
+
+				if(color.getRed() == 0 && color.getGreen() == 0 && color.getBlue() == 0) {
+					return false;
+				}
+
+			}
+
+		}
+
+		return true;
+
+	}
+
+	private BufferedImage buffer;
+
+	private boolean ajust = true;
+
+	private boolean leftTendency = false;
+
+	private boolean rightTendency = false;
+
+	@Override
+	public void timeUpdate(long now) {
+
+		buffer = drone.getCamera().getBufferedImage();
 		manualFlight();
+
+		if (ajust) {
+
+			int margin = 6;
+
+			if(checkPixelFirstColumn(buffer)) {
+
+				if(!rightTendency) {
+					leftTendency = true;
+
+					drone.getModel().setColor(Color.RED);
+				} else {
+					leftTendency = false;	
+				}
+
+			} else {
+
+				leftTendency = false;
+			}
+
+			if (checkPixelLastColumn(buffer)) {
+
+				if(!leftTendency) {
+					rightTendency = true;
+
+					drone.getModel().setColor(Color.BLUE);
+
+				} else {
+					rightTendency = false;
+				}
+
+			} else {
+
+				rightTendency = false;
+			}
+
+
+			if(leftTendency) {
+
+				float centroidY = calculateCentroidY(0, buffer);
+				
+				if(centroidY > buffer.getHeight()/2 - margin && centroidY < buffer.getHeight()/2 + margin) {
+					drone.goLeft(Sensitivity.FULL_POSITIVE);
+				} else {
+
+					drone.goForward(Sensitivity.FULL_POSITIVE);
+
+				}
+			}
+
+			if(rightTendency) {
+				
+				float centroidY = calculateCentroidY(buffer.getWidth()-1, buffer);
+			
+				if(centroidY > buffer.getHeight()/2 - margin && centroidY < buffer.getHeight()/2 + margin) {
+					drone.goRight(Sensitivity.FULL_POSITIVE);
+				} else {
+					drone.goForward(Sensitivity.FULL_POSITIVE);
+
+				}
+
+			}
+
+			if(!rightTendency && !leftTendency) {
+				
+				if(checkPixelFirstLine(buffer)) {
+					
+					drone.getModel().setColor(Color.GREEN);
+					
+					return;
+				}
+
+				drone.getModel().setColor(Color.YELLOW);
+
+				float centroidX = calculateCentroidX(buffer);
+
+				if(centroidX < buffer.getWidth()/2 - margin) {
+
+					drone.goLeft(0.5f);
+
+				} else if(centroidX > buffer.getWidth()/2 + margin) {
+
+					drone.goRight(0.5f);
+
+				} else {
+
+					drone.goForward(Sensitivity.FULL_POSITIVE);
+				}
+
+			}
+
+		}
 
 	}
 
@@ -378,8 +574,12 @@ public class PathEnvironment extends GridApplication {
 
 		//Draw PipCamera
 		g.drawImage(droneCamera.getBufferedImage(), 0, 60);
-		
-		g.drawImage(buffer, 0, 60);
+
+		g.setColor(Color.BLACK);
+		g.drawRect(0, 60, droneCamera.getBufferedImage().getWidth(), droneCamera.getBufferedImage().getHeight());
+
+		if(ajust)
+			g.drawImage(buffer, 0, 60);
 
 		//Draw Information
 		g.setColor(Color.WHITE);
