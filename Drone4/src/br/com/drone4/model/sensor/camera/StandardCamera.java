@@ -2,8 +2,8 @@ package br.com.drone4.model.sensor.camera;
 
 import java.awt.image.BufferedImage;
 
+import br.com.abby.linear.AimPoint;
 import br.com.drone4.model.Drone;
-import br.com.luvia.linear.AimPoint;
 
 public class StandardCamera extends AimPoint implements Camera {
 

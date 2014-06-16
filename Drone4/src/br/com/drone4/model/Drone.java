@@ -1,7 +1,7 @@
 package br.com.drone4.model;
 
+import br.com.abby.linear.AimPoint;
 import br.com.drone4.control.Sensitivity;
-import br.com.luvia.linear.AimPoint;
 
 public class Drone extends AimPoint {
 
