@@ -27,7 +27,7 @@ public class PhantomDJI extends AerialDrone {
 		this.turnSpeed = 10;
 		
 		camera = new StandardCamera(x, y, z);
-		
+				
 		gps = new PreciseGPSSensor();
 		
 		model = MeshLoader.getInstance().loadModel("aerial/quad.obj");
