@@ -2,7 +2,6 @@ package br.com.drone4.drone;
 
 import java.awt.Color;
 
-import examples.jgl.application.Model;
 import br.com.abby.loader.MeshLoader;
 import br.com.drone4.model.AerialDrone;
 import br.com.drone4.model.sensor.camera.StandardCamera;

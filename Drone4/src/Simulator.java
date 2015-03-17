@@ -1,5 +1,7 @@
+import br.com.drone4.examples.indoor.IndoorEnvironment;
+import br.com.drone4.examples.outdoor.CleanEnvironment;
+import br.com.drone4.examples.outdoor.SportsEnvironment;
 import br.com.luvia.Luvia;
-import br.com.drone4.environment.indoor.*;
 import br.com.luvia.core.ApplicationGL;
 
 
@@ -23,7 +25,8 @@ public class Simulator extends Luvia {
 	@Override
 	public ApplicationGL startApplication() {
 		
-		return new IndoorEnvironment(w, h);
+		return new SportsEnvironment(w, h);
+		//return new CleanEnvironment(w, h);
 		
 	}
 

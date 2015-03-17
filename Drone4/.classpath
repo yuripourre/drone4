@@ -6,6 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Luvia"/>
 	<classpathentry kind="lib" path="/Luvia/libs/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="/Luvia/libs/jogl-all.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/E-Motion"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Emotion"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
