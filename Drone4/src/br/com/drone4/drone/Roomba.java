@@ -2,12 +2,12 @@ package br.com.drone4.drone;
 
 import java.awt.Color;
 
+import br.com.abby.loader.MeshLoader;
 import br.com.drone4.model.TerrestrialDrone;
+import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.drone4.model.sensor.compass.CompassSensor;
 import br.com.drone4.model.sensor.compass.PreciseCompassSensor;
-import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.luvia.linear.Mesh;
-import br.com.luvia.loader.mesh.MeshLoader;
 
 public class Roomba extends TerrestrialDrone {
 	
@@ -28,7 +28,7 @@ public class Roomba extends TerrestrialDrone {
 				
 		this.angleY = startAngle;
 		
-		model = MeshLoader.getInstance().loadModel("terrestrial/roomba.obj");
+		model = new Mesh(MeshLoader.getInstance().loadModel("terrestrial/roomba.obj"));
 		model.setDrawTexture(false);
 		
 		model.setColor(Color.DARK_GRAY);

@@ -2,12 +2,13 @@ package br.com.drone4.drone;
 
 import java.awt.Color;
 
+import examples.jgl.application.Model;
+import br.com.abby.loader.MeshLoader;
 import br.com.drone4.model.AerialDrone;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.drone4.model.sensor.gps.GPSSensor;
 import br.com.drone4.model.sensor.gps.PreciseGPSSensor;
 import br.com.luvia.linear.Mesh;
-import br.com.luvia.loader.mesh.MeshLoader;
 
 public class PhantomDJI extends AerialDrone {
 
@@ -30,7 +31,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		gps = new PreciseGPSSensor();
 		
-		model = MeshLoader.getInstance().loadModel("aerial/quad.obj");
+		model = new Mesh(MeshLoader.getInstance().loadModel("aerial/quad.obj"));
 		model.setDrawTexture(false);
 		
 		model.setColor(Color.DARK_GRAY);
