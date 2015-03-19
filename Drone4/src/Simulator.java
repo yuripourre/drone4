@@ -25,6 +25,8 @@ public class Simulator extends Luvia {
 	@Override
 	public ApplicationGL startApplication() {
 		
+		initialSetup("../");
+		
 		return new SportsEnvironment(w, h);
 		//return new CleanEnvironment(w, h);
 		
