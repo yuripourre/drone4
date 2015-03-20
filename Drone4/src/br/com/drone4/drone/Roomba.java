@@ -24,7 +24,7 @@ public class Roomba extends TerrestrialDrone {
 		
 		this.speed = .5;
 		
-		this.turnSpeed = 10;
+		this.yawSpeed = 10;
 				
 		this.angleY = startAngle;
 		

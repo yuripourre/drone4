@@ -6,6 +6,6 @@ public class Sensitivity {
 	
 	public static final double FULL_NEGATIVE = -1;
 	
-	public static final double NEUTRAL = 0;
+	public static final double RELEASED = 0;
 	
 }

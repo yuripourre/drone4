@@ -6,8 +6,6 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -15,14 +13,9 @@ import javax.media.opengl.GLAutoDrawable;
 
 import br.com.abby.loader.MeshLoader;
 import br.com.abby.util.CameraGL;
-import br.com.abby.vbo.VBO;
-import br.com.drone4.automated.AutonomousFlight;
-import br.com.drone4.automated.action.GoToAction;
-import br.com.drone4.automated.action.MoveAction;
-import br.com.drone4.automated.action.TurnAction;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
-import br.com.drone4.model.control.Input;
+import br.com.drone4.model.control.KeyboardInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
@@ -53,7 +46,7 @@ public class SportsEnvironment extends GridApplication {
 
 	protected boolean click = false;
 
-	private Input controller = new Input();
+	private KeyboardInput controller = new KeyboardInput();
 
 	public SportsEnvironment(int w, int h) {
 		super(w, h);

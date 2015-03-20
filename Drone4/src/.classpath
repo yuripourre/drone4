@@ -7,5 +7,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/Luvia"/>
 	<classpathentry kind="lib" path="/home/yuri/git/luvia/Luvia/libs/gluegen-rt.jar"/>
 	<classpathentry kind="lib" path="/home/yuri/git/luvia/Luvia/libs/jogl-all.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/Midnight"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

@@ -16,15 +16,15 @@ public class PhantomDJI extends AerialDrone {
 	private StandardCamera camera;
 	
 	private Mesh model;
-	
-	private float startAngle = 180;
-		
+			
 	public PhantomDJI(double x, double y, double z) {
 		super(x, y, z);
 		
-		this.speed = .5;
+		speed = .5;
 		
-		this.turnSpeed = 10;
+		yawSpeed = 10;
+		
+		startAngle = 180;
 		
 		camera = new StandardCamera(x, y, z);
 		

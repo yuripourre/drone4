@@ -53,11 +53,11 @@ public class SimpleStrategyInterpolator implements StrategyInterpolator {
 		
 		if(drone.getAngleY() < action.getAngleY()) {
 
-			drone.roll(Sensitivity.FULL_POSITIVE);
+			drone.yaw(Sensitivity.FULL_POSITIVE);
 
 		} else if(drone.getAngleY() > action.getAngleY()) {
 			
-			drone.roll(Sensitivity.FULL_NEGATIVE);
+			drone.yaw(Sensitivity.FULL_NEGATIVE);
 			
 		} else {
 			

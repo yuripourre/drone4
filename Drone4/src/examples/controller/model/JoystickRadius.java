@@ -9,7 +9,7 @@ import br.com.etyllica.layer.Layer;
 import br.com.etyllica.linear.Point2D;
 import br.com.luvia.util.PointUtils;
 
-public class RangeRadius {
+public class JoystickRadius {
 
 	private static final int DEFAULT_RADIUS = 120/2;
 	private static final int DEFAULT_JOYSTICK_RADIUS = 50/2;
@@ -25,7 +25,7 @@ public class RangeRadius {
 	private Point2D center;
 	private Point2D joyPosition;
 
-	public RangeRadius(int x, int y) {
+	public JoystickRadius(int x, int y) {
 		super();
 		area = new Layer(x, y, DEFAULT_RADIUS*2, DEFAULT_RADIUS*2);
 
@@ -78,7 +78,7 @@ public class RangeRadius {
 					setActive(true);
 				}
 			} else {
-												
+
 				calculateSensitivityX(mx);
 				calculateSensitivityY(my);
 				
@@ -101,6 +101,8 @@ public class RangeRadius {
 			if(active) {
 				setActive(false);
 				resetJoystick();
+				sensitivityX = 0;
+				sensitivityY = 0;
 			}
 		}		
 	}
@@ -127,6 +129,8 @@ public class RangeRadius {
 		} else if(sensitivityY<-1) {
 			sensitivityY = -1;
 		}
+		
+		sensitivityY = -sensitivityY;
 	}
 
 	private void resetJoystick() {

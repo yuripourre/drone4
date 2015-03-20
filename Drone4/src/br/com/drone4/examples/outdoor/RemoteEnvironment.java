@@ -6,22 +6,18 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 
 import br.com.abby.util.CameraGL;
-import br.com.drone4.automated.AutonomousFlight;
-import br.com.drone4.automated.action.GoToAction;
-import br.com.drone4.automated.action.MoveAction;
-import br.com.drone4.automated.action.TurnAction;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
-import br.com.drone4.model.control.KeyboardInput;
+import br.com.drone4.model.control.ControllerInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.drone4.network.ControllerClient;
+import br.com.drone4.network.server.DroneServer;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -33,9 +29,7 @@ import br.com.luvia.loader.TextureLoader;
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class CleanEnvironment extends GridApplication {
-
-	private AutonomousFlight flight;
+public class RemoteEnvironment extends GridApplication {
 	
 	protected StandardCamera droneCamera;
 
@@ -52,9 +46,11 @@ public class CleanEnvironment extends GridApplication {
 
 	protected boolean click = false;
 
-	private KeyboardInput controller = new KeyboardInput();
-
-	public CleanEnvironment(int w, int h) {
+	private ControllerInput controller = new ControllerInput();
+	
+	private DroneServer server = new DroneServer(ControllerClient.PORT, controller);
+	
+	public RemoteEnvironment(int w, int h) {
 		super(w, h);
 	}
 
@@ -88,22 +84,11 @@ public class CleanEnvironment extends GridApplication {
 
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
-
-		//Configure Autonomous Flight
-		List<MoveAction> actionList = new ArrayList<MoveAction>();
-
-		actionList.add(new GoToAction(0, 8, 5));
+				
+		//Turn Server On		
+		server.start();
 		
-		actionList.add(new TurnAction(0, 540, 0));
-		
-		actionList.add(new GoToAction(0, 5, 7));
-		actionList.add(new GoToAction(0, 10, 10));
-		actionList.add(new GoToAction(0, 5, 20));
-		
-		flight = new AutonomousFlight(drone, actionList);
-		
-		updateAtFixedRate(300);
-
+		updateAtFixedRate(100);
 	}
 	
 	private void drawFloor(GL2 gl) {
@@ -127,9 +112,7 @@ public class CleanEnvironment extends GridApplication {
 		double startX = 0;
 
 		for(int i=0;i<60;i++) {
-
 			drawTile(gl, startX, i, tileSize);
-
 		}
 
 		road.disable(gl);
@@ -149,13 +132,10 @@ public class CleanEnvironment extends GridApplication {
 		float aspect = (float)width / (float)height;
 		
 		glu.gluPerspective(60*zoom, aspect, 1, 100);
-		
 	}
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
-
-		controller.updateKeyboard(event);
 		
 		if(event.isKeyDown(KeyEvent.TSK_I)) {
 			
@@ -266,45 +246,35 @@ public class CleanEnvironment extends GridApplication {
 	
 	@Override
 	public void timeUpdate(long now) {
-
-		flight.flight();
-
 		manualFlight();
-
 	}
 	
 	private void manualFlight() {
 		
-		if(controller.isUpPressed()) {
-			drone.goUp(Sensitivity.FULL_POSITIVE);
+		//Left Joystick		
+		if(controller.getThrottle() > 0) {
+			drone.goUp(controller.getThrottle());
+		} else if(controller.getThrottle() < 0)  {
+			drone.goDown(controller.getThrottle());			
+		}
+				
+		if(controller.getYaw() > 0) {
+			drone.turnRight(controller.getYaw());
+		} else if(controller.getYaw() < 0) {
+			drone.turnLeft(controller.getYaw());
 		}
 
-		if(controller.isDownPressed()) {
-			drone.goDown(Sensitivity.FULL_NEGATIVE);
+		//Right Joystick
+		if(controller.getPitch() > 0) {
+			drone.goForward(controller.getPitch());
+		} else if(controller.getPitch() < 0) {
+			drone.goBackward(controller.getPitch());
 		}
-
-		if(controller.isRightPressed()) {
-			drone.goRight(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(controller.isLeftPressed()) {
-			drone.goLeft(Sensitivity.FULL_NEGATIVE);
-		}
-
-		if(controller.isForwardPressed()) {
-			drone.goForward(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(controller.isBackwardPressed()) {
-			drone.goBackward(Sensitivity.FULL_NEGATIVE);
-		}
-
-		if(controller.isTurnRightPressed()) {
-			drone.turnRight(Sensitivity.FULL_POSITIVE);
-		}
-
-		if(controller.isTurnLeftPressed()) {
-			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
+		
+		if(controller.getRoll() > 0) {
+			drone.goRight(controller.getRoll());
+		} else if(controller.getRoll() < 0) {
+			drone.goLeft(controller.getRoll());
 		}
 		
 	}

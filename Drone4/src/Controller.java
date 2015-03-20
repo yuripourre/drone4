@@ -19,8 +19,7 @@ public class Controller extends EtyllicaFrame {
 	
 	@Override
 	public Application startApplication() {
-		
-		initialSetup("../");		
+		initialSetup("../");
 		
 		return new ControllerExample(w, h);
 	}

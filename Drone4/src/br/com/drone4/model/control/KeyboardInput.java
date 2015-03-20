@@ -1,109 +1,110 @@
 package br.com.drone4.model.control;
 
+import br.com.drone4.control.Sensitivity;
 import br.com.etyllica.core.event.KeyEvent;
 
-public class Input {
+public class KeyboardInput {
 
-	private boolean forwardPressed = false;
+	private double forwardPressed = 0;
 
-	private boolean backwardPressed = false;
+	private double backwardPressed = 0;
 
-	private boolean turnLeftPressed = false;
+	private double turnLeftPressed = 0;
 
-	private boolean turnRightPressed = false;
+	private double turnRightPressed = 0;
 
-	private boolean upPressed = false;
+	private double upPressed = 0;
 
-	private boolean downPressed = false;
+	private double downPressed = 0;
 
-	private boolean rightPressed = false;
+	private double rightPressed = 0;
 
-	private boolean leftPressed = false;
+	private double leftPressed = 0;
 	
 	public void updateKeyboard(KeyEvent event) {
 
 		if(event.isKeyDown(KeyEvent.TSK_W)) {
-			upPressed = true;
+			upPressed = Sensitivity.FULL_POSITIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_W)) {
-			upPressed = false;
+			upPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			rightPressed = true;
+			rightPressed = Sensitivity.FULL_POSITIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
-			rightPressed = false;
+			rightPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_A)) {
-			leftPressed = true;
+			leftPressed = Sensitivity.FULL_NEGATIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
-			leftPressed = false;
+			leftPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_S)) {
-			downPressed = true;
+			downPressed = Sensitivity.FULL_NEGATIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
-			downPressed = false;
+			downPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
-			forwardPressed = true;			
+			forwardPressed = Sensitivity.FULL_POSITIVE;			
 
 		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
-			forwardPressed = false;
+			forwardPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
-			backwardPressed = true;
+			backwardPressed = Sensitivity.FULL_NEGATIVE;
 
 		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
-			backwardPressed = false;
+			backwardPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-			turnLeftPressed = true;
+			turnLeftPressed = Sensitivity.FULL_NEGATIVE;
 
 		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
-			turnLeftPressed = false;
+			turnLeftPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-			turnRightPressed = true;
+			turnRightPressed = Sensitivity.FULL_POSITIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
-			turnRightPressed = false;
+			turnRightPressed = 0;
 		}
 	}
 
 	public boolean isForwardPressed() {
-		return forwardPressed;
+		return forwardPressed != 0;
 	}
 
 	public boolean isBackwardPressed() {
-		return backwardPressed;
+		return backwardPressed != 0;
 	}
 
 	public boolean isTurnLeftPressed() {
-		return turnLeftPressed;
+		return turnLeftPressed != 0;
 	}
 
 	public boolean isTurnRightPressed() {
-		return turnRightPressed;
+		return turnRightPressed != 0;
 	}
 
 	public boolean isUpPressed() {
-		return upPressed;
+		return upPressed != 0;
 	}
 
 	public boolean isDownPressed() {
-		return downPressed;
+		return downPressed != 0;
 	}
 
 	public boolean isRightPressed() {
-		return rightPressed;
+		return rightPressed != 0;
 	}
 
 	public boolean isLeftPressed() {
-		return leftPressed;
-	}
+		return leftPressed != 0;
+	}	
 
 }
