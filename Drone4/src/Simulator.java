@@ -15,11 +15,8 @@ public class Simulator extends Luvia {
 
 	// Main program
 	public static void main(String[] args) {
-
 		Simulator luvmotion = new Simulator();
-				
 		luvmotion.init();
-
 	}
 	
 	@Override
