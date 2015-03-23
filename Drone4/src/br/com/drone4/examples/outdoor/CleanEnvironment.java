@@ -11,7 +11,6 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 
 import br.com.abby.util.CameraGL;
 import br.com.drone4.automated.AutonomousFlight;
@@ -27,6 +26,7 @@ import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
+import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.grid.GridApplication;
 import br.com.luvia.loader.TextureLoader;
 
@@ -59,7 +59,7 @@ public class CleanEnvironment extends GridApplication {
 	}
 
 	@Override
-	public void init(GLAutoDrawable drawable) {
+	public void init(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -136,7 +136,7 @@ public class CleanEnvironment extends GridApplication {
 	}
 	
 	@Override
-	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
 		GL2 gl = drawable.getGL().getGL2();
 
@@ -205,7 +205,7 @@ public class CleanEnvironment extends GridApplication {
 	}
 
 	@Override
-	public void display(GLAutoDrawable drawable) {
+	public void display(Graphics3D drawable) {
 
 		GL2 gl = drawable.getGL().getGL2();
 

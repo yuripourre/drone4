@@ -24,7 +24,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		yawSpeed = 10;
 		
-		startAngle = 180;
+		startAngle = 0;
 		
 		camera = new StandardCamera(x, y, z);
 		
@@ -35,8 +35,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
-		
-		this.angleY = startAngle;
+		model.setAngleY(135);
 		
 	}
 
