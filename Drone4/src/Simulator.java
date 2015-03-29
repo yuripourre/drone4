@@ -3,7 +3,7 @@ import br.com.drone4.examples.outdoor.CleanEnvironment;
 import br.com.drone4.examples.outdoor.RemoteEnvironment;
 import br.com.drone4.examples.outdoor.SportsEnvironment;
 import br.com.luvia.Luvia;
-import br.com.luvia.core.ApplicationGL;
+import br.com.luvia.core.context.ApplicationGL;
 
 
 public class Simulator extends Luvia {

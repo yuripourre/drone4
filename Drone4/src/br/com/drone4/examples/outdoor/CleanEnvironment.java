@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.glu.GLU;
 
 import br.com.abby.util.CameraGL;
 import br.com.drone4.automated.AutonomousFlight;
@@ -138,7 +139,8 @@ public class CleanEnvironment extends GridApplication {
 	@Override
 	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
-		GL2 gl = drawable.getGL().getGL2();
+		GL2 gl = drawable.getGL2();
+		GLU glu = drawable.getGLU();
 
 		gl.glViewport (x, y, width, height);
 
@@ -212,18 +214,20 @@ public class CleanEnvironment extends GridApplication {
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 
-		captureCamera(gl, droneCamera);
+		captureCamera(drawable, droneCamera);
 		
 		gl.glViewport(x, y, w, h);
 				
 		//Update Camera View
-		updateCamera(gl, cameraGL);
+		drawable.updateCamera(cameraGL);
 		
 		drawScene(gl);
 				
 	}
 	
-	protected void captureCamera(GL2 gl, StandardCamera camera) {
+	protected void captureCamera(Graphics3D drawable, StandardCamera camera) {
+		
+		GL2 gl = drawable.getGL2();
 		
 		int w = camera.getWidth();
 		
@@ -232,7 +236,7 @@ public class CleanEnvironment extends GridApplication {
 		gl.glViewport(0, 0, w, h);
 		
 		//Update Camera View
-		aimCamera(gl, camera);
+		drawable.aimCamera(camera);
 
 		//gl.glRotated(angleX, 1, 0, 0);
 		
