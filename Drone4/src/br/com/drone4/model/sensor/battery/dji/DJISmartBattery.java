@@ -1,22 +1,23 @@
-package br.com.drone4.model.sensor.battery;
+package br.com.drone4.model.sensor.battery.dji;
 
 import br.com.drone4.model.Drone;
+import br.com.drone4.model.sensor.battery.BatterySensor;
 
-public class StandardUsbBattery implements BatterySensor {
+public class DJISmartBattery implements BatterySensor {
 
 	private int scale = 100;
 	
 	private int level = 100;
 	
-	private double weight = 250;
+	private double weight = 400;
 	
-	private double voltage = 5;
+	private double voltage = 11.1;
 	
-	private double maxPower = 10; //10W
+	private double maxPower = 100; //Dont know
 	
-	private double current = 500; //mA
+	private double maxCurrent = 5000; //Dont know
 	
-	private double capacity = 1500; //mAh
+	private double capacity = 5200; //mAh
 		
 	@Override
 	public void updateSensor(Drone drone) {
@@ -56,11 +57,7 @@ public class StandardUsbBattery implements BatterySensor {
 
 	@Override
 	public double current() {
-		return current;
-	}
-
-	public double getCapacityAsPercent() {
-		return level/scale;
+		return maxCurrent;
 	}
 
 }

@@ -22,6 +22,7 @@ import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.drone4.model.control.KeyboardInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.drone4.ui.indicator.BatteryIndicator;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -55,6 +56,9 @@ public class CleanEnvironment extends GridApplication {
 
 	private KeyboardInput controller = new KeyboardInput();
 
+	//UI
+	BatteryIndicator battery;
+	
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
 	}
@@ -72,7 +76,7 @@ public class CleanEnvironment extends GridApplication {
 		gl.glShadeModel(GL2.GL_SMOOTH);
 
 		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
-
+		
 	}
 
 	@Override
@@ -102,6 +106,8 @@ public class CleanEnvironment extends GridApplication {
 		actionList.add(new GoToAction(0, 5, 20));
 		
 		flight = new AutonomousFlight(drone, actionList);
+		
+		battery = new BatteryIndicator(w-w/20, 70, drone.getBattery());
 		
 		updateAtFixedRate(300);
 
@@ -271,7 +277,7 @@ public class CleanEnvironment extends GridApplication {
 	@Override
 	public void timeUpdate(long now) {
 
-		flight.flight();
+		//flight.flight();
 
 		manualFlight();
 
@@ -332,6 +338,8 @@ public class CleanEnvironment extends GridApplication {
 		g.drawShadow(20,220, "CameraAngleX: "+(droneCamera.getAngleX()),Color.BLACK);
 		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera.getAngleY()),Color.BLACK);
 		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera.getAngleZ()),Color.BLACK);
+		
+		battery.draw(g);
 
 	}
 
