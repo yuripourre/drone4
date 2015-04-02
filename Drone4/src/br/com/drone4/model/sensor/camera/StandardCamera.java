@@ -18,12 +18,11 @@ public class StandardCamera extends AimPoint implements Camera {
 
 		bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
-		bufferedImage.createGraphics();
-		
+		bufferedImage.createGraphics();		
 	}
 	
 	@Override
-	public void updateSensor(Drone drone) {
+	public void update(Drone drone) {
 		
 		setCoordinates(drone.getX(), drone.getY(), drone.getZ());
 		

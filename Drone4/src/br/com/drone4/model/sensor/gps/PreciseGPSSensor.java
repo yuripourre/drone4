@@ -11,7 +11,7 @@ public class PreciseGPSSensor implements GPSSensor {
 	private double z = 0;
 	
 	@Override
-	public void updateSensor(Drone drone) {
+	public void update(Drone drone) {
 		
 		this.x = drone.getX();
 		

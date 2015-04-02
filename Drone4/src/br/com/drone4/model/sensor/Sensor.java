@@ -4,7 +4,7 @@ import br.com.drone4.model.Drone;
 
 public interface Sensor {
 
-	public void updateSensor(Drone drone);
+	public void update(Drone drone);
 	
 	/*
 	 * Weight in grams(g)

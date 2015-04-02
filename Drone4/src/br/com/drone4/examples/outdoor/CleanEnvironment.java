@@ -110,7 +110,6 @@ public class CleanEnvironment extends GridApplication {
 		battery = new BatteryIndicator(w-w/20, 70, drone.getBattery());
 		
 		updateAtFixedRate(300);
-
 	}
 	
 	private void drawFloor(GL2 gl) {

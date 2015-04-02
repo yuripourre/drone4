@@ -64,9 +64,9 @@ public class Roomba extends TerrestrialDrone {
 	@Override
 	public void updateSensors() {
 		
-		camera.updateSensor(this);
+		camera.update(this);
 		
-		compass.updateSensor(this);
+		compass.update(this);
 		
 		model.setCoordinates(x, y, z);
 		

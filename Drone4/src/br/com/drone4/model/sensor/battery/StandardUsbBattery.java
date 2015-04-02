@@ -19,7 +19,7 @@ public class StandardUsbBattery implements BatterySensor {
 	private double capacity = 1500; //mAh
 		
 	@Override
-	public void updateSensor(Drone drone) {
+	public void update(Drone drone) {
 		// TODO Auto-generated method stub
 		
 	}

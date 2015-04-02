@@ -20,7 +20,7 @@ public class DJISmartBattery implements BatterySensor {
 	private double capacity = 5200; //mAh
 		
 	@Override
-	public void updateSensor(Drone drone) {
+	public void update(Drone drone) {
 		// TODO Auto-generated method stub
 		
 	}

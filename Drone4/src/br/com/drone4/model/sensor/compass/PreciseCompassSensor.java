@@ -7,7 +7,7 @@ public class PreciseCompassSensor implements CompassSensor {
 	private double angle = 0;
 	
 	@Override
-	public void updateSensor(Drone drone) {
+	public void update(Drone drone) {
 		this.angle = drone.getAngleY();
 		
 	}
