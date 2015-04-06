@@ -5,13 +5,14 @@ import java.awt.Color;
 import br.com.drone4.network.ControllerClient;
 import br.com.drone4.network.listener.DroneListener;
 import br.com.etyllica.context.Application;
+import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.ImageLayer;
 import examples.controller.model.JoystickRadius;
 
-public class ControllerExample extends Application implements DroneListener {
+public class ControllerExample extends Application implements DroneListener, UpdateIntervalListener {
 
 	//View
 	private ImageLayer background;
@@ -38,7 +39,7 @@ public class ControllerExample extends Application implements DroneListener {
 		client = new ControllerClient("127.0.0.1", this);
 		client.start(UPDATE_DELAY);
 		
-		updateAtFixedRate(UPDATE_DELAY);
+		updateAtFixedRate(UPDATE_DELAY, this);
 		
 		loading = 100;
 	}

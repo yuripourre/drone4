@@ -26,8 +26,8 @@ public class Simulator extends Luvia {
 		initialSetup("../");
 		
 		//return new SportsEnvironment(w, h);
-		return new CleanEnvironment(w, h);
-		//return new RemoteEnvironment(w, h);
+		//return new CleanEnvironment(w, h);
+		return new RemoteEnvironment(w, h);
 		
 	}
 

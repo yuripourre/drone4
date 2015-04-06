@@ -18,6 +18,7 @@ import br.com.abby.util.CameraGL;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.Roomba;
 import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -27,7 +28,7 @@ import br.com.luvia.grid.GridApplication;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 
-public class IndoorEnvironment extends GridApplication {
+public class IndoorEnvironment extends GridApplication implements UpdateIntervalListener {
 
 	private StandardCamera droneCamera;
 
@@ -80,7 +81,7 @@ public class IndoorEnvironment extends GridApplication {
 
 		floor = new boolean[10][5];
 
-		updateAtFixedRate(300);
+		updateAtFixedRate(300, this);
 
 	}
 

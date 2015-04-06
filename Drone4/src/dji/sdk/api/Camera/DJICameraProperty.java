@@ -1,0 +1,23 @@
+package dji.sdk.api.Camera;
+
+import dji.sdk.util.DjiLocationCoordinate2D;
+
+public class DJICameraProperty {
+
+	public DJICameraSettingsTypeDef.CameraAntiFlickerType antiFlicker;
+	public DJICameraSettingsTypeDef.CameraActionWhenBreak cameraAction;
+	public DjiLocationCoordinate2D cameraGps;
+	public DJICameraSettingsTypeDef.CameraContrastType contrast;
+	public DJICameraSettingsTypeDef.CameraExposureCompensationType exposureCompensation;
+	public DJICameraSettingsTypeDef.CameraExposureMeteringType exposureMetering;
+	public DJICameraSettingsTypeDef.CameraISOType iso;
+	public DJICameraSettingsTypeDef.DJICameraContinuousPhotoParam mContinuousPhotoParam;
+	public DJICameraSettingsTypeDef.CameraMultiShotCount multiShotCount;
+	public DJICameraSettingsTypeDef.CameraPhotoFormatType photoFormat;
+	public DJICameraSettingsTypeDef.CameraPhotoSizeType photoSize;
+	public DJICameraSettingsTypeDef.CameraRecordingFovType recordingFov;
+	public DJICameraSettingsTypeDef.CameraRecordingResolutionType recordingResolution;
+	public DJICameraSettingsTypeDef.CameraSharpnessType sharpness;
+	public DJICameraSettingsTypeDef.CameraWhiteBalanceType whiteBalance;
+	
+}

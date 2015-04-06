@@ -17,6 +17,7 @@ import br.com.drone4.model.control.ControllerInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.drone4.network.ControllerClient;
 import br.com.drone4.network.server.DroneServer;
+import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -29,7 +30,7 @@ import br.com.luvia.loader.TextureLoader;
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class RemoteEnvironment extends GridApplication {
+public class RemoteEnvironment extends GridApplication implements UpdateIntervalListener {
 	
 	protected StandardCamera droneCamera;
 
@@ -88,7 +89,7 @@ public class RemoteEnvironment extends GridApplication {
 		//Turn Server On		
 		server.start();
 		
-		updateAtFixedRate(100);
+		updateAtFixedRate(100, this);
 	}
 	
 	private void drawFloor(GL2 gl) {

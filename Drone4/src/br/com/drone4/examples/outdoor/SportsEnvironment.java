@@ -17,6 +17,7 @@ import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.drone4.model.control.KeyboardInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
@@ -28,7 +29,7 @@ import br.com.luvia.linear.Mesh;
 
 import com.jogamp.opengl.util.awt.Screenshot;
 
-public class SportsEnvironment extends GridApplication {
+public class SportsEnvironment extends GridApplication implements UpdateIntervalListener {
 
 	protected StandardCamera droneCamera;
 
@@ -84,7 +85,7 @@ public class SportsEnvironment extends GridApplication {
 		//Load Club Mesh
 		club = new Mesh(MeshLoader.getInstance().loadModel("scene/club/club.obj"));
 		
-		updateAtFixedRate(300);
+		updateAtFixedRate(300, this);
 
 	}
 	

@@ -9,7 +9,7 @@ public class DJISmartBattery implements BatterySensor {
 	
 	private int level = 100;
 	
-	private double weight = 400;
+	private double weight = 400; //400g
 	
 	private double voltage = 11.1;
 	
