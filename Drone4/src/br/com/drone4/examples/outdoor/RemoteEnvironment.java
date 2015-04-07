@@ -75,7 +75,7 @@ public class RemoteEnvironment extends GridApplication implements UpdateInterval
 	public void load() {
 		
 		//Size in meters		
-		drone = new PhantomDJI(1, 8, 0);
+		drone = new PhantomDJI(1, 8, 0);		
 
 		droneCamera = drone.getCamera();
 

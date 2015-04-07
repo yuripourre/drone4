@@ -26,15 +26,17 @@ public class PhantomDJI extends AerialDrone {
 	private Gimbal gimbal;
 	
 	private Mesh model;
+	
+	private double modelAngle = 135;
 			
 	public PhantomDJI(double x, double y, double z) {
 		super(x, y, z);
 		
 		speed = .5;
 		
-		yawSpeed = 10;
+		startAngle = 180;
 		
-		startAngle = 0;
+		yawSpeed = 10;
 		
 		initSensors(x, y, z);
 		
@@ -43,7 +45,7 @@ public class PhantomDJI extends AerialDrone {
 		
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
-		model.setAngleY(135);		
+		model.setAngleY(modelAngle);
 	}
 
 	private void initSensors(double x, double y, double z) {
@@ -56,9 +58,8 @@ public class PhantomDJI extends AerialDrone {
 	@Override
 	public void updateSensors() {
 		
-		model.setCoordinates(x, y, z);
-		
-		model.setAngleY(angleY);//angle in degrees
+		model.setCoordinates(x, y, z);		
+		model.setAngleY(-angleY+modelAngle);//angle in degrees
 
 		camera.update(this);
 		

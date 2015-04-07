@@ -56,9 +56,9 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	protected boolean click = false;
 
 	private KeyboardInput controller = new KeyboardInput();
-
+	
 	//UI
-	BatteryIndicator battery;
+	private BatteryIndicator battery;
 	
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
@@ -87,7 +87,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		drone = new PhantomDJI(1, 8, 0);
 
 		droneCamera = drone.getCamera();
-
+				
 		cameraGL = new CameraGL(0, 20, -10);
 
 		cameraGL.setTarget(drone);
@@ -165,27 +165,19 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 
 		controller.updateKeyboard(event);
 		
-		if(event.isKeyDown(KeyEvent.TSK_I)) {
-			
-			//droneCamera.getTarget().setOffsetX(+1);			
+		if(event.isKeyDown(KeyEvent.TSK_I)) {						
 			droneCamera.setOffsetX(+1);
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_K)) {
-			
-			//droneCamera.getTarget().setOffsetX(-1);			
+		if(event.isKeyDown(KeyEvent.TSK_K)) {						
 			droneCamera.setOffsetX(-1);
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_L)) {
-			
-			//droneCamera.getTarget().setOffsetZ(+1);	
+		if(event.isKeyDown(KeyEvent.TSK_L)) {				
 			droneCamera.setOffsetZ(+1);
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_J)) {
-			
-			//droneCamera.getTarget().setOffsetZ(-1);
+		if(event.isKeyDown(KeyEvent.TSK_J)) {			
 			droneCamera.setOffsetZ(-1);
 		}
 		
@@ -226,6 +218,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 				
 		//Update Camera View
 		drawable.updateCamera(cameraGL);
+		//drawable.aimCamera(followCamera);
 		
 		drawScene(gl);
 				
@@ -243,13 +236,6 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		
 		//Update Camera View
 		drawable.aimCamera(camera);
-
-		//gl.glRotated(angleX, 1, 0, 0);
-		
-		//gl.glRotated(camera.getAngleY(), 0, 1, 0);
-		//gl.glTranslated(camera.getX(), camera.getY(), camera.getZ());
-		
-		//gl.glRotated(angleZ, 0, 0, 1);
 		
 		drawScene(gl);
 		
@@ -276,11 +262,13 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	
 	@Override
 	public void timeUpdate(long now) {
-
-		//flight.flight();
+		
+		//flight.flight();		
 
 		manualFlight();
-
+		
+		cameraGL.setX(drone.getX());
+		cameraGL.setZ(drone.getZ()-10);
 	}
 	
 	private void manualFlight() {
