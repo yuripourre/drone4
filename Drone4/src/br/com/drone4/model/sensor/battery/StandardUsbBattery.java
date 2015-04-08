@@ -4,9 +4,9 @@ import br.com.drone4.model.Drone;
 
 public class StandardUsbBattery implements BatterySensor {
 
-	private int scale = 100;
+	private double scale = 100;
 	
-	private int level = 100;
+	private double level = 100;
 	
 	private double weight = 250;
 	
@@ -59,8 +59,9 @@ public class StandardUsbBattery implements BatterySensor {
 		return current;
 	}
 
-	public double getCapacityAsPercent() {
-		return level/scale;
+	@Override
+	public void setLevel(double level) {
+		this.level = level;
 	}
 
 }

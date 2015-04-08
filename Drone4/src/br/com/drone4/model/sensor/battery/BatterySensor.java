@@ -30,5 +30,11 @@ public interface BatterySensor extends Sensor {
 	 * milliampere per hour(mAh)
 	 */
 	public double getCapacity();
-			
+	
+	/**
+	 * Set Battery Current Level (0~scale)
+	 * @param level
+	 */
+	public void setLevel(double level);
+	
 }

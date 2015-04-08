@@ -58,7 +58,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	private KeyboardInput controller = new KeyboardInput();
 	
 	//UI
-	private BatteryIndicator battery;
+	private BatteryIndicator batteryIndicator;
 	
 	public CleanEnvironment(int w, int h) {
 		super(w, h);
@@ -108,9 +108,9 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		
 		flight = new AutonomousFlight(drone, actionList);
 		
-		battery = new BatteryIndicator(w-w/20, 70, drone.getBattery());
+		batteryIndicator = new BatteryIndicator(w-w/20, 70, drone.getBattery());
 		
-		updateAtFixedRate(300, this);
+		//updateAtFixedRate(300, this);
 	}
 	
 	private void drawFloor(GL2 gl) {
@@ -177,7 +177,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 			droneCamera.setOffsetZ(+1);
 		}
 		
-		if(event.isKeyDown(KeyEvent.TSK_J)) {			
+		if(event.isKeyDown(KeyEvent.TSK_J)) {
 			droneCamera.setOffsetZ(-1);
 		}
 		
@@ -207,6 +207,9 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	@Override
 	public void display(Graphics3D drawable) {
 
+		//Force update by FPS
+		timeUpdate(0);
+		
 		GL2 gl = drawable.getGL().getGL2();
 
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -270,39 +273,52 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		cameraGL.setX(drone.getX());
 		cameraGL.setZ(drone.getZ()-10);
 	}
-	
+		
 	private void manualFlight() {
+		
+		double level = drone.getBattery().getLevel();
+		
+		double offsetMove = 0.1;
+		double offsetTurn = 0.1;
 		
 		if(controller.isUpPressed()) {
 			drone.goUp(Sensitivity.FULL_POSITIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isDownPressed()) {
 			drone.goDown(Sensitivity.FULL_NEGATIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isRightPressed()) {
 			drone.goRight(Sensitivity.FULL_POSITIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isLeftPressed()) {
 			drone.goLeft(Sensitivity.FULL_NEGATIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isForwardPressed()) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isBackwardPressed()) {
 			drone.goBackward(Sensitivity.FULL_NEGATIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isTurnRightPressed()) {
 			drone.turnRight(Sensitivity.FULL_POSITIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isTurnLeftPressed()) {
 			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 		
 	}
@@ -327,7 +343,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera.getAngleY()),Color.BLACK);
 		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera.getAngleZ()),Color.BLACK);
 		
-		battery.draw(g);
+		batteryIndicator.draw(g);
 
 	}
 

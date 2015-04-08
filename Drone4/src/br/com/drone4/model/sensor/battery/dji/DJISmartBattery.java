@@ -5,9 +5,9 @@ import br.com.drone4.model.sensor.battery.BatterySensor;
 
 public class DJISmartBattery implements BatterySensor {
 
-	private int scale = 100;
+	private double scale = 100;
 	
-	private int level = 100;
+	private double level = 100;
 	
 	private double weight = 400; //400g
 	
@@ -58,6 +58,11 @@ public class DJISmartBattery implements BatterySensor {
 	@Override
 	public double current() {
 		return maxCurrent;
+	}
+
+	@Override
+	public void setLevel(double level) {
+		this.level = level;
 	}
 
 }
