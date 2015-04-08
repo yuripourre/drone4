@@ -20,6 +20,7 @@ import br.com.drone4.automated.action.MoveAction;
 import br.com.drone4.automated.action.TurnAction;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
+import br.com.drone4.model.accessory.Gimbal;
 import br.com.drone4.model.control.KeyboardInput;
 import br.com.drone4.model.sensor.camera.StandardCamera;
 import br.com.drone4.ui.indicator.BatteryIndicator;
@@ -211,7 +212,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 
-		captureCamera(drawable, droneCamera);
+		captureCamera(drawable, drone.getGimbal(), droneCamera);
 		
 		gl.glViewport(x, y, w, h);
 				
@@ -223,7 +224,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 				
 	}
 	
-	protected void captureCamera(Graphics3D drawable, StandardCamera camera) {
+	protected void captureCamera(Graphics3D drawable, Gimbal gimbal, StandardCamera camera) {
 		
 		GL2 gl = drawable.getGL2();
 		
@@ -234,7 +235,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		gl.glViewport(0, 0, w, h);
 		
 		//Update Camera View
-		drawable.aimCamera(camera);
+		drawable.aimCamera(camera, gimbal.getAngleX(), gimbal.getAngleY(), gimbal.getAngleZ());
 		
 		drawScene(gl);
 		
@@ -271,53 +272,69 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	private void manualFlight() {
 		
 		double level = drone.getBattery().getLevel();
-		
-		double moveBattery = 0.05;
+		double inc = -0.01;
+		double moveOffset = 0.05;
+		double moveGimbal = 0.02;
 		
 		if(controller.isUpPressed()) {
 			drone.goUp(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isDownPressed()) {
 			drone.goDown(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isRightPressed()) {
 			drone.goRight(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isLeftPressed()) {
 			drone.goLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isForwardPressed()) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isBackwardPressed()) {
 			drone.goBackward(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isTurnRightPressed()) {
 			drone.turnRight(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 
 		if(controller.isTurnLeftPressed()) {
 			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			inc -= moveOffset;
 		}
 		
 		if(controller.isUpperLeftUpPressed()) {
-			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getGimbal().turnX(1);
+			inc -= moveGimbal;
 		}
+		if(controller.isUpperLeftDownPressed()) {
+			drone.getGimbal().turnX(-1);
+			inc -= moveGimbal;
+		}
+		
+		if(controller.isUpperRightUpPressed()) {
+			drone.getGimbal().turnY(1);
+			inc -= moveGimbal;
+		}
+		if(controller.isUpperRightDownPressed()) {
+			drone.getGimbal().turnY(-1);
+			inc -= moveGimbal;
+		}
+		
+		drone.getBattery().setLevel(level+inc);
 		
 	}
 

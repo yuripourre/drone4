@@ -43,6 +43,21 @@ public class StandardGimbal implements Gimbal {
 	}
 
 	@Override
+	public double getAngleX() {
+		return point.getAngleX();
+	}
+
+	@Override
+	public double getAngleY() {
+		return point.getAngleY();
+	}
+
+	@Override
+	public double getAngleZ() {
+		return point.getAngleZ();
+	}
+	
+	@Override
 	public double getWeight() {
 		return 0;
 	}
