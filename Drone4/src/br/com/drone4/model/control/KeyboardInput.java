@@ -5,6 +5,10 @@ import br.com.etyllica.core.event.KeyEvent;
 
 public class KeyboardInput {
 
+	private static final int UNDEFINED_ID = -1;
+	
+	private int id = UNDEFINED_ID;
+	
 	private double forwardPressed = 0;
 
 	private double backwardPressed = 0;
@@ -20,6 +24,21 @@ public class KeyboardInput {
 	private double rightPressed = 0;
 
 	private double leftPressed = 0;
+	
+	private double upperRightUpPressed = 0; //R1
+	private double upperRightDownPressed = 0; //R2
+	
+	private double upperLeftUpPressed = 0; //L1
+	private double upperLeftDownPressed = 0; //L2
+	
+	public KeyboardInput() {
+		super();
+	}
+	
+	public KeyboardInput(int id) {
+		super();
+		this.id = id;
+	}
 	
 	public void updateKeyboard(KeyEvent event) {
 
@@ -74,11 +93,42 @@ public class KeyboardInput {
 			rightPressed = 0;
 		}
 		
-		updateJoystick(event);
+		if(event.isKeyDown(KeyEvent.TSK_2)) {
+			upperLeftUpPressed = Sensitivity.FULL_POSITIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_2)) {
+			upperLeftUpPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_1)) {
+			upperLeftDownPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_1)) {
+			upperLeftDownPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_9)) {
+			upperRightUpPressed = Sensitivity.FULL_POSITIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_9)) {
+			upperRightUpPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_0)) {
+			upperRightDownPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_0)) {
+			upperRightDownPressed = 0;
+		}
+				
+		if (id != UNDEFINED_ID && event.getId() == id) {
+			updateJoystick(event);
+		}
+		
 	}
 	
 	public void updateJoystick(KeyEvent event) {
-		
+				
 		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_UP)) {			
 			upPressed = Sensitivity.FULL_POSITIVE;			
 		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_Y)) {
@@ -130,6 +180,35 @@ public class KeyboardInput {
 			rightPressed = 0;
 		}
 		
+		//Upper Buttons
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_7)) {
+			upperLeftUpPressed = Sensitivity.FULL_POSITIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_7)) {
+			upperLeftUpPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_5)) {
+			upperLeftDownPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_5)) {
+			upperLeftDownPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_8)) {
+			upperRightUpPressed = Sensitivity.FULL_POSITIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_8)) {
+			upperRightUpPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_6)) {
+			upperRightDownPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_6)) {
+			upperRightDownPressed = 0;
+		}
+		
 	}
 
 	public boolean isForwardPressed() {
@@ -162,6 +241,22 @@ public class KeyboardInput {
 
 	public boolean isLeftPressed() {
 		return leftPressed != 0;
-	}	
+	}
+
+	public boolean isUpperLeftUpPressed() {
+		return upperLeftUpPressed != 0;
+	}
+	
+	public boolean isUpperLeftDownPressed() {
+		return upperLeftDownPressed != 0;
+	}
+	
+	public boolean isUpperRightUpPressed() {
+		return upperRightUpPressed != 0;
+	}
+	
+	public boolean isUpperRightDownPressed() {
+		return upperRightDownPressed != 0;
+	}
 
 }

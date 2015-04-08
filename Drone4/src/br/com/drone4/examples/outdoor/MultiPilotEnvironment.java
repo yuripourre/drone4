@@ -14,7 +14,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import br.com.abby.util.CameraGL;
-import br.com.drone4.automated.AutonomousFlight;
 import br.com.drone4.automated.action.GoToAction;
 import br.com.drone4.automated.action.MoveAction;
 import br.com.drone4.automated.action.TurnAction;
@@ -28,7 +27,6 @@ import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.event.PointerEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.grid.GridApplication;
 import br.com.luvia.loader.TextureLoader;
@@ -36,16 +34,18 @@ import br.com.luvia.loader.TextureLoader;
 import com.jogamp.opengl.util.awt.Screenshot;
 import com.jogamp.opengl.util.texture.Texture;
 
-public class CleanEnvironment extends GridApplication implements UpdateIntervalListener {
+public class MultiPilotEnvironment extends GridApplication implements UpdateIntervalListener {
 	
-	protected StandardCamera droneCamera;
+	protected StandardCamera droneCamera1;
 
 	//Scene Stuff
 	private Texture road;
 
-	protected CameraGL cameraGL;
-
-	protected PhantomDJI drone;
+	protected PhantomDJI drone1;
+	protected PhantomDJI drone2;
+	
+	protected CameraGL cameraGL1;
+	protected CameraGL cameraGL2;
 	
 	protected float mx = 0;
 
@@ -53,12 +53,14 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 
 	protected boolean click = false;
 
-	private KeyboardInput controller = new KeyboardInput();
+	private KeyboardInput controller1 = new KeyboardInput(1);
+	private KeyboardInput controller2 = new KeyboardInput(0);
 	
 	//UI
-	private BatteryIndicator batteryIndicator;
+	private BatteryIndicator batteryIndicator1;
+	private BatteryIndicator batteryIndicator2;
 	
-	public CleanEnvironment(int w, int h) {
+	public MultiPilotEnvironment(int w, int h) {
 		super(w, h);
 	}
 
@@ -82,13 +84,14 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	public void load() {
 		
 		//Size in meters		
-		drone = new PhantomDJI(1, 8, 0);
-
-		droneCamera = drone.getCamera();
-				
-		cameraGL = new CameraGL(0, 20, -10);
-
-		cameraGL.setTarget(drone);
+		drone1 = new PhantomDJI(1, 8, 0);
+		cameraGL1 = new CameraGL(0, 20, -10);
+		cameraGL1.setTarget(drone1);
+		droneCamera1 = drone1.getCamera();
+		
+		drone2 = new PhantomDJI(3, 8, 0);
+		cameraGL2 = new CameraGL(1, 20, -10);
+		cameraGL2.setTarget(drone2);
 
 		//Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
@@ -104,7 +107,8 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		actionList.add(new GoToAction(0, 10, 10));
 		actionList.add(new GoToAction(0, 5, 20));
 				
-		batteryIndicator = new BatteryIndicator(w-w/20, 70, drone.getBattery());
+		batteryIndicator1 = new BatteryIndicator(w-w/20, 70, drone1.getBattery());
+		batteryIndicator2 = new BatteryIndicator(w-w/20, 170, drone2.getBattery());
 		
 		//updateAtFixedRate(300, this);
 	}
@@ -159,43 +163,33 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
-		controller.updateKeyboard(event);
+		controller1.updateKeyboard(event);
+		controller2.updateKeyboard(event);
 		
 		if(event.isKeyDown(KeyEvent.TSK_I)) {						
-			droneCamera.setOffsetX(+1);
+			droneCamera1.setOffsetX(+1);
 		}
 		
 		if(event.isKeyDown(KeyEvent.TSK_K)) {						
-			droneCamera.setOffsetX(-1);
+			droneCamera1.setOffsetX(-1);
 		}
 		
 		if(event.isKeyDown(KeyEvent.TSK_L)) {				
-			droneCamera.setOffsetZ(+1);
+			droneCamera1.setOffsetZ(+1);
 		}
 		
 		if(event.isKeyDown(KeyEvent.TSK_J)) {
-			droneCamera.setOffsetZ(-1);
+			droneCamera1.setOffsetZ(-1);
 		}
 		
 		return GUIEvent.NONE;
 	}
 
+	@Override
 	public GUIEvent updateMouse(PointerEvent event) {
 
 		mx = event.getX();
-
 		my = event.getY();
-
-		if(event.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()+0.1f);
-			click = true;
-		}
-
-		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()-0.1f);
-
-			click = false;
-		}
 
 		return GUIEvent.NONE;
 	}
@@ -211,12 +205,12 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
 
-		captureCamera(drawable, droneCamera);
+		captureCamera(drawable, droneCamera1);
 		
 		gl.glViewport(x, y, w, h);
 				
 		//Update Camera View
-		drawable.updateCamera(cameraGL);
+		drawable.updateCamera(cameraGL1);
 		//drawable.aimCamera(followCamera);
 		
 		drawScene(gl);
@@ -253,7 +247,8 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		//Draw Scene
 		drawFloor(gl);
 
-		drone.getModel().draw(gl);
+		drone1.getModel().draw(gl);
+		drone2.getModel().draw(gl);
 
 		gl.glFlush();
 
@@ -261,62 +256,61 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	
 	@Override
 	public void timeUpdate(long now) {
-
-		manualFlight();
 		
-		cameraGL.setX(drone.getX());
-		cameraGL.setZ(drone.getZ()-10);
+		//flight.flight();		
+
+		manualFlight(controller1, drone1);
+		manualFlight(controller2, drone2);
+		
+		cameraGL1.setX(drone1.getX());
+		cameraGL1.setZ(drone1.getZ()-10);
 	}
 		
-	private void manualFlight() {
+	private void manualFlight(KeyboardInput controller, PhantomDJI drone) {
 		
 		double level = drone.getBattery().getLevel();
 		
-		double moveBattery = 0.05;
+		double offsetMove = 0.1;
+		double offsetTurn = 0.1;
 		
 		if(controller.isUpPressed()) {
 			drone.goUp(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isDownPressed()) {
 			drone.goDown(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isRightPressed()) {
 			drone.goRight(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isLeftPressed()) {
 			drone.goLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isForwardPressed()) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isBackwardPressed()) {
 			drone.goBackward(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isTurnRightPressed()) {
 			drone.turnRight(Sensitivity.FULL_POSITIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 
 		if(controller.isTurnLeftPressed()) {
 			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
-		}
-		
-		if(controller.isUpperLeftUpPressed()) {
-			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
-			drone.getBattery().setLevel(level-moveBattery);
+			drone.getBattery().setLevel(level-offsetMove);
 		}
 		
 	}
@@ -325,23 +319,23 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 	public void draw(Graphic g) {
 
 		//Draw PipCamera
-		g.drawImage(droneCamera.getBufferedImage(), 0, 60);
+		g.drawImage(droneCamera1.getBufferedImage(), 0, 60);
 		
 		//Draw Information
 		g.setColor(Color.WHITE);
 		g.drawShadow(20,60, "Scene",Color.BLACK);
 
-		g.drawShadow(20,120, "DroneX: "+(drone.getX()),Color.BLACK);
-		g.drawShadow(20,140, "DroneY: "+(drone.getY()),Color.BLACK);
-		g.drawShadow(20,160, "DroneZ: "+(drone.getZ()),Color.BLACK);
+		g.drawShadow(20,120, "DroneX: "+(drone1.getX()),Color.BLACK);
+		g.drawShadow(20,140, "DroneY: "+(drone1.getY()),Color.BLACK);
+		g.drawShadow(20,160, "DroneZ: "+(drone1.getZ()),Color.BLACK);
 		
-		g.drawShadow(20,200, "DroneAngleY: "+(drone.getAngleY()),Color.BLACK);
+		g.drawShadow(20,200, "DroneAngleY: "+(drone1.getAngleY()),Color.BLACK);
 		
-		g.drawShadow(20,220, "CameraAngleX: "+(droneCamera.getAngleX()),Color.BLACK);
-		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera.getAngleY()),Color.BLACK);
-		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera.getAngleZ()),Color.BLACK);
+		g.drawShadow(20,220, "CameraAngleX: "+(droneCamera1.getAngleX()),Color.BLACK);
+		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera1.getAngleY()),Color.BLACK);
+		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera1.getAngleZ()),Color.BLACK);
 		
-		batteryIndicator.draw(g);
+		batteryIndicator1.draw(g);
 
 	}
 
