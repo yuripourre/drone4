@@ -2,6 +2,7 @@ import br.com.drone4.examples.indoor.IndoorEnvironment;
 import br.com.drone4.examples.outdoor.CleanEnvironment;
 import br.com.drone4.examples.outdoor.RemoteEnvironment;
 import br.com.drone4.examples.outdoor.SportsEnvironment;
+import br.com.etyllica.core.loader.JoystickLoader;
 import br.com.luvia.Luvia;
 import br.com.luvia.core.context.ApplicationGL;
 
@@ -25,9 +26,12 @@ public class Simulator extends Luvia {
 		
 		initialSetup("../");
 		
+		//Init joystick
+		JoystickLoader.getInstance().init(5);
+		
 		//return new SportsEnvironment(w, h);
-		//return new CleanEnvironment(w, h);
-		return new RemoteEnvironment(w, h);
+		return new CleanEnvironment(w, h);
+		//return new RemoteEnvironment(w, h);
 		
 	}
 

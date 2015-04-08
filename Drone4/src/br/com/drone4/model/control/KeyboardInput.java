@@ -30,15 +30,15 @@ public class KeyboardInput {
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
-			rightPressed = Sensitivity.FULL_POSITIVE;
+			turnRightPressed = Sensitivity.FULL_POSITIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
-			rightPressed = 0;
+			turnRightPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_A)) {
-			leftPressed = Sensitivity.FULL_NEGATIVE;
+			turnLeftPressed = Sensitivity.FULL_NEGATIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
-			leftPressed = 0;
+			turnLeftPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_S)) {
@@ -62,17 +62,74 @@ public class KeyboardInput {
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
-			turnLeftPressed = Sensitivity.FULL_NEGATIVE;
+			leftPressed = Sensitivity.FULL_NEGATIVE;
 
 		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
-			turnLeftPressed = 0;
+			leftPressed = 0;
 		}
 
 		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
-			turnRightPressed = Sensitivity.FULL_POSITIVE;
+			rightPressed = Sensitivity.FULL_POSITIVE;
 		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
+			rightPressed = 0;
+		}
+		
+		updateJoystick(event);
+	}
+	
+	public void updateJoystick(KeyEvent event) {
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_UP)) {			
+			upPressed = Sensitivity.FULL_POSITIVE;			
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_Y)) {
+			upPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_DOWN)) {
+			downPressed = Sensitivity.FULL_NEGATIVE;
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_Y)) {
+			downPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_RIGHT)) {			
+			turnRightPressed = Sensitivity.FULL_NEGATIVE;	
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_X)) {
 			turnRightPressed = 0;
 		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_LEFT)) {
+			turnLeftPressed = Sensitivity.FULL_POSITIVE;
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_CENTER_X)) {
+			turnLeftPressed = 0;
+		}
+		
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_1)) {
+			forwardPressed = Sensitivity.FULL_POSITIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_1)) {
+			forwardPressed = 0;
+		}
+
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
+			backwardPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_3)) {
+			backwardPressed = 0;
+		}
+
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_4)) {
+			leftPressed = Sensitivity.FULL_NEGATIVE;
+
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_4)) {
+			leftPressed = 0;
+		}
+
+		if(event.isKeyDown(KeyEvent.TSK_JOYSTICK_BUTTON_2)) {
+			rightPressed = Sensitivity.FULL_POSITIVE;
+		} else if(event.isKeyUp(KeyEvent.TSK_JOYSTICK_BUTTON_2)) {
+			rightPressed = 0;
+		}
+		
 	}
 
 	public boolean isForwardPressed() {
