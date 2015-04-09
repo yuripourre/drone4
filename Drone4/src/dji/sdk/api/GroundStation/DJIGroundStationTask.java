@@ -9,7 +9,7 @@ public class DJIGroundStationTask {
 	private int startWaypointIndex = 0; 
 	private int wayPointCount = 0;
 	
-	private boolean loop = false;
+	public boolean loop = false;
 	
 	public DJIGroundStationTask() {
 		super();
