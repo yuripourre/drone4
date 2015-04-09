@@ -21,7 +21,7 @@ import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
 import br.com.drone4.model.accessory.Gimbal;
 import br.com.drone4.model.control.KeyboardInput;
-import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.drone4.sensor.camera.StandardCamera;
 import br.com.drone4.ui.indicator.BatteryIndicator;
 import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
@@ -45,7 +45,7 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 
 	protected CameraGL cameraGL;
 
-	protected PhantomDJI drone;
+	protected PhantomDJI drone; 
 	
 	protected float mx = 0;
 

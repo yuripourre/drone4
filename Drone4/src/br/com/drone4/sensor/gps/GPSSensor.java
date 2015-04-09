@@ -1,6 +1,6 @@
-package br.com.drone4.model.sensor.gps;
+package br.com.drone4.sensor.gps;
 
-import br.com.drone4.model.sensor.Sensor;
+import br.com.drone4.sensor.Sensor;
 
 public interface GPSSensor extends Sensor {
 	

@@ -6,11 +6,12 @@ import br.com.abby.loader.MeshLoader;
 import br.com.drone4.model.AerialDrone;
 import br.com.drone4.model.accessory.Gimbal;
 import br.com.drone4.model.accessory.StandardGimbal;
-import br.com.drone4.model.sensor.battery.BatterySensor;
-import br.com.drone4.model.sensor.battery.dji.DJISmartBattery;
-import br.com.drone4.model.sensor.camera.StandardCamera;
-import br.com.drone4.model.sensor.gps.GPSSensor;
-import br.com.drone4.model.sensor.gps.PreciseGPSSensor;
+import br.com.drone4.sensor.battery.BatterySensor;
+import br.com.drone4.sensor.battery.dji.DJISmartBattery;
+import br.com.drone4.sensor.camera.AngularLensCamera;
+import br.com.drone4.sensor.camera.StandardCamera;
+import br.com.drone4.sensor.gps.GPSSensor;
+import br.com.drone4.sensor.gps.PreciseGPSSensor;
 import br.com.luvia.linear.Mesh;
 
 public class PhantomDJI extends AerialDrone {
@@ -49,7 +50,7 @@ public class PhantomDJI extends AerialDrone {
 	}
 
 	private void initSensors(double x, double y, double z) {
-		camera = new StandardCamera(x, y, z);
+		camera = new AngularLensCamera(x, y, z);
 		gps = new PreciseGPSSensor();
 		batterySensor = new DJISmartBattery();
 		gimbal = new StandardGimbal(camera);

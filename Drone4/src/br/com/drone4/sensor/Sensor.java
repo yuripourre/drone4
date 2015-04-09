@@ -1,4 +1,4 @@
-package br.com.drone4.model.sensor;
+package br.com.drone4.sensor;
 
 import br.com.drone4.model.Drone;
 

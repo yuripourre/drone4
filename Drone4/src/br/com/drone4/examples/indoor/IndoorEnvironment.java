@@ -17,7 +17,7 @@ import javax.media.opengl.glu.GLU;
 import br.com.abby.util.CameraGL;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.Roomba;
-import br.com.drone4.model.sensor.camera.StandardCamera;
+import br.com.drone4.sensor.camera.StandardCamera;
 import br.com.etyllica.context.UpdateIntervalListener;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;

@@ -4,9 +4,9 @@ import java.awt.Color;
 
 import br.com.abby.loader.MeshLoader;
 import br.com.drone4.model.TerrestrialDrone;
-import br.com.drone4.model.sensor.camera.StandardCamera;
-import br.com.drone4.model.sensor.compass.CompassSensor;
-import br.com.drone4.model.sensor.compass.PreciseCompassSensor;
+import br.com.drone4.sensor.camera.StandardCamera;
+import br.com.drone4.sensor.compass.CompassSensor;
+import br.com.drone4.sensor.compass.PreciseCompassSensor;
 import br.com.luvia.linear.Mesh;
 
 public class Roomba extends TerrestrialDrone {

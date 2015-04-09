@@ -1,4 +1,4 @@
-package br.com.drone4.model.sensor.camera;
+package br.com.drone4.sensor.camera;
 
 import java.awt.image.BufferedImage;
 
@@ -7,11 +7,11 @@ import br.com.drone4.model.Drone;
 
 public class StandardCamera extends AimPoint implements Camera {
 
-	private int width = 160;
+	protected int width = 160;
 	
-	private int height = 90;
+	protected int height = 90;
 		
-	private BufferedImage bufferedImage;
+	protected BufferedImage bufferedImage;
 	
 	public StandardCamera(double x, double y, double z) {
 		super(x, y, z);

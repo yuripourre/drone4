@@ -1,8 +1,8 @@
-package br.com.drone4.model.sensor.camera;
+package br.com.drone4.sensor.camera;
 
 import java.awt.image.BufferedImage;
 
-import br.com.drone4.model.sensor.Sensor;
+import br.com.drone4.sensor.Sensor;
 
 public interface Camera extends Sensor {
 		

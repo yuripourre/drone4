@@ -1,6 +1,6 @@
-package br.com.drone4.model.sensor.battery;
+package br.com.drone4.sensor.battery;
 
-import br.com.drone4.model.sensor.Sensor;
+import br.com.drone4.sensor.Sensor;
 
 public interface BatterySensor extends Sensor {
 

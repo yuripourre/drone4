@@ -2,7 +2,7 @@ package br.com.drone4.ui.indicator;
 
 import java.awt.Color;
 
-import br.com.drone4.model.sensor.battery.BatterySensor;
+import br.com.drone4.sensor.battery.BatterySensor;
 import br.com.etyllica.core.Drawable;
 import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.layer.Layer;

@@ -2,7 +2,7 @@ package br.com.drone4.model.accessory;
 
 import br.com.abby.linear.AimPoint;
 import br.com.drone4.model.Drone;
-import br.com.drone4.model.sensor.camera.Camera;
+import br.com.drone4.sensor.camera.Camera;
 
 public class StandardGimbal implements Gimbal {
 	

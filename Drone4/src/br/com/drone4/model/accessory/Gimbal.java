@@ -1,6 +1,6 @@
 package br.com.drone4.model.accessory;
 
-import br.com.drone4.model.sensor.Sensor;
+import br.com.drone4.sensor.Sensor;
 
 public interface Gimbal extends Sensor {
 	
