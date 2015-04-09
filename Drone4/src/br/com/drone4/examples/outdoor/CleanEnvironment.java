@@ -14,7 +14,6 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import br.com.abby.util.CameraGL;
-import br.com.drone4.automated.AutonomousFlight;
 import br.com.drone4.automated.action.GoToAction;
 import br.com.drone4.automated.action.MoveAction;
 import br.com.drone4.automated.action.TurnAction;
@@ -284,15 +283,20 @@ public class CleanEnvironment extends GridApplication implements UpdateIntervalL
 		if(controller.isDownPressed()) {
 			drone.goDown(Sensitivity.FULL_NEGATIVE);
 			inc -= moveOffset;
+			
+			//Ground Collision
+			if(drone.getY()<0) {
+				drone.setY(0);
+			}
 		}
 
 		if(controller.isRightPressed()) {
-			drone.goRight(Sensitivity.FULL_POSITIVE);
+			drone.goRight(Sensitivity.FULL_NEGATIVE);
 			inc -= moveOffset;
 		}
 
 		if(controller.isLeftPressed()) {
-			drone.goLeft(Sensitivity.FULL_NEGATIVE);
+			drone.goLeft(Sensitivity.FULL_POSITIVE);
 			inc -= moveOffset;
 		}
 

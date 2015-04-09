@@ -14,9 +14,8 @@ public class AerialDrone extends Drone {
 	}
 			
 	@Override
-	public void goRight(double sensitivity) {
-		
-		double distance = speed;
+	public void goRight(double sensitivity) {		
+		double distance = speed*sensitivity;
 		double angle = angleY+90;
 		moveByAngle(angle, distance);
 		updateSensors();
@@ -24,7 +23,7 @@ public class AerialDrone extends Drone {
 	
 	@Override
 	public void goLeft(double sensitivity) {
-		double distance = speed;
+		double distance = speed*-sensitivity;
 		double angle = angleY-90;
 		moveByAngle(angle, distance);
 		updateSensors();
