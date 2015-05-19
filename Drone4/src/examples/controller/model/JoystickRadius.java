@@ -21,7 +21,7 @@ public class JoystickRadius {
 	//Center
 	private float sensitivityX = 0;
 	private float sensitivityY = 0;
-	
+
 	private Point2D center;
 	private Point2D joyPosition;
 
@@ -31,10 +31,10 @@ public class JoystickRadius {
 
 		int cx = area.getX()+DEFAULT_RADIUS;
 		int cy = area.getY()+DEFAULT_RADIUS;
-		
+
 		center = new Point2D(cx, cy);
 		joyPosition = new Point2D(cx, cy);
-		
+
 		joystick = new Layer(cx-DEFAULT_JOYSTICK_RADIUS, cy-DEFAULT_JOYSTICK_RADIUS, DEFAULT_JOYSTICK_RADIUS*2, DEFAULT_JOYSTICK_RADIUS*2);
 	}
 
@@ -81,14 +81,14 @@ public class JoystickRadius {
 
 				calculateSensitivityX(mx);
 				calculateSensitivityY(my);
-				
+
 				int jx = mx-DEFAULT_JOYSTICK_RADIUS;
 				int jy = my-DEFAULT_JOYSTICK_RADIUS;
-				
+
 				joyPosition.setLocation(mx, my);
-								
+
 				double dist = joyPosition.distance(center);
-				
+
 				if(dist < DEFAULT_RADIUS) {
 					joystick.setCoordinates(jx, jy);					
 				} else {
@@ -118,7 +118,7 @@ public class JoystickRadius {
 			sensitivityX = -1;
 		}
 	}
-	
+
 	private void calculateSensitivityY(int my) {
 		float cy = area.getY()+DEFAULT_RADIUS;
 
@@ -129,7 +129,7 @@ public class JoystickRadius {
 		} else if(sensitivityY<-1) {
 			sensitivityY = -1;
 		}
-		
+
 		sensitivityY = -sensitivityY;
 	}
 
@@ -143,7 +143,7 @@ public class JoystickRadius {
 	public float getSensitivityX() {
 		return sensitivityX;
 	}
-	
+
 	public float getSensitivityY() {
 		return sensitivityY;
 	}

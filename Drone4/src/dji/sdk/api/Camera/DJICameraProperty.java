@@ -19,5 +19,5 @@ public class DJICameraProperty {
 	public DJICameraSettingsTypeDef.CameraRecordingResolutionType recordingResolution;
 	public DJICameraSettingsTypeDef.CameraSharpnessType sharpness;
 	public DJICameraSettingsTypeDef.CameraWhiteBalanceType whiteBalance;
-	
+
 }

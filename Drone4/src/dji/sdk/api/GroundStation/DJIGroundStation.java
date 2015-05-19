@@ -11,13 +11,14 @@ import dji.sdk.interfaces.DJIGroundStationTakeOffCallBack;
 public class DJIGroundStation {
 
 	private DJIGroundStationTask task = new DJIGroundStationTask();
-	
+
 	private DJIGroundStationFlyingInfoCallBack groundStationFlyingInfoCallBack;
-	
+
 	/**
 	 * Start upate timer
+	 * 
 	 * @param intervel - Timer run interval
-	 * @return 
+	 * @return
 	 */
 	public boolean startUpdateTimer(int intervel) {
 		return true;
@@ -25,6 +26,7 @@ public class DJIGroundStation {
 
 	/**
 	 * Stop upate timer
+	 * 
 	 * @return success
 	 */
 	public boolean stopUpdateTimer() {
@@ -40,6 +42,7 @@ public class DJIGroundStation {
 
 	/**
 	 * Open ground station
+	 * 
 	 * @param mCallBack - The ground station execute callBack
 	 */
 	public void openGroundStation(DJIGroundStationExecutCallBack mCallBack) {
@@ -48,6 +51,7 @@ public class DJIGroundStation {
 
 	/**
 	 * Close ground station
+	 * 
 	 * @param mCallBack - The ground station execute callBack
 	 */
 	public void closeGroundStation(DJIGroundStationExecutCallBack mCallBack) {
@@ -56,15 +60,18 @@ public class DJIGroundStation {
 
 	/**
 	 * Upload ground station task
+	 * 
 	 * @param task - The ground station task
 	 * @param mCallBack - The ground station execute callBack
 	 */
-	public void uploadGroundStationTask(DJIGroundStationTask task, DJIGroundStationExecutCallBack mCallBack) {
+	public void uploadGroundStationTask(DJIGroundStationTask task,
+			DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 	/**
 	 * Download ground station task
+	 * 
 	 * @param mCallBack - The ground station execute callBack
 	 */
 	public void downloadGroundStationTask(DJIGroundStationExecutCallBack mCallBack) {
@@ -72,7 +79,8 @@ public class DJIGroundStation {
 	}
 
 	/**
-	 * Start ground station task 
+	 * Start ground station task
+	 * 
 	 * @param mCallBack - The ground station take off callBack
 	 */
 	public void startGroundStationTask(DJIGroundStationTakeOffCallBack mCallBack) {
@@ -81,6 +89,7 @@ public class DJIGroundStation {
 
 	/**
 	 * Pause ground station task
+	 * 
 	 * @param mCallBack - The ground station take off callBack
 	 */
 
@@ -90,6 +99,7 @@ public class DJIGroundStation {
 
 	/**
 	 * One key fly
+	 * 
 	 * @param mCallBack - The ground station hover callBack
 	 */
 	public void onKeyFly(DJIGroundStationOneKeyFlyCallBack mCallBack) {
@@ -100,6 +110,7 @@ public class DJIGroundStation {
 
 	/**
 	 * Continue ground station task
+	 * 
 	 * @param mCallBack - The ground station resume callBack
 	 */
 	public void continueGroundStationTask(DJIGroundStationResumeCallBack mCallBack) {
@@ -109,57 +120,60 @@ public class DJIGroundStation {
 
 	/**
 	 * Go home
+	 * 
 	 * @param mCallBack - The ground station go home callBack
 	 */
 	public void goHome(DJIGroundStationGoHomeCallBack mCallBack) {
 
 	}
+
 	/**
 	 * setAircraftYawSpeed
+	 * 
 	 * @param yawSpeed - Aircraft yaw rotate speed[-1000 ~ 1000]
 	 * @param mCallBack - The ground station execute callBack
 	 */
-	public void setAircraftYawSpeed(int yawSpeed,
-			DJIGroundStationExecutCallBack mCallBack) {
+	public void setAircraftYawSpeed(int yawSpeed, DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 
 	/**
 	 * Set Aircraft Pitch Rotate Speed
+	 * 
 	 * @param pitchSpeed - Aircraft pitch rotate speed[-1000 ~ 1000]
 	 * @param mCallBack - The ground station execute callBack
 	 */
 
-	public void setAircraftPitchSpeed(int pitchSpeed,
-			DJIGroundStationExecutCallBack mCallBack) {
+	public void setAircraftPitchSpeed(int pitchSpeed, DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 	/**
 	 * Set Aircraft Roll Rotate Speed
+	 * 
 	 * @param rollSpeed - Aircraft roll rotate speed[-1000 ~ 1000]
 	 * @param mCallBack - The ground station execute callBack
 	 */
 
-	public void setAircraftRollSpeed(int rollSpeed,
-			DJIGroundStationExecutCallBack mCallBack) {
+	public void setAircraftRollSpeed(int rollSpeed, DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 	/**
 	 * Set Aircraft Roll Rotate Speed
+	 * 
 	 * @param throttle - Aircraft roll rotate speed[0 stop,1 up, 2 down]
 	 * @param mCallBack - The ground station execute callBack
 	 */
-	public void setAircraftThrottle(int throttle,
-			DJIGroundStationExecutCallBack mCallBack) {
+	public void setAircraftThrottle(int throttle, DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 
 	/**
 	 * Set Aircraft JoyStick Attitude
+	 * 
 	 * @param yawSpeed - Aircraft yaw rotate speed[-1000 ~ 1000]
 	 * @param pitchSpeed - Aircraft pitch rotate speed[-1000 ~ 1000]
 	 * @param rollSpeed - Aircraft roll rotate speed[-1000 ~ 1000]
@@ -167,16 +181,14 @@ public class DJIGroundStation {
 	 * @param mCallBack - The ground station execute callBack
 	 */
 
-	public void setAircraftJoystick(int yawSpeed,
-			int pitchSpeed,
-			int rollSpeed,
-			int throttle,
+	public void setAircraftJoystick(int yawSpeed, int pitchSpeed, int rollSpeed, int throttle,
 			DJIGroundStationExecutCallBack mCallBack) {
 
 	}
 
 	/**
 	 * Get GroundStationFlyingInfoCallBack
+	 * 
 	 * @return DJIGroundStationFlyingInfoCallBack
 	 */
 	public DJIGroundStationFlyingInfoCallBack getGroundStationFlyingInfoCallBack() {
@@ -185,18 +197,21 @@ public class DJIGroundStation {
 
 	/**
 	 * Set GroundStationFlyingInfoCallBack
+	 * 
 	 * @param mGroundStationFlyingInfoCallBack - The ground station fly infomation callback
 	 */
-	public void setGroundStationFlyingInfoCallBack(DJIGroundStationFlyingInfoCallBack mGroundStationFlyingInfoCallBack) {
+	public void setGroundStationFlyingInfoCallBack(
+			DJIGroundStationFlyingInfoCallBack mGroundStationFlyingInfoCallBack) {
 		this.groundStationFlyingInfoCallBack = mGroundStationFlyingInfoCallBack;
 	}
 
 	/**
 	 * Get Ground Station Task
+	 * 
 	 * @return DJIGroundStationTask
 	 */
 	public DJIGroundStationTask getDJIGroundStationTask() {
 		return task;
 	}
-	
+
 }

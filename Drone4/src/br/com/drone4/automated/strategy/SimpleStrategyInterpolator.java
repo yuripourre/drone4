@@ -6,72 +6,52 @@ import br.com.drone4.model.Drone;
 
 public class SimpleStrategyInterpolator implements StrategyInterpolator {
 
-	@Override
-	public boolean handleGoTo(Drone drone, MoveAction action) {
+  @Override
+  public boolean handleGoTo(Drone drone, MoveAction action) {
 
-		boolean foundY = false;
+    boolean foundY = false;
+    boolean foundZ = false;
 
-		boolean foundZ = false;
-		
-		if(drone.getZ() < action.getZ()) {
-			
-			drone.goForward(Sensitivity.FULL_POSITIVE);
-			
-		} else {
-			
-			foundZ = true;
-		}
+    if (drone.getZ() < action.getZ()) {
+      drone.goForward(Sensitivity.FULL_POSITIVE);
+    } else {
+      foundZ = true;
+    }
 
-		if(drone.getY() < action.getY()) {
+    if (drone.getY() < action.getY()) {
+      drone.goUp(Sensitivity.FULL_POSITIVE);
+    } else if (drone.getY() > action.getY()) {
+      drone.goDown(Sensitivity.FULL_NEGATIVE);
+    } else {
+      foundY = true;
+    }
 
-			drone.goUp(Sensitivity.FULL_POSITIVE);
+    if (foundY && foundZ) {
 
-		} else if(drone.getY() > action.getY()) {
-			
-			drone.goDown(Sensitivity.FULL_NEGATIVE);
-			
-		} else {
-			
-			foundY = true;
-		}		
+      return true;
 
-		if(foundY && foundZ) {
+    }
 
-			return true;
+    return false;
+  }
 
-		}
-				
-		return false;
-	}
+  @Override
+  public boolean handleTurn(Drone drone, MoveAction action) {
 
-	@Override
-	public boolean handleTurn(Drone drone, MoveAction action) {
-		
-		boolean foundY = false;
+    boolean foundY = false;
+    boolean foundZ = true;
 
-		boolean foundZ = true;
-		
-		if(drone.getAngleY() < action.getAngleY()) {
+    if (drone.getAngleY() < action.getAngleY()) {
+      drone.yaw(Sensitivity.FULL_POSITIVE);
+    } else if (drone.getAngleY() > action.getAngleY()) {
+      drone.yaw(Sensitivity.FULL_NEGATIVE);
+    } else {
+      foundY = true;
+    }
 
-			drone.yaw(Sensitivity.FULL_POSITIVE);
-
-		} else if(drone.getAngleY() > action.getAngleY()) {
-			
-			drone.yaw(Sensitivity.FULL_NEGATIVE);
-			
-		} else {
-			
-			foundY = true;
-			
-		}		
-		
-
-		if(foundY && foundZ) {
-
-			return true;
-
-		}
-		return false;
-	}
-
+    if (foundY && foundZ) {
+      return true;
+    }
+    return false;
+  }
 }

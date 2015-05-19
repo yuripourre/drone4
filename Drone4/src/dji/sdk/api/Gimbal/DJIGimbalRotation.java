@@ -6,7 +6,7 @@ public class DJIGimbalRotation {
 	public boolean direction;
 	public boolean enable;
 	public boolean type;
-	
+
 	/**
 	 * 
 	 * @param mEnable - The rotate enable
@@ -15,11 +15,11 @@ public class DJIGimbalRotation {
 	 * @param mAngle - The rotate angle
 	 */
 	public DJIGimbalRotation(boolean mEnable, boolean mDirection, boolean mType, int mAngle) {
-	    super();
-	    angle = mAngle;
-	    type = mType;
-	    direction = mDirection;
-	    enable = mEnable;
+		super();
+		angle = mAngle;
+		type = mType;
+		direction = mDirection;
+		enable = mEnable;
 	}
-	
+
 }

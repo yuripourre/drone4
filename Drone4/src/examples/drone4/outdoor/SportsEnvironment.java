@@ -1,4 +1,4 @@
-package br.com.drone4.examples.outdoor;
+package examples.drone4.outdoor;
 
 import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_TEXTURE_2D;
@@ -33,10 +33,10 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 
 	protected StandardCamera droneCamera;
 
-	//Scene Stuff
+	// Scene Stuff
 	private Mesh club;
-	
-	//private Texture road;
+
+	// private Texture road;
 
 	protected CameraGL cameraGL;
 
@@ -72,8 +72,8 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 
 	@Override
 	public void load() {
-		
-		//Size in meters		
+
+		// Size in meters
 		drone = new PhantomDJI(1, 8, 0);
 
 		droneCamera = drone.getCamera();
@@ -82,13 +82,13 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 
 		cameraGL.setTarget(drone);
 
-		//Load Club Mesh
+		// Load Club Mesh
 		club = new Mesh(MeshLoader.getInstance().loadModel("scene/club/club.obj"));
-		
+
 		updateAtFixedRate(300, this);
 
 	}
-	
+
 	private void drawFloor(GL2 gl) {
 
 		gl.glColor3d(1, 1, 1);
@@ -98,54 +98,54 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 
 		club.draw(gl);
 	}
-	
+
 	@Override
 	public void reshape(Graphics3D drawable, int x, int y, int width, int height) {
 
 		GL2 gl = drawable.getGL2();
 		GLU glu = drawable.getGLU();
 
-		gl.glViewport (x, y, width, height);
+		gl.glViewport(x, y, width, height);
 
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 
 		gl.glLoadIdentity();
 
-		float aspect = (float)width / (float)height;
-		
-		glu.gluPerspective(60*zoom, aspect, 1, 100);
-		
+		float aspect = (float) width / (float) height;
+
+		glu.gluPerspective(60 * zoom, aspect, 1, 100);
+
 	}
 
 	@Override
 	public GUIEvent updateKeyboard(KeyEvent event) {
 
 		controller.updateKeyboard(event);
-		
-		if(event.isKeyDown(KeyEvent.TSK_I)) {
-			
-			//droneCamera.getTarget().setOffsetX(+1);			
+
+		if (event.isKeyDown(KeyEvent.TSK_I)) {
+
+			// droneCamera.getTarget().setOffsetX(+1);
 			droneCamera.setOffsetX(+1);
 		}
-		
-		if(event.isKeyDown(KeyEvent.TSK_K)) {
-			
-			//droneCamera.getTarget().setOffsetX(-1);			
+
+		if (event.isKeyDown(KeyEvent.TSK_K)) {
+
+			// droneCamera.getTarget().setOffsetX(-1);
 			droneCamera.setOffsetX(-1);
 		}
-		
-		if(event.isKeyDown(KeyEvent.TSK_L)) {
-			
-			//droneCamera.getTarget().setOffsetZ(+1);	
+
+		if (event.isKeyDown(KeyEvent.TSK_L)) {
+
+			// droneCamera.getTarget().setOffsetZ(+1);
 			droneCamera.setOffsetZ(+1);
 		}
-		
-		if(event.isKeyDown(KeyEvent.TSK_J)) {
-			
-			//droneCamera.getTarget().setOffsetZ(-1);
+
+		if (event.isKeyDown(KeyEvent.TSK_J)) {
+
+			// droneCamera.getTarget().setOffsetZ(-1);
 			droneCamera.setOffsetZ(-1);
 		}
-		
+
 		return GUIEvent.NONE;
 	}
 
@@ -155,13 +155,13 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 
 		my = event.getY();
 
-		if(event.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()+0.1f);
+		if (event.isButtonDown(MouseButton.MOUSE_BUTTON_LEFT)) {
+			cameraGL.setZ(cameraGL.getZ() + 0.1f);
 			click = true;
 		}
 
-		if(event.isButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
-			cameraGL.setZ(cameraGL.getZ()-0.1f);
+		if (event.isButtonUp(MouseButton.MOUSE_BUTTON_LEFT)) {
+			cameraGL.setZ(cameraGL.getZ() - 0.1f);
 
 			click = false;
 		}
@@ -178,51 +178,51 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 		gl.glClearColor(1f, 1f, 1f, 1);
 
 		captureCamera(drawable, droneCamera);
-		
+
 		gl.glViewport(x, y, w, h);
-				
-		//Update Camera View
+
+		// Update Camera View
 		drawable.updateCamera(cameraGL);
-		
+
 		drawScene(gl);
-				
+
 	}
-	
+
 	protected void captureCamera(Graphics3D drawable, StandardCamera camera) {
-		
+
 		GL2 gl = drawable.getGL2();
-		
+
 		int w = camera.getWidth();
-		
+
 		int h = camera.getHeight();
-				
+
 		gl.glViewport(0, 0, w, h);
-		
-		//Update Camera View
+
+		// Update Camera View
 		drawable.aimCamera(camera);
 
-		//gl.glRotated(angleX, 1, 0, 0);
-		
-		//gl.glRotated(camera.getAngleY(), 0, 1, 0);
-		//gl.glTranslated(camera.getX(), camera.getY(), camera.getZ());
-		
-		//gl.glRotated(angleZ, 0, 0, 1);
-		
+		// gl.glRotated(angleX, 1, 0, 0);
+
+		// gl.glRotated(camera.getAngleY(), 0, 1, 0);
+		// gl.glTranslated(camera.getX(), camera.getY(), camera.getZ());
+
+		// gl.glRotated(angleZ, 0, 0, 1);
+
 		drawScene(gl);
-		
-		//Draw Drone Camera
+
+		// Draw Drone Camera
 		camera.setBufferedImage(Screenshot.readToBufferedImage(0, 0, w, h, false));
-		
+
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 		gl.glClearColor(1f, 1f, 1f, 1);
-		
+
 		gl.glLoadIdentity();
-		
+
 	}
 
 	protected void drawScene(GL2 gl) {
 
-		//Draw Scene
+		// Draw Scene
 		drawFloor(gl);
 
 		drone.getModel().draw(gl);
@@ -230,67 +230,67 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 		gl.glFlush();
 
 	}
-	
+
 	@Override
 	public void timeUpdate(long now) {
 		manualFlight();
 	}
-	
+
 	private void manualFlight() {
-		
-		if(controller.isUpPressed()) {
+
+		if (controller.isUpPressed()) {
 			drone.goUp(Sensitivity.FULL_POSITIVE);
 		}
 
-		if(controller.isDownPressed()) {
+		if (controller.isDownPressed()) {
 			drone.goDown(Sensitivity.FULL_NEGATIVE);
 		}
 
-		if(controller.isRightPressed()) {
+		if (controller.isRightPressed()) {
 			drone.goRight(Sensitivity.FULL_POSITIVE);
 		}
 
-		if(controller.isLeftPressed()) {
+		if (controller.isLeftPressed()) {
 			drone.goLeft(Sensitivity.FULL_NEGATIVE);
 		}
 
-		if(controller.isForwardPressed()) {
+		if (controller.isForwardPressed()) {
 			drone.goForward(Sensitivity.FULL_POSITIVE);
 		}
 
-		if(controller.isBackwardPressed()) {
+		if (controller.isBackwardPressed()) {
 			drone.goBackward(Sensitivity.FULL_NEGATIVE);
 		}
 
-		if(controller.isTurnRightPressed()) {
+		if (controller.isTurnRightPressed()) {
 			drone.turnRight(Sensitivity.FULL_POSITIVE);
 		}
 
-		if(controller.isTurnLeftPressed()) {
+		if (controller.isTurnLeftPressed()) {
 			drone.turnLeft(Sensitivity.FULL_NEGATIVE);
 		}
-		
+
 	}
 
 	@Override
 	public void draw(Graphic g) {
 
-		//Draw PipCamera
+		// Draw PipCamera
 		g.drawImage(droneCamera.getBufferedImage(), 0, 60);
-		
-		//Draw Information
-		g.setColor(Color.WHITE);
-		g.drawShadow(20,60, "Scene",Color.BLACK);
 
-		g.drawShadow(20,120, "DroneX: "+(drone.getX()),Color.BLACK);
-		g.drawShadow(20,140, "DroneY: "+(drone.getY()),Color.BLACK);
-		g.drawShadow(20,160, "DroneZ: "+(drone.getZ()),Color.BLACK);
-		
-		g.drawShadow(20,200, "DroneAngleY: "+(drone.getAngleY()),Color.BLACK);
-		
-		g.drawShadow(20,220, "CameraAngleX: "+(droneCamera.getAngleX()),Color.BLACK);
-		g.drawShadow(20,240, "CameraAngleY: "+(droneCamera.getAngleY()),Color.BLACK);
-		g.drawShadow(20,260, "CameraAngleZ: "+(droneCamera.getAngleZ()),Color.BLACK);
+		// Draw Information
+		g.setColor(Color.WHITE);
+		g.drawShadow(20, 60, "Scene", Color.BLACK);
+
+		g.drawShadow(20, 120, "DroneX: " + (drone.getX()), Color.BLACK);
+		g.drawShadow(20, 140, "DroneY: " + (drone.getY()), Color.BLACK);
+		g.drawShadow(20, 160, "DroneZ: " + (drone.getZ()), Color.BLACK);
+
+		g.drawShadow(20, 200, "DroneAngleY: " + (drone.getAngleY()), Color.BLACK);
+
+		g.drawShadow(20, 220, "CameraAngleX: " + (droneCamera.getAngleX()), Color.BLACK);
+		g.drawShadow(20, 240, "CameraAngleY: " + (droneCamera.getAngleY()), Color.BLACK);
+		g.drawShadow(20, 260, "CameraAngleZ: " + (droneCamera.getAngleZ()), Color.BLACK);
 
 	}
 

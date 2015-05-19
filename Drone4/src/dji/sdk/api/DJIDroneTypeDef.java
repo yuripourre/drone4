@@ -3,7 +3,7 @@ package dji.sdk.api;
 public class DJIDroneTypeDef {
 
 	public static enum DJIDroneType {
-		DJIDrone_Vision;
+		DJIDrone_Vision, DJIDrone_Inspire1;
 	}
-	
+
 }

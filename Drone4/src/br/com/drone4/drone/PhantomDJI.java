@@ -16,34 +16,34 @@ import br.com.luvia.linear.Mesh;
 
 public class PhantomDJI extends AerialDrone {
 
-	//Sensors
+	// Sensors
 	private PreciseGPSSensor gps;
-	
+
 	private StandardCamera camera;
-	
+
 	private BatterySensor batterySensor;
-	
-	//Accessories
+
+	// Accessories
 	private Gimbal gimbal;
-	
+
 	private Mesh model;
-	
+
 	private double modelAngle = 135;
-			
+
 	public PhantomDJI(double x, double y, double z) {
 		super(x, y, z);
-		
+
 		speed = .5;
-		
+
 		startAngle = 180;
-		
+
 		yawSpeed = 10;
-		
+
 		initSensors(x, y, z);
-		
+
 		model = new Mesh(MeshLoader.getInstance().loadModel("aerial/quad.obj"));
 		model.setDrawTexture(false);
-		
+
 		model.setColor(Color.DARK_GRAY);
 		model.setCoordinates(x, y, z);
 		model.setAngleY(modelAngle);
@@ -55,34 +55,30 @@ public class PhantomDJI extends AerialDrone {
 		batterySensor = new DJISmartBattery();
 		gimbal = new StandardGimbal(camera);
 	}
-	
+
 	@Override
 	public void updateSensors() {
-		
-		model.setCoordinates(x, y, z);		
-		model.setAngleY(-angleY+modelAngle);//angle in degrees
+		model.setCoordinates(x, y, z);
+		model.setAngleY(-angleY + modelAngle);// angle in degrees
 
 		camera.update(this);
-		
 		gps.update(this);
-		
 		batterySensor.update(this);
-		
 		gimbal.update(this);
 	}
 
 	public StandardCamera getCamera() {
 		return camera;
 	}
-	
+
 	public Mesh getModel() {
 		return model;
 	}
-		
+
 	public GPSSensor getGps() {
 		return gps;
 	}
-	
+
 	public BatterySensor getBattery() {
 		return batterySensor;
 	}
@@ -90,5 +86,5 @@ public class PhantomDJI extends AerialDrone {
 	public Gimbal getGimbal() {
 		return gimbal;
 	}
-	
+
 }

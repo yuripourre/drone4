@@ -6,11 +6,8 @@ public class TurnAction extends MoveAction {
 		super(MoveActionType.TURN);
 		
 		this.angleX = angleX;
-		
 		this.angleY = angleY;
-		
 		this.angleZ = angleZ;
-
 	}
 	
 }

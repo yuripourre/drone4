@@ -4,39 +4,39 @@ import br.com.drone4.model.Drone;
 
 public class PreciseGPSSensor implements GPSSensor {
 
-	private double x = 0;
-	
-	private double y = 0;
-	
-	private double z = 0;
-	
-	@Override
-	public void update(Drone drone) {
-		
-		this.x = drone.getX();
-		
-		this.y = drone.getY();
-		
-		this.z = drone.getZ();
-		
-	}
+  private double x = 0;
 
-	public double getX() {
-		return x;
-	}
+  private double y = 0;
 
-	public double getY() {
-		return y;
-	}
+  private double z = 0;
 
-	public double getZ() {
-		return z;
-	}
+  @Override
+  public void update(Drone drone) {
 
-	@Override
-	public double getWeight() {
-		// TODO Auto-generated method stub
-		return 0;
-	}	
-	
+    this.x = drone.getX();
+
+    this.y = drone.getY();
+
+    this.z = drone.getZ();
+
+  }
+
+  public double getX() {
+    return x;
+  }
+
+  public double getY() {
+    return y;
+  }
+
+  public double getZ() {
+    return z;
+  }
+
+  @Override
+  public double getWeight() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
 }

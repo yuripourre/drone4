@@ -13,59 +13,55 @@ import br.com.drone4.model.Drone;
 
 public class AutonomousFlight {
 
-	private Drone drone;
-	
-	private int currentPoint = 0;
-	
-	private Map<MoveActionType, StrategyInterpolator> map;
-	
-	private List<MoveAction> actions = new ArrayList<MoveAction>();
-	
-	public AutonomousFlight(Drone drone, List<MoveAction> actions) {
-		super();
-		
-		this.drone = drone;
-		
-		this.actions.addAll(actions);
-		
-		map = new HashMap<MoveActionType, StrategyInterpolator>();  
+  private Drone drone;
 
-		SimpleStrategyInterpolator interpolator = new SimpleStrategyInterpolator();
-			
-		map.put(MoveActionType.GO_TO, interpolator);
-		map.put(MoveActionType.TURN, interpolator);
+  private int currentPoint = 0;
 
-	}
-	
-	public void flight() {
+  private Map<MoveActionType, StrategyInterpolator> map;
 
-		MoveAction action = actions.get(currentPoint);
+  private List<MoveAction> actions = new ArrayList<MoveAction>();
 
-		StrategyInterpolator strategy = map.get(action.getActionType());
-		
-		boolean nextPoint = false;
-		
-		switch(action.getActionType()) {
-		
-			case GO_TO:
-				
-				nextPoint = strategy.handleGoTo(drone, action);
-				break;
-				
-			case TURN:
-				
-				nextPoint = strategy.handleTurn(drone, action);
-				break;
-		}
-						
-		if( nextPoint ) {
-			
-			if(currentPoint < actions.size()-1) {
-				currentPoint++;
-			}
-			
-		}
+  public AutonomousFlight(Drone drone, List<MoveAction> actions) {
+    super();
 
-	}
-	
+    this.drone = drone;
+
+    this.actions.addAll(actions);
+
+    map = new HashMap<MoveActionType, StrategyInterpolator>();
+
+    SimpleStrategyInterpolator interpolator = new SimpleStrategyInterpolator();
+
+    map.put(MoveActionType.GO_TO, interpolator);
+    map.put(MoveActionType.TURN, interpolator);
+
+  }
+
+  public void flight() {
+
+    MoveAction action = actions.get(currentPoint);
+
+    StrategyInterpolator strategy = map.get(action.getActionType());
+
+    boolean nextPoint = false;
+
+    switch (action.getActionType()) {
+
+      case GO_TO:
+        nextPoint = strategy.handleGoTo(drone, action);
+        break;
+
+      case TURN:
+        nextPoint = strategy.handleTurn(drone, action);
+        break;
+    }
+
+    if (nextPoint) {
+      if (currentPoint < actions.size() - 1) {
+        currentPoint++;
+      }
+    }
+
+  }
+
 }

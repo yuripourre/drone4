@@ -10,82 +10,139 @@ import dji.sdk.api.GroundStation.DJIGroundStationWaypoint;
 
 public class DJIAutonomousFlight {
 
-	private Drone drone;
+  private Drone drone;
+  private DJIGroundStationTask task;
 
-	private int currentPoint = 0;
+  private int currentPoint = 0;
 
-	private DJIGroundStationTask task;
+  private boolean needTurn = true;
+  private boolean goal = false;
+  private boolean landing = false;
+  
+  double tolerance = 1;//1 meter radius 
+
+  public DJIAutonomousFlight(Drone drone, DJIGroundStationTask task) {
+    super();
+
+    this.drone = drone;
+    this.task = task;
+  }
+
+  public boolean flight() {
+
+    if (goal) {
+      return true;
+    }
+    
+    List<DJIGroundStationWaypoint> points = task.getAllWaypoint();
+
+    if(currentPoint >= points.size()) {
+      return false;
+    }
+    
+    DJIGroundStationWaypoint waypoint = points.get(currentPoint);
+
+    Point3D point = extractPoint(waypoint);
+
+    if (!isOverPoint(point)) {
+      turnToPoint(point);
+      goToPoint(point);
+    } else {
+      reachedPoint(points);
+    }
+
+    return goal;
+  }
+  
+  private boolean isOverPoint(Point3D point) {
+	  return near(drone.getX(), point.getX(), tolerance) &&
+			 near(drone.getZ(), point.getZ(), tolerance);
+  }
+  
+  private boolean near(double value, double target, double tolerance) {
+	  return value<=target+tolerance &&value>=target-tolerance;
+  }
+
+  private void reachedPoint(List<DJIGroundStationWaypoint> points) {
+
+    if (landing && !landed()) {
+      land();
+      return;
+    }
+
+    currentPoint++;
+    needTurn = true;
+
+    if (currentPoint >= points.size()) {
+      if (!task.loop) {
+        landed();
+      } else {
+        currentPoint %= points.size();
+      }
+    }
+  }
+
+  protected void land() {
+    if (drone.getY() > 0) {
+      drone.goDown(Sensitivity.FULL_POSITIVE);
+    } else if (drone.getY() <= 0) {
+      drone.setY(0);
+
+      // landed
+      goal = true;
+      landing = false;
+    }
+  }
+
+  private boolean landed() {
+    return drone.getY() == 0;
+  }
+  
+  private void goToPoint(Point3D point) {
+	  if(needTurn) {
+		  return;
+	  }
+    
+      drone.goForward(drone.getSpeed());
+  }
+
+private void turnToPoint(Point3D point) {
+	if(!needTurn) {
+		return;
+	}
 	
-	private boolean landing = false;
-	
-	private boolean goal = false;
+	double angleY = point.angleXZ(drone)+90;
+    
+    double offset = Sensitivity.FULL_POSITIVE;
+    
+    if (drone.getAngleY() != angleY && needTurn) {
+      if (drone.getAngleY() < angleY+offset) {
+        drone.turnLeft(Sensitivity.FULL_POSITIVE/2);
+        
+        if(drone.getAngleY() >= angleY+offset) {
+          needTurn = false;
+        }
+        
+      } else if (drone.getAngleY() > angleY-offset) {
+        drone.turnRight(Sensitivity.FULL_NEGATIVE/2);
+        
+        if (drone.getAngleY() <= angleY-offset) {
+          needTurn = false;
+        }
+        
+      }
+      
+    } else {
+      needTurn = false;
+    }
+}
 
-	public DJIAutonomousFlight(Drone drone, DJIGroundStationTask task) {
-		super();
+  private Point3D extractPoint(DJIGroundStationWaypoint waypoint) {
+    return new Point3D(waypoint.lontitude, waypoint.altitude, waypoint.latitude);
+  }
 
-		this.drone = drone;
-
-		this.task = task;	
-	}
-
-	public boolean flight() {
-
-		if (goal) {
-			return true;
-		}
-		
-		List<DJIGroundStationWaypoint> points = task.getAllWaypoint();
-
-		DJIGroundStationWaypoint waypoint = points.get(currentPoint);
-
-		Point3D point = extractPoint(waypoint);		
-		
-		if(drone.getX() != point.getX()) {
-			gotoPoint(point);
-		} else {
-			reachedPoint(points);
-		}
-		
-		return goal;
-	}
-
-	private void reachedPoint(List<DJIGroundStationWaypoint> points) {
-		
-		if (landing && !land()) {
-			
-			if(drone.getY() > 0) {
-				drone.goDown(Sensitivity.FULL_POSITIVE);
-			} else if(drone.getY()<=0) {
-				drone.setY(0);
-				goal = true;
-			}
-			
-			return;
-		}
-		
-		currentPoint++;
-
-		if(currentPoint>=points.size()) {
-			if(!task.loop) {
-				land();
-			} else {
-				currentPoint %= points.size();
-			}
-		}
-	}
-
-	private boolean land() {
-		return drone.getY() == 0;		
-	}
-
-	private void gotoPoint(Point3D point) {
-		double angleY = drone.angleXZ(point);
-		drone.setAngleY(angleY);
-		drone.goForward(drone.getSpeed());
-	}
-
-	private Point3D extractPoint(DJIGroundStationWaypoint waypoint) {
-		return new Point3D(waypoint.lontitude, waypoint.latitude, waypoint.altitude);
-	}
+  public int getCurrentPoint() {
+	return currentPoint;
+  }
 
 }

@@ -1,4 +1,4 @@
-package br.com.drone4.examples.indoor;
+package examples.drone4.indoor;
 
 import static javax.media.opengl.GL.GL_LINEAR;
 import static javax.media.opengl.GL.GL_TEXTURE_2D;
@@ -169,9 +169,9 @@ public class IndoorEnvironment extends GridApplication implements UpdateInterval
 	}
 
 	private void captureCamera(Graphics3D g, StandardCamera camera) {
-		
+
 		GL2 gl = g.getGL2();
-		
+
 		int w = camera.getWidth();
 
 		int h = camera.getHeight();
@@ -238,7 +238,7 @@ public class IndoorEnvironment extends GridApplication implements UpdateInterval
 		final int maxX = floor.length;
 
 		final int maxZ = floor[0].length;
-		
+
 		if(leftTendency) {
 
 			if(!needTurn) {
@@ -252,7 +252,7 @@ public class IndoorEnvironment extends GridApplication implements UpdateInterval
 					needTurn = true;
 
 				}
-				
+
 			} else {
 
 				//if was going up
@@ -272,7 +272,7 @@ public class IndoorEnvironment extends GridApplication implements UpdateInterval
 					}
 
 				}
-				
+
 				//if was going down
 				if(!upTendency) {
 
@@ -290,7 +290,7 @@ public class IndoorEnvironment extends GridApplication implements UpdateInterval
 
 					}
 				}
-				
+
 			}
 
 		} else {

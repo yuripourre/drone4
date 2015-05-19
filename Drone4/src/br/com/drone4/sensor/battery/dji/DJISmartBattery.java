@@ -5,64 +5,64 @@ import br.com.drone4.sensor.battery.BatterySensor;
 
 public class DJISmartBattery implements BatterySensor {
 
-	private double scale = 100;
-	
-	private double level = 100;
-	
-	private double weight = 400; //400g
-	
-	private double voltage = 11.1;
-	
-	private double maxPower = 100; //Dont know
-	
-	private double maxCurrent = 5000; //Dont know
-	
-	private double capacity = 5200; //mAh
-		
-	@Override
-	public void update(Drone drone) {
-		// TODO Auto-generated method stub
-		
-	}
+  private double scale = 100;
 
-	@Override
-	public double getWeight() {
-		return weight;
-	}
+  private double level = 100;
 
-	@Override
-	public double getLevel() {
-		return level;
-	}
+  private double weight = 400; // 400g
 
-	@Override
-	public double getScale() {
-		return scale;
-	}
+  private double voltage = 11.1;
 
-	@Override
-	public double getVoltage() {
-		return voltage;
-	}
+  private double maxPower = 100; // Dont know
 
-	@Override
-	public double getCapacity() {
-		return capacity;
-	}
+  private double maxCurrent = 5000; // Dont know
 
-	@Override
-	public double getMaxPower() {
-		return maxPower;
-	}
+  private double capacity = 5200; // mAh
 
-	@Override
-	public double current() {
-		return maxCurrent;
-	}
+  @Override
+  public void update(Drone drone) {
+    // TODO Auto-generated method stub
 
-	@Override
-	public void setLevel(double level) {
-		this.level = level;
-	}
+  }
+
+  @Override
+  public double getWeight() {
+    return weight;
+  }
+
+  @Override
+  public double getLevel() {
+    return level;
+  }
+
+  @Override
+  public double getScale() {
+    return scale;
+  }
+
+  @Override
+  public double getVoltage() {
+    return voltage;
+  }
+
+  @Override
+  public double getCapacity() {
+    return capacity;
+  }
+
+  @Override
+  public double getMaxPower() {
+    return maxPower;
+  }
+
+  @Override
+  public double current() {
+    return maxCurrent;
+  }
+
+  @Override
+  public void setLevel(double level) {
+    this.level = level;
+  }
 
 }

@@ -4,8 +4,8 @@ public class DJIPhantomNoFlyZone {
 
 	public double zoneCenterLatitude;
 
-    public double zoneCenterLongitude;
+	public double zoneCenterLongitude;
 
-    public float zoneRadius;
+	public float zoneRadius;
 
 }

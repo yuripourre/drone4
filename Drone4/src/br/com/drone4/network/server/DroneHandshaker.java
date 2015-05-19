@@ -5,9 +5,9 @@ import br.com.midnight.model.Handshaker;
 
 public class DroneHandshaker implements Handshaker {
 
-	@Override
-	public String handshakeMessage(String sessionId) {
-		return DroneProtocol.DEFAULT_PREFIX+" Hello, pilot "+sessionId+"!!!";
-	}
+  @Override
+  public String handshakeMessage(String sessionId) {
+    return DroneProtocol.DEFAULT_PREFIX + " Hello, pilot " + sessionId + "!!!";
+  }
 
 }

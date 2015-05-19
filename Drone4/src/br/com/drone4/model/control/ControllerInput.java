@@ -3,44 +3,41 @@ package br.com.drone4.model.control;
 
 public class ControllerInput {
 
-	private double yaw = 0;
+  private double yaw = 0;
+  private double pitch = 0;
+  private double roll = 0;
+  private double throttle = 0;
 
-	private double pitch = 0;
+  public double getYaw() {
+    return yaw;
+  }
 
-	private double roll = 0;
+  public void setYaw(double yaw) {
+    this.yaw = yaw;
+  }
 
-	private double throttle = 0;
+  public double getPitch() {
+    return pitch;
+  }
 
-	public double getYaw() {
-		return yaw;
-	}
+  public void setPitch(double pitch) {
+    this.pitch = pitch;
+  }
 
-	public void setYaw(double yaw) {
-		this.yaw = yaw;
-	}
+  public double getRoll() {
+    return roll;
+  }
 
-	public double getPitch() {
-		return pitch;
-	}
+  public void setRoll(double roll) {
+    this.roll = roll;
+  }
 
-	public void setPitch(double pitch) {
-		this.pitch = pitch;
-	}
+  public double getThrottle() {
+    return throttle;
+  }
 
-	public double getRoll() {
-		return roll;
-	}
-
-	public void setRoll(double roll) {
-		this.roll = roll;
-	}
-
-	public double getThrottle() {
-		return throttle;
-	}
-
-	public void setThrottle(double throttle) {
-		this.throttle = throttle;
-	}
+  public void setThrottle(double throttle) {
+    this.throttle = throttle;
+  }
 
 }

@@ -65,13 +65,10 @@ public class Roomba extends TerrestrialDrone {
 	public void updateSensors() {
 		
 		camera.update(this);
-		
 		compass.update(this);
 		
-		model.setCoordinates(x, y, z);
-		
-		model.setAngleY(angleY);//angle in degrees
-		
+		model.setCoordinates(x, y, z);		
+		model.setAngleY(angleY);//angle in degrees		
 	}
 		
 }
