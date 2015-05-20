@@ -25,7 +25,7 @@ public class DJIBatteryState {
 	public boolean dischargeShortCut;
 	
 	/**
-	 * Self-discharge in storage 
+	 * Self-discharge in storage
 	 */
 	public boolean selfDischarge;
 	
