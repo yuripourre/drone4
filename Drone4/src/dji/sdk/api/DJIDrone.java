@@ -9,12 +9,12 @@ import dji.sdk.api.RangeExtender.DJIRangeExtender;
 
 public class DJIDrone {
 		
-	private static DJIBattery battery; 
-	private static DJICamera camera;
-	private static DJIGimbal gimbal;
-	private static DJIGroundStation groundStation;
-	private static DJIMainController mainController;
-	private static DJIRangeExtender rangeExtender;
+	private static DJIBattery battery = new DJIBattery(); 
+	private static DJICamera camera = new DJICamera();
+	private static DJIGimbal gimbal = new DJIGimbal();
+	private static DJIGroundStation groundStation = new DJIGroundStation();
+	private static DJIMainController mainController = new DJIMainController();
+	private static DJIRangeExtender rangeExtender = new DJIRangeExtender();
 	
 	public static final String TAG = "DJIDrone";
 	
@@ -24,13 +24,6 @@ public class DJIDrone {
 
 	public DJIDrone() {
 		super();
-		
-		battery = new DJIBattery();
-		camera = new DJICamera();
-		gimbal = new DJIGimbal();
-		groundStation = new DJIGroundStation();
-		mainController = new DJIMainController();
-		rangeExtender = new DJIRangeExtender();
 	}	
 
 	/**
