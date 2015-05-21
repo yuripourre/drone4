@@ -23,6 +23,16 @@ public class KeyboardInput {
   private double upperRightDownPressed = 0; // R2
   private double upperLeftUpPressed = 0; // L1
   private double upperLeftDownPressed = 0; // L2
+  
+  public int w = KeyEvent.TSK_W;
+  public int d = KeyEvent.TSK_D;
+  public int a = KeyEvent.TSK_A;
+  public int s = KeyEvent.TSK_S;
+  
+  public int u = KeyEvent.TSK_U;
+  public int h = KeyEvent.TSK_H;
+  public int j = KeyEvent.TSK_J;
+  public int k = KeyEvent.TSK_K;
 
   public KeyboardInput() {
     super();
@@ -35,54 +45,54 @@ public class KeyboardInput {
 
   public void updateKeyboard(KeyEvent event) {
 
-    if (event.isKeyDown(KeyEvent.TSK_W)) {
+    if (event.isKeyDown(w)) {
       upPressed = Sensitivity.FULL_POSITIVE;
-    } else if (event.isKeyUp(KeyEvent.TSK_W)) {
+    } else if (event.isKeyUp(w)) {
       upPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_D)) {
+    if (event.isKeyDown(d)) {
       turnRightPressed = Sensitivity.FULL_POSITIVE;
-    } else if (event.isKeyUp(KeyEvent.TSK_D)) {
+    } else if (event.isKeyUp(d)) {
       turnRightPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_A)) {
+    if (event.isKeyDown(a)) {
       turnLeftPressed = Sensitivity.FULL_NEGATIVE;
-    } else if (event.isKeyUp(KeyEvent.TSK_A)) {
+    } else if (event.isKeyUp(a)) {
       turnLeftPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_S)) {
+    if (event.isKeyDown(s)) {
       downPressed = Sensitivity.FULL_NEGATIVE;
-    } else if (event.isKeyUp(KeyEvent.TSK_S)) {
+    } else if (event.isKeyUp(s)) {
       downPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
+    if (event.isKeyDown(u)) {
       forwardPressed = Sensitivity.FULL_POSITIVE;
 
-    } else if (event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
+    } else if (event.isKeyUp(u)) {
       forwardPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
+    if (event.isKeyDown(j)) {
       backwardPressed = Sensitivity.FULL_NEGATIVE;
 
-    } else if (event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
+    } else if (event.isKeyUp(j)) {
       backwardPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
+    if (event.isKeyDown(h)) {
       leftPressed = Sensitivity.FULL_NEGATIVE;
 
-    } else if (event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
+    } else if (event.isKeyUp(h)) {
       leftPressed = 0;
     }
 
-    if (event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
+    if (event.isKeyDown(k)) {
       rightPressed = Sensitivity.FULL_POSITIVE;
-    } else if (event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
+    } else if (event.isKeyUp(k)) {
       rightPressed = 0;
     }
 

@@ -43,7 +43,7 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 
 	protected PhantomDJI drone1;
 	protected PhantomDJI drone2;
-
+	
 	protected CameraGL cameraGL1;
 	protected CameraGL cameraGL2;
 
@@ -83,6 +83,9 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 	@Override
 	public void load() {
 
+		//setup controllers
+		setupControllers();
+		
 		// Size in meters
 		drone1 = new PhantomDJI(1, 8, 0);
 		cameraGL1 = new CameraGL(0, 20, -10);
@@ -92,7 +95,7 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 		drone2 = new PhantomDJI(3, 8, 0);
 		cameraGL2 = new CameraGL(1, 20, -10);
 		cameraGL2.setTarget(drone2);
-
+				
 		// Load Road Texture
 		road = TextureLoader.getInstance().loadTexture("road.jpg");
 
@@ -111,6 +114,17 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 		batteryIndicator2 = new BatteryIndicator(w - w / 20, 170, drone2.getBattery());
 
 		// updateAtFixedRate(300, this);
+	}
+
+	private void setupControllers() {
+		controller2.w = KeyEvent.TSK_NUMPAD_8;
+		controller2.a = KeyEvent.TSK_NUMPAD_4;
+		controller2.s = KeyEvent.TSK_NUMPAD_5;
+		controller2.d = KeyEvent.TSK_NUMPAD_6;
+		controller2.u = KeyEvent.TSK_UP_ARROW;
+		controller2.h = KeyEvent.TSK_LEFT_ARROW;
+		controller2.j = KeyEvent.TSK_DOWN_ARROW;
+		controller2.k = KeyEvent.TSK_RIGHT_ARROW;
 	}
 
 	private void drawFloor(GL2 gl) {
@@ -249,7 +263,7 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 
 		drone1.getModel().draw(gl);
 		drone2.getModel().draw(gl);
-
+		
 		gl.glFlush();
 
 	}
@@ -336,6 +350,7 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 		g.drawShadow(20, 260, "CameraAngleZ: " + (droneCamera1.getAngleZ()), Color.BLACK);
 
 		batteryIndicator1.draw(g);
+		batteryIndicator2.draw(g);
 
 	}
 
