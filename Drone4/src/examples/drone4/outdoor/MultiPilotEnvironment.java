@@ -117,14 +117,14 @@ public class MultiPilotEnvironment extends GridApplication implements UpdateInte
 	}
 
 	private void setupControllers() {
-		controller2.w = KeyEvent.TSK_NUMPAD_8;
-		controller2.a = KeyEvent.TSK_NUMPAD_4;
-		controller2.s = KeyEvent.TSK_NUMPAD_5;
-		controller2.d = KeyEvent.TSK_NUMPAD_6;
-		controller2.u = KeyEvent.TSK_UP_ARROW;
-		controller2.h = KeyEvent.TSK_LEFT_ARROW;
-		controller2.j = KeyEvent.TSK_DOWN_ARROW;
-		controller2.k = KeyEvent.TSK_RIGHT_ARROW;
+		controller2.upKey = KeyEvent.TSK_NUMPAD_8;
+		controller2.turnLeftKey = KeyEvent.TSK_NUMPAD_4;
+		controller2.downKey = KeyEvent.TSK_NUMPAD_5;
+		controller2.turnRightKey = KeyEvent.TSK_NUMPAD_6;
+		controller2.forwardKey = KeyEvent.TSK_UP_ARROW;
+		controller2.leftKey = KeyEvent.TSK_LEFT_ARROW;
+		controller2.backwardKey = KeyEvent.TSK_DOWN_ARROW;
+		controller2.rightKey = KeyEvent.TSK_RIGHT_ARROW;
 	}
 
 	private void drawFloor(GL2 gl) {
