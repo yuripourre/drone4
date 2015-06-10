@@ -3,6 +3,9 @@ package dji.sdk.api;
 public class DJIError {
 
 	public static String TAG = "DJIError";
+	
+	public int errorCode;
+	public String errorDescription;
 
 	public static final int CheckPermissionErrorActivationExceed = -7;
 	public static final int CheckPermissionErrorAesEncryptFailed = -16;
@@ -71,5 +74,24 @@ public class DJIError {
 	public static final int ERR_UPDATE_WRONG = 245;
 	public static final int RESULT_OK = 0;
 	public static final int RESULT_SUCCEED = 1;
+	
+	/**
+	 * Get error description by errcode
+	 * @param errCode
+	 * @return
+	 */
+	public static String getCheckPermissionErrorDescription(int errCode) {
+		return "ERROR PERMISSION "+errCode;
+	}
+	
+	/**
+	 * Get error description by errcode
+	 * @param errCode
+	 * @return
+	 */
+	public static String getErrorDescriptionByErrcode(int errCode) {
+		return "ERROR "+errCode;
+	}
+	
 
 }

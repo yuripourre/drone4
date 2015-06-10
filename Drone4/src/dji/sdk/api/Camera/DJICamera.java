@@ -1,6 +1,18 @@
 package dji.sdk.api.Camera;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
+
+import br.com.drone4.sensor.camera.StandardCamera;
+import dji.sdk.api.DJIError;
 import dji.sdk.api.DJIObject;
+import dji.sdk.api.Camera.DJICameraSettingsTypeDef.CameraCaptureMode;
 import dji.sdk.api.media.DJIMedia;
 import dji.sdk.interfaces.DJICameraSdCardInfoCallBack;
 import dji.sdk.interfaces.DJICameraSystemStateCallBack;
@@ -13,6 +25,18 @@ import dji.sdk.util.DjiLocationCoordinate2D;
 public class DJICamera extends DJIObject {
 
 	public static java.lang.String TAG = "DJICamera";
+
+	private StandardCamera camera;
+	
+	private CameraCaptureMode mode = CameraCaptureMode.Camera_Single_Capture;
+	private DJIExecuteResultCallback mResultCallback;
+	private DJIReceivedVideoDataCallBack mReceivedVideoDataCallBack;
+	
+	private ScheduledExecutorService service;
+	
+	public DJICamera(StandardCamera camera) {
+		this.camera = camera;
+	}
 
 	/**
 	 * Release djicamera
@@ -451,7 +475,7 @@ public class DJICamera extends DJIObject {
 	 * @param mReceivedVideoDataCallBack
 	 */
 	public void setReceivedVideoDataCallBack(DJIReceivedVideoDataCallBack mReceivedVideoDataCallBack) {
-
+		this.mReceivedVideoDataCallBack = mReceivedVideoDataCallBack;
 	}
 
 	/**
@@ -469,16 +493,45 @@ public class DJICamera extends DJIObject {
 	 * @param mCall
 	 */
 	public void startTakePhoto(DJIExecuteResultCallback mCall) {
-
+		startTakePhoto(CameraCaptureMode.Camera_Single_Capture, mCall);
+	}
+	
+	public void startTakePhoto(CameraCaptureMode mode,
+			DJIExecuteResultCallback mCall) {
+		this.mode = mode;
+		this.mResultCallback = mCall;
+		
+		try {
+			takePhoto();
+		} catch (IOException e) {
+			DJIError error = new DJIError();
+			error.errorCode = DJIError.ERR_CAM_NO_SDCARD;
+			error.errorDescription = e.getMessage();
+		}
+	}
+	
+	private void takePhoto() throws IOException {
+		BufferedImage image = camera.getBufferedImage();
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ImageIO.write(image, "jpg", baos);
+		baos.flush();
+		byte[] videoBuffer = baos.toByteArray();
+		baos.close();
+				
+		mReceivedVideoDataCallBack.onResult(videoBuffer, videoBuffer.length);
 	}
 
 	/**
-	 * Start upate timer
+	 * Start update timer
 	 * 
-	 * @param intervel
+	 * @param intervel //Typo to reflect DJI's API
 	 * @return
 	 */
 	public boolean startUpdateTimer(int intervel) {
+		service = Executors.newSingleThreadScheduledExecutor();
+		service.scheduleAtFixedRate(new PhotoTaker(), 0, intervel, TimeUnit.MILLISECONDS);
+		
 		return true;
 	}
 
@@ -518,4 +571,17 @@ public class DJICamera extends DJIObject {
 
 	}
 
+	private class PhotoTaker implements Runnable {
+				
+		@Override
+		public void run() {
+			try {
+				takePhoto();
+			} catch (IOException e) {
+				DJIError error = new DJIError();
+				error.errorCode = DJIError.ERR_CAM_NO_SDCARD;
+				error.errorDescription = e.getMessage();
+			}
+		}
+	}
 }
