@@ -2,16 +2,41 @@ package dji.sdk.api;
 
 public class DJIError {
 
-	public static java.lang.String TAG = "DJIError";
+	public static String TAG = "DJIError";
+	
+	public int errorCode;
+	public String errorDescription;
 
-	public static final java.lang.String DESCRIPTION_RESULT_OK = "OK.";
+	public static final int CheckPermissionErrorActivationExceed = -7;
+	public static final int CheckPermissionErrorAesEncryptFailed = -16;
+	public static final int CheckPermissionErrorAppKeyNoPermission = -10;
+	public static final int CheckPermissionErrorAppKeyNotExist = -9;
+	public static final int CheckPermissionErrorAppKeyPlatfromError = -8;
+	public static final int CheckPermissionErrorAppKeyProhibited = -6;
+	public static final int CheckPermissionErrorConnectInternet = -1;
+	public static final int CheckPermissionErrorDeviceNotMatch = -4;
+	public static final int CheckPermissionErrorGetServerDataTimeout = -3;
+	public static final int CheckPermissionErrorInvalidAppKey = -2;
+	public static final int CheckPermissionErrorInvalidMetaData = -14;
+	public static final int CheckPermissionErrorInvalidUUID = -17;
+	public static final int CheckPermissionErrorPackageNameNotMatch = -5;
+	public static final int CheckPermissionErrorServerDataAbnormal = -13;
+	public static final int CheckPermissionErrorServerParseFailure = -11;
+	public static final int CheckPermissionErrorServerWriteError = -12;
+	public static final int CheckPermissionErrorUnknown = -1000;
+	public static final int CheckPermissionErrorUnsportAesEncrypt = -15;
+	public static final int CheckPermissionSuccess = 0;
 	public static final int ERR_AUTH_FAILED = -3;
+	public static final int ERR_CAM_CAPTURING_DISABLED = -19; //Official SDK's name is ERR_CAM_CAPTURINGï¼¿DISABLED
 	public static final int ERR_CAM_EXEC_TIMEOUT = 225;
 	public static final int ERR_CAM_INVALID_PARAM = 227;
+	public static final int ERR_CAM_IS_STORING = -18;
+	public static final int ERR_CAM_IS_TIME_CAPTURE = -20;
 	public static final int ERR_CAM_MEMALLOC_FAILED = 226;
 	public static final int ERR_CAM_NO_SDCARD = 232;
 	public static final int ERR_CAM_NOT_USB_STATE = -8;
 	public static final int ERR_CAM_PARAM_GET_FAILED = 231;
+	public static final int ERR_CAM_PARAM_NOT_AVAILABLE = 237;
 	public static final int ERR_CAM_PARAM_SET_FAILED = 230;
 	public static final int ERR_CAM_SDCARD_ERROR = 234;
 	public static final int ERR_CAM_SDCARD_FULL = 233;
@@ -22,49 +47,51 @@ public class DJIError {
 	public static final int ERR_CAM_UNSUPPORT_CMD_STATE = 228;
 	public static final int ERR_CMD_RECV_PACK_NULL = -2;
 	public static final int ERR_CONNECTTION_NOT_OK = -5;
-	public static final java.lang.String ERR_DECRIPTION_AUTH_FAILED = "Auth failed";
-	public static final java.lang.String ERR_DECRIPTION_CAM_EXEC_TIMEOUT = "Camera exec timeout";
-	public static final java.lang.String ERR_DECRIPTION_CAM_INVALID_PARAM = "Camera invalid param";
-	public static final java.lang.String ERR_DECRIPTION_CAM_MEMALLOC_FAILED =
-			"Camera memalloc failed";
-	public static final java.lang.String ERR_DECRIPTION_CAM_NO_SDCARD = "Camera no sdcard";
-	public static final java.lang.String ERR_DECRIPTION_CAM_PARAM_GET_FAILED =
-			"Camera param get failed";
-	public static final java.lang.String ERR_DECRIPTION_CAM_PARAM_SET_FAILED =
-			"Camera param set failed";
-	public static final java.lang.String ERR_DECRIPTION_CAM_SDCARD_ERROR = "Camera sdcard error";
-	public static final java.lang.String ERR_DECRIPTION_CAM_SDCARD_FULL = "Camera sdcard full";
-	public static final java.lang.String ERR_DECRIPTION_CAM_SENSOR_ERROR = "Camera sensor error";
-	public static final java.lang.String ERR_DECRIPTION_CAM_SYSTEM_ERROR = "Camera system error";
-	public static final java.lang.String ERR_DECRIPTION_CAM_TIME_NO_SYNC = "Camera time is not sync";
-	public static final java.lang.String ERR_DECRIPTION_CAM_UNSUPPORT_CMD = "Camera unsuppot cmd";
-	public static final java.lang.String ERR_DECRIPTION_CAM_UNSUPPORT_CMD_STATE =
-			"Camera unsupport cmd state";
-	public static final java.lang.String ERR_DECRIPTION_CMD_RECV_PACK_NULL = "Recv pack null";
-	public static final java.lang.String ERR_DECRIPTION_PARAM_IILEGAL = "Param iilegal";
-	public static final java.lang.String ERR_DESCRIPTION_CAM_NOT_USB_STATE = "Camera not usb state.";
-	public static final java.lang.String ERR_DESCRIPTION_CONNECTTION_NOT_OK = "Connection not ok.";
-	public static final java.lang.String ERR_DESCRIPTION_GET_REMOTE_MEDIA_FAILED =
-			"Get remote media failed";
-	public static final java.lang.String ERR_DESCRIPTION_GET_REMOTE_MEDIA_HTTP_ERROR =
-			"Get remote media http error";
-	public static final java.lang.String ERR_DESCRIPTION_GET_REMOTE_NO_MEDIA = "Get remote no media";
-	public static final java.lang.String ERR_DESCRIPTION_GET_SMART_BATTERY_INFO_FAILED =
-			"Get smart battery info failed";
-	public static final java.lang.String ERR_DESCRIPTION_GET_THUMBNAIL_FAILED =
-			"Thumbnail bitmap get failed.";
-	public static final java.lang.String ERR_DESCRIPTION_PLUS_GIMBAL_MOTOR = "Gimbal Motor Error.";
-	public static final java.lang.String ERR_DESCRIPTION_PLUS_REMOVE_LOCK = "Remove Gimbal Clamp.";
-	public static final java.lang.String ERR_DESCRIPTION_UNSUPPORT = "Not supported.";
+	public static final int ERR_FIRM_MATCH_WRONG = 246;
+	public static final int ERR_FLASH_C_WRONG = 243;
+	public static final int ERR_FLASH_FLUSHING = 253;
+	public static final int ERR_FLASH_W_WRONG = 244;
+	public static final int ERR_FM_CRC_WRONG = 242;
+	public static final int ERR_FM_LENGTH_WRONG = 241;
+	public static final int ERR_FM_NONSEQUENCE = 240;
 	public static final int ERR_GET_REMOTE_MEDIA_FAILED = -10;
 	public static final int ERR_GET_REMOTE_MEDIA_HTTP_ERROR = -11;
 	public static final int ERR_GET_REMOTE_NO_MEDIA = -12;
 	public static final int ERR_GET_SMART_BATTERY_INFO_FAILED = -13;
 	public static final int ERR_GET_THUMBNAIL_FAILED = -9;
+	public static final int ERR_IS_CONTINUOUS_CAPUTRE = -23;
+	public static final int ERR_IS_FULL_VIEW_CAPTURE = -24;
+	public static final int ERR_IS_MUTIPLY_CAPTURE = -22;
+	public static final int ERR_IS_SINGLE_CAPTURE = -21;
+	public static final int ERR_NOCONNECT = 511;
 	public static final int ERR_PARAM_IILEGAL = -1;
 	public static final int ERR_PLUS_GIMBAL_MOTOR = -7;
 	public static final int ERR_PLUS_REMOVE_LOCK = -6;
+	public static final int ERR_RESULT_MATCH_FAILED = 2;
+	public static final int ERR_TIMEOUT = 256;
+	public static final int ERR_UNDEFINED = 255;
 	public static final int ERR_UNSUPPORTED = -4;
+	public static final int ERR_UPDATE_WRONG = 245;
 	public static final int RESULT_OK = 0;
+	public static final int RESULT_SUCCEED = 1;
+	
+	/**
+	 * Get error description by errcode
+	 * @param errCode
+	 * @return
+	 */
+	public static String getCheckPermissionErrorDescription(int errCode) {
+		return "ERROR PERMISSION "+errCode;
+	}
+	
+	/**
+	 * Get error description by errcode
+	 * @param errCode
+	 * @return
+	 */
+	public static String getErrorDescriptionByErrcode(int errCode) {
+		return "ERROR "+errCode;
+	}
+	
 
 }

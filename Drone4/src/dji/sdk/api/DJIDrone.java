@@ -1,5 +1,6 @@
 package dji.sdk.api;
 
+import br.com.drone4.drone.PhantomDJI;
 import dji.sdk.api.Battery.DJIBattery;
 import dji.sdk.api.Camera.DJICamera;
 import dji.sdk.api.Gimbal.DJIGimbal;
@@ -8,13 +9,13 @@ import dji.sdk.api.MainController.DJIMainController;
 import dji.sdk.api.RangeExtender.DJIRangeExtender;
 
 public class DJIDrone {
-		
-	private static DJIBattery battery; 
+	
+	private static DJIBattery battery = new DJIBattery(); 
 	private static DJICamera camera;
-	private static DJIGimbal gimbal;
-	private static DJIGroundStation groundStation;
-	private static DJIMainController mainController;
-	private static DJIRangeExtender rangeExtender;
+	private static DJIGimbal gimbal = new DJIGimbal();
+	private static DJIGroundStation groundStation = new DJIGroundStation();
+	private static DJIMainController mainController = new DJIMainController();
+	private static DJIRangeExtender rangeExtender = new DJIRangeExtender();
 	
 	public static final String TAG = "DJIDrone";
 	
@@ -22,15 +23,10 @@ public class DJIDrone {
 	//private static DJIRemoteController remoteController;
 	//private static DJIImageTransmitter imageTransmitter;
 
+	private static PhantomDJI drone;
+	
 	public DJIDrone() {
 		super();
-		
-		battery = new DJIBattery();
-		camera = new DJICamera();
-		gimbal = new DJIGimbal();
-		groundStation = new DJIGroundStation();
-		mainController = new DJIMainController();
-		rangeExtender = new DJIRangeExtender();
 	}	
 
 	/**
@@ -121,6 +117,15 @@ public class DJIDrone {
 	 */
 	public static int getLevel() {
 		return 1;
+	}
+
+	public static PhantomDJI getDrone() {
+		return drone;
+	}
+
+	public static void setDrone(PhantomDJI drone) {
+		DJIDrone.drone = drone;
+		camera = new DJICamera(drone.getCamera());
 	}
 
 }
