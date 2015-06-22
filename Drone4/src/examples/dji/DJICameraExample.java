@@ -7,7 +7,6 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
-import android.util.log.Log;
 import br.com.etyllica.core.graphics.Graphic;
 import dji.sdk.api.DJIDrone;
 import dji.sdk.api.DJIError;
@@ -65,8 +64,8 @@ public class DJICameraExample extends MultiPilotEnvironment {
 
             @Override
             public void onResult(DJIError mErr) {
-                Log.d(TAG, "Set Action errorCode = "+ mErr.errorCode);
-                Log.d(TAG, "Set Action errorDescription = "+ mErr.errorDescription);
+                //Log.d(TAG, "Set Action errorCode = "+ mErr.errorCode);
+                //\Log.d(TAG, "Set Action errorDescription = "+ mErr.errorDescription);
             }
         });
 		
