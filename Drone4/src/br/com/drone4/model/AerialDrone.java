@@ -17,7 +17,7 @@ public class AerialDrone extends Drone {
 	public void goRight(double sensitivity) {
 		double distance = speed * sensitivity;
 		double angle = angleY + 90;
-		moveByAngle(angle, distance);
+		moveByAngleXZ(angle, distance);
 		updateSensors();
 	}
 
@@ -25,7 +25,7 @@ public class AerialDrone extends Drone {
 	public void goLeft(double sensitivity) {
 		double distance = speed * -sensitivity;
 		double angle = angleY - 90;
-		moveByAngle(angle, distance);
+		moveByAngleXZ(angle, distance);
 		updateSensors();
 	}
 

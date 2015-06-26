@@ -281,7 +281,7 @@ public class AutonomousCleanEnvironment extends GridApplication implements Updat
 		// Draw Scene
 		drawFloor(gl);
 
-		drone.getModel().simpleDraw(gl);
+		drone.getModel().texturedRender(gl);
 
 		displayGroundStatonTask(g);
 
@@ -416,7 +416,7 @@ public class AutonomousCleanEnvironment extends GridApplication implements Updat
 			}
 
 			ring.setCoordinates(waypoint.lontitude, drone.getY(), waypoint.latitude);
-			ring.simpleDraw(g.getGL2());
+			ring.texturedRender(g.getGL2());
 
 			count++;      
 		}

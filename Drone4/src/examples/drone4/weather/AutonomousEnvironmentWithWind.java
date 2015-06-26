@@ -290,7 +290,7 @@ public class AutonomousEnvironmentWithWind extends GridApplication implements Up
 		// Draw Scene
 		drawFloor(gl);
 
-		drone.getModel().simpleDraw(gl);
+		drone.getModel().texturedRender(gl);
 
 		displayGroundStatonTask(g);
 
@@ -427,7 +427,7 @@ public class AutonomousEnvironmentWithWind extends GridApplication implements Up
 			}
 
 			ring.setCoordinates(waypoint.lontitude, drone.getY(), waypoint.latitude);
-			ring.simpleDraw(g.getGL2());
+			ring.texturedRender(g.getGL2());
 
 			count++;      
 		}
