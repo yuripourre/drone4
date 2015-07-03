@@ -7,7 +7,7 @@ import br.com.etyllica.core.graphics.Graphic;
 import br.com.etyllica.core.input.mouse.MouseButton;
 import br.com.etyllica.layer.Layer;
 import br.com.etyllica.linear.Point2D;
-import br.com.luvia.util.PointUtils;
+import br.com.etyllica.util.PointUtils;
 
 public class JoystickRadius {
 

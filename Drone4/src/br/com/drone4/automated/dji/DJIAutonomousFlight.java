@@ -2,7 +2,7 @@ package br.com.drone4.automated.dji;
 
 import java.util.List;
 
-import br.com.abby.linear.Point3D;
+import br.com.abby.linear.ColoredPoint3D;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.model.Drone;
 import dji.sdk.api.GroundStation.DJIGroundStationTask;
@@ -43,7 +43,7 @@ public class DJIAutonomousFlight {
 		DJIGroundStationWaypoint waypoint = points.get(currentPoint);
 
 		//Next Waypoint
-		Point3D point = extractPoint(waypoint);
+		ColoredPoint3D point = extractPoint(waypoint);
 
 		if (!isOverPoint(point)) {
 			turnToPoint(point);
@@ -55,7 +55,7 @@ public class DJIAutonomousFlight {
 		return goal;
 	}
 
-	private boolean isOverPoint(Point3D point) {
+	private boolean isOverPoint(ColoredPoint3D point) {
 		return near(drone.getX(), point.getX(), tolerance) &&
 				near(drone.getZ(), point.getZ(), tolerance);
 	}
@@ -99,7 +99,7 @@ public class DJIAutonomousFlight {
 		return drone.getY() == 0;
 	}
 
-	private void goToPoint(Point3D point) {
+	private void goToPoint(ColoredPoint3D point) {
 		if(needTurn) {
 			return;
 		}
@@ -107,7 +107,7 @@ public class DJIAutonomousFlight {
 		drone.goForward(drone.getSpeed());
 	}
 
-	private void turnToPoint(Point3D point) {
+	private void turnToPoint(ColoredPoint3D point) {
 		
 		double angleY = point.angleXZ(drone)+90;
 		
@@ -134,8 +134,8 @@ public class DJIAutonomousFlight {
 		}*/
 	}
 
-	private Point3D extractPoint(DJIGroundStationWaypoint waypoint) {
-		return new Point3D(waypoint.lontitude, waypoint.altitude, waypoint.latitude);
+	private ColoredPoint3D extractPoint(DJIGroundStationWaypoint waypoint) {
+		return new ColoredPoint3D(waypoint.lontitude, waypoint.altitude, waypoint.latitude);
 	}
 
 	public int getCurrentPoint() {

@@ -6,8 +6,6 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -15,9 +13,6 @@ import javax.media.opengl.glu.GLU;
 
 import br.com.abby.loader.MeshLoader;
 import br.com.abby.util.CameraGL;
-import br.com.drone4.automated.action.GoToAction;
-import br.com.drone4.automated.action.MoveAction;
-import br.com.drone4.automated.action.TurnAction;
 import br.com.drone4.automated.dji.DJIAutonomousFlight;
 import br.com.drone4.control.Sensitivity;
 import br.com.drone4.drone.PhantomDJI;
@@ -188,19 +183,19 @@ public class AutonomousCleanEnvironment extends GridApplication implements Updat
 		controller.updateKeyboard(event);
 
 		if (event.isKeyDown(KeyEvent.TSK_I)) {
-			droneCamera.setOffsetX(+1);
+			droneCamera.offsetX(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_K)) {
-			droneCamera.setOffsetX(-1);
+			droneCamera.offsetX(-1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_L)) {
-			droneCamera.setOffsetZ(+1);
+			droneCamera.offsetZ(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_J)) {
-			droneCamera.setOffsetZ(-1);
+			droneCamera.offsetZ(-1);
 		}
 
 		return GUIEvent.NONE;

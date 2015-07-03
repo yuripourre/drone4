@@ -20,20 +20,20 @@ public class StandardGimbal implements Gimbal {
 
   @Override
   public void turnX(double speed) {
-    point.setOffsetAngleX(speed * strength);
-    camera.setOffsetAngleX(speed * strength);
+    point.offsetAngleX(speed * strength);
+    camera.offsetAngleX(speed * strength);
   }
 
   @Override
   public void turnY(double speed) {
-    point.setOffsetAngleY(speed * strength);
-    camera.setOffsetAngleY(speed * strength);
+    point.offsetAngleY(speed * strength);
+    camera.offsetAngleY(speed * strength);
   }
 
   @Override
   public void turnZ(double speed) {
-    point.setOffsetAngleZ(speed * strength);
-    camera.setOffsetAngleZ(speed * strength);
+    point.offsetAngleZ(speed * strength);
+    camera.offsetAngleZ(speed * strength);
   }
 
   @Override

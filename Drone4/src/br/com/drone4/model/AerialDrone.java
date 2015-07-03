@@ -9,7 +9,7 @@ public class AerialDrone extends Drone {
 
 	@Override
 	public void throttle(double sensitivity) {
-		setOffsetY(throttleSpeed * sensitivity);
+		offsetY(throttleSpeed * sensitivity);
 		updateSensors();
 	}
 

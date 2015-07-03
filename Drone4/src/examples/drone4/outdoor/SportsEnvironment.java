@@ -125,25 +125,25 @@ public class SportsEnvironment extends GridApplication implements UpdateInterval
 		if (event.isKeyDown(KeyEvent.TSK_I)) {
 
 			// droneCamera.getTarget().setOffsetX(+1);
-			droneCamera.setOffsetX(+1);
+			droneCamera.offsetX(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_K)) {
 
 			// droneCamera.getTarget().setOffsetX(-1);
-			droneCamera.setOffsetX(-1);
+			droneCamera.offsetX(-1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_L)) {
 
 			// droneCamera.getTarget().setOffsetZ(+1);
-			droneCamera.setOffsetZ(+1);
+			droneCamera.offsetZ(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_J)) {
 
 			// droneCamera.getTarget().setOffsetZ(-1);
-			droneCamera.setOffsetZ(-1);
+			droneCamera.offsetZ(-1);
 		}
 
 		return GUIEvent.NONE;

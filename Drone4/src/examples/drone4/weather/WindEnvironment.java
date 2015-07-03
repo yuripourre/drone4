@@ -151,19 +151,19 @@ public class WindEnvironment extends GridApplication implements UpdateIntervalLi
 		controller1.updateKeyboard(event);
 
 		if (event.isKeyDown(KeyEvent.TSK_I)) {
-			droneCamera1.setOffsetX(+1);
+			droneCamera1.offsetX(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_K)) {
-			droneCamera1.setOffsetX(-1);
+			droneCamera1.offsetX(-1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_L)) {
-			droneCamera1.setOffsetZ(+1);
+			droneCamera1.offsetZ(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_J)) {
-			droneCamera1.setOffsetZ(-1);
+			droneCamera1.offsetZ(-1);
 		}
 
 		return GUIEvent.NONE;
@@ -245,7 +245,7 @@ public class WindEnvironment extends GridApplication implements UpdateIntervalLi
 		cameraGL1.setX(drone1.getX());
 		cameraGL1.setZ(drone1.getZ() - 10);
 		
-		wind.moveDrone(drone1);
+		//wind.moveDrone(drone1);
 	}
 
 	private void manualFlight(KeyboardInput controller, PhantomDJI drone) {

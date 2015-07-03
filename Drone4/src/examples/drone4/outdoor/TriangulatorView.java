@@ -188,35 +188,35 @@ public class TriangulatorView extends GridApplication {
 		}
 		
 		if(moveUp) {
-			mainView.setOffsetY(-offset);
+			mainView.offsetY(-offset);
 		}
 		
 		if(moveDown) {
-			mainView.setOffsetY(+offset);
+			mainView.offsetY(+offset);
 		}
 		
 		if(moveLeft) {
-			mainView.setOffsetZ(+offset);
+			mainView.offsetZ(+offset);
 		}
 		
 		if(moveRight) {
-			mainView.setOffsetZ(-offset);
+			mainView.offsetZ(-offset);
 		}
 		
 		if(turnRight) {
-			mainView.setOffsetAngleY(+offsetTurn);
+			mainView.offsetAngleY(+offsetTurn);
 		}
 		
 		if(turnLeft) {
-			mainView.setOffsetAngleY(-offsetTurn);	
+			mainView.offsetAngleY(-offsetTurn);	
 		}
 		
 		if(turnUp) {
-			mainView.setOffsetAngleX(+offsetTurn);
+			mainView.offsetAngleX(+offsetTurn);
 		}
 		
 		if(turnDown) {
-			mainView.setOffsetAngleX(-offsetTurn);	
+			mainView.offsetAngleX(-offsetTurn);	
 		}
 		
 	}

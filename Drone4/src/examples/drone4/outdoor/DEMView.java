@@ -1,33 +1,26 @@
 package examples.drone4.outdoor;
 
 import java.awt.Color;
-import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import jdt.triangulation.DelaunayTriangulation;
-import jdt.triangulation.Triangle;
 import br.com.abby.linear.AimPoint;
+import br.com.abby.loader.MeshLoader;
 import br.com.abby.util.CameraGL;
 import br.com.drone4.drone.PhantomDJI;
-import br.com.drone4.loader.ASCIIDEMLoader;
-import br.com.drone4.sensor.camera.StandardCamera;
 import br.com.etyllica.core.event.GUIEvent;
 import br.com.etyllica.core.event.KeyEvent;
 import br.com.etyllica.core.graphics.Graphic;
-import br.com.etyllica.linear.Point3D;
+import br.com.etyllica.core.graphics.SVGColor;
 import br.com.etyllica.util.PathHelper;
 import br.com.luvia.core.video.Graphics3D;
 import br.com.luvia.grid.GridApplication;
+import br.com.luvia.light.LightSource3D;
+import br.com.luvia.linear.Mesh;
 
 public class DEMView extends GridApplication {
-
-	protected StandardCamera droneCamera;
-
-	// Scene Stuff
-	//private Texture road;
 
 	protected CameraGL cameraGL;
 	protected AimPoint mainView;
@@ -40,9 +33,9 @@ public class DEMView extends GridApplication {
 
 	protected boolean click = false;
 
-	private List<Point3D> terrain;
+	//private Mesh terrain;
 	
-	private List<Triangle> triangles;
+	private LightSource3D light;
 
 	public DEMView(int w, int h) {
 		super(w, h);
@@ -50,21 +43,18 @@ public class DEMView extends GridApplication {
 
 	@Override
 	public void load() {
-		String path = PathHelper.desktopDirectory();
-		
+
 		loadingInfo = "Loading terrain...";
 		System.out.println(loadingInfo);
-		
-		terrain = ASCIIDEMLoader.loadDEM(path+"/MDE_26124se_v1.XYZ");
-		
-		loadingInfo = "Terrain Loaded";
-		System.out.println(loadingInfo);
-		
-		loadingInfo = "Triangulating...";
-		System.out.println(loadingInfo);
-		triangles = new DelaunayTriangulation(terrain).getTriangulation();
 
-		loadingInfo = "Terrain Triangulated";
+		//String terrainPath = PathHelper.desktopDirectory()+"terrain.obj";
+		
+		//String terrainPath = PathHelper.desktopDirectory()+"drone4/prainha/prainha_simplified_3d_mesh.obj";
+
+		//terrain = new Mesh(MeshLoader.getInstance().loadModel(terrainPath, true));
+		//terrain.setAngleX(90);
+
+		loadingInfo = "Terrain Loaded";
 		System.out.println(loadingInfo);
 	}
 
@@ -75,29 +65,35 @@ public class DEMView extends GridApplication {
 
 		// Size in meters
 		drone = new PhantomDJI(1, 8, 0);
+		drone.getModel().setColor(Color.RED);
 
-		droneCamera = drone.getCamera();
+		//droneCamera = drone.getCamera();
 
 		cameraGL = new CameraGL(0, 20, -10);
-		
+
 		mainView = new AimPoint(0,-3220,40);
 		mainView.setAngleX(120);
 		mainView.setAngleY(90);
 
 		cameraGL.setTarget(drone);
 
-		// Load Road Texture
-		//road = TextureLoader.getInstance().loadTexture("road.jpg");
-
 		// Global settings
 		gl.glEnable(GL.GL_DEPTH_TEST);
-
 		gl.glDepthFunc(GL.GL_LEQUAL);
-
 		gl.glShadeModel(GL2.GL_SMOOTH);
 
-		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
+		light = new LightSource3D();
+		light.setCoordinates(50.0f, 200.0f, 100.0f);
+		light.setColor(SVGColor.BLUE);
 		
+		light.configureLight(gl, GL2.GL_LIGHT0);
+		
+		//gl.glEnable(GL2.GL_LIGHTING);
+		//gl.glEnable(GL2.GL_LIGHT0);
+		
+		gl.glEnable(GL2.GL_POLYGON_SMOOTH);
+		gl.glEnable(GL2.GL_MULTISAMPLE);
+		gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL.GL_NICEST);
 	}
 
 	@Override
@@ -115,7 +111,6 @@ public class DEMView extends GridApplication {
 		float aspect = (float) width / (float) height;
 
 		glu.gluPerspective(60 * zoom, aspect, 1, 100000);
-
 	}
 
 	@Override
@@ -131,167 +126,151 @@ public class DEMView extends GridApplication {
 		// Update Camera View
 		//drawable.updateCamera(cameraGL);
 		// drawable.aimCamera(followCamera);
-		
+
 		drawable.aimCamera(mainView);
+		
+		//Draw Light as a Sphere
+		drawable.drawSphere(light, 40);
 
 		drawScene(gl);
-		
-		drawable.setColor(Color.BLACK);
-		//gl.glPolygonMode( GL2.GL_FRONT_AND_BACK, GL2.GL_POLYGON );
-		gl.glPolygonMode( GL2.GL_FRONT_AND_BACK, GL2.GL_LINE );
-		
-		Point3D reference = terrain.get(0);
-				
-		gl.glBegin(GL2.GL_TRIANGLES);
-				
-		for(Triangle tri: triangles) {
-			drawPoint(gl, reference, tri.getA());
-			drawPoint(gl, reference, tri.getB());
-			drawPoint(gl, reference, tri.getC());
-		}
-		
-		gl.glEnd();
-		
-	}
 
-	private void drawPoint(GL2 gl, Point3D reference, Point3D point) {
-		//DEM is Z up
-		gl.glVertex3d(point.getX()-reference.getX(), point.getZ()-reference.getZ(), point.getY()-reference.getY());
+		//terrain.draw(gl);
 	}
 
 	protected void drawScene(GL2 gl) {
 
 		// Draw Scene
+		drone.getModel().setScale(200);
 		drone.getModel().draw(gl);
 
-		gl.glFlush();
+		//gl.glFlush();
 	}
-	
+
 	@Override
 	public void draw(Graphic g) {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private boolean moveUp = false;
 	private boolean moveDown = false;
 	private boolean moveLeft = false;
 	private boolean moveRight = false;
-	
+
 	private boolean moveForward = false;
-	
+
 	private boolean turnLeft = false;
 	private boolean turnRight = false;
 	private boolean turnUp = false;
 	private boolean turnDown = false;
-	
+
 	private boolean shiftPressed = false;
-	
+
 	public void update(long now) {
-		
+
 		if(moveForward) {
 			mainView.moveXZ(offset);
 		}
-		
+
 		if(moveUp) {
-			mainView.setOffsetY(-offset);
+			mainView.offsetY(-offset);
 		}
-		
+
 		if(moveDown) {
-			mainView.setOffsetY(+offset);
+			mainView.offsetY(+offset);
 		}
-		
+
 		if(moveLeft) {
-			mainView.setOffsetZ(+offset);
+			mainView.offsetZ(+offset);
 		}
-		
+
 		if(moveRight) {
-			mainView.setOffsetZ(-offset);
+			mainView.offsetZ(-offset);
 		}
-		
+
 		if(turnRight) {
-			mainView.setOffsetAngleY(+offsetTurn);
+			mainView.offsetAngleY(+offsetTurn);
 		}
-		
+
 		if(turnLeft) {
-			mainView.setOffsetAngleY(-offsetTurn);	
+			mainView.offsetAngleY(-offsetTurn);	
 		}
-		
+
 		if(turnUp) {
-			mainView.setOffsetAngleX(+offsetTurn);
+			mainView.offsetAngleX(+offsetTurn);
 		}
-		
+
 		if(turnDown) {
-			mainView.setOffsetAngleX(-offsetTurn);	
+			mainView.offsetAngleX(-offsetTurn);	
 		}
-		
+
 	}
-	
+
 	private int offset = 20;
 	private int offsetTurn = 1;
-	
+
 	public GUIEvent updateKeyboard(KeyEvent event) {
-		
+
 		if(event.isAnyKeyDown(KeyEvent.TSK_SHIFT_RIGHT, KeyEvent.TSK_SHIFT_LEFT)) {
 			shiftPressed = true;
 		} else if(event.isAnyKeyUp(KeyEvent.TSK_SHIFT_RIGHT, KeyEvent.TSK_SHIFT_LEFT)) {
 			shiftPressed = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 			//if(shiftPressed) {
-				moveUp = true;
+			moveUp = true;
 			//} else {
-				//moveForward = true;
+			//moveForward = true;
 			//}
-			
+
 		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
 			moveUp = false;
 			moveForward = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_UP_ARROW)) {
 			moveUp = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_UP_ARROW)) {
 			moveUp = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_DOWN_ARROW)) {
 			moveDown = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_DOWN_ARROW)) {
 			moveDown = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_LEFT_ARROW)) {
 			turnLeft = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_LEFT_ARROW)) {
 			turnLeft = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_RIGHT_ARROW)) {
 			turnRight = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_RIGHT_ARROW)) {
 			turnRight = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_D)) {
 			moveRight = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_D)) {
 			moveRight = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_A)) {
 			moveLeft = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_A)) {
 			moveLeft = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_S)) {
 			turnDown = true;
 		} else if(event.isKeyUp(KeyEvent.TSK_S)) {
 			turnDown = false;
 		}
-		
+
 		if(event.isKeyDown(KeyEvent.TSK_W)) {
 			turnUp = true;
 			//moveForward = true;
@@ -299,7 +278,7 @@ public class DEMView extends GridApplication {
 			turnUp = false;
 			//moveForward = false;
 		}
-		
+
 		return null;
 	}
 

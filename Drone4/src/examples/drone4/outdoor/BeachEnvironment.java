@@ -94,11 +94,11 @@ public class BeachEnvironment extends GridApplication implements UpdateIntervalL
 		
 		// Load Club Mesh
 		terrain = new Mesh(MeshLoader.getInstance().loadModel(PathHelper.desktopDirectory()+"drone4/prainha/prainha_simplified_3d_mesh.obj", true));
-		//terrain.setOffsetAngleY(-90);
+		//terrain.offsetAngleY(-90);
 		//terrain.setScale(5);
 		
 		terrain.setAngleX(-90);
-		terrain.setOffsetY(70);
+		terrain.offsetY(70);
 		
 		updateAtFixedRate(300, this);
 	}
@@ -145,40 +145,40 @@ public class BeachEnvironment extends GridApplication implements UpdateIntervalL
 		
 		if (event.isKeyDown(KeyEvent.TSK_I)) {
 
-			// droneCamera.getTarget().setOffsetX(+1);
-			droneCamera.setOffsetX(+1);
+			// droneCamera.getTarget().offsetX(+1);
+			droneCamera.offsetX(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_K)) {
 
-			// droneCamera.getTarget().setOffsetX(-1);
-			droneCamera.setOffsetX(-1);
+			// droneCamera.getTarget().offsetX(-1);
+			droneCamera.offsetX(-1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_L)) {
 
-			// droneCamera.getTarget().setOffsetZ(+1);
-			droneCamera.setOffsetZ(+1);
+			// droneCamera.getTarget().offsetZ(+1);
+			droneCamera.offsetZ(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_J)) {
 
-			// droneCamera.getTarget().setOffsetZ(-1);
-			droneCamera.setOffsetZ(-1);
+			// droneCamera.getTarget().offsetZ(-1);
+			droneCamera.offsetZ(-1);
 		}
 		
 		if (event.isKeyDown(KeyEvent.TSK_Z)) {
-			drone.setOffsetX(-10);
+			drone.offsetX(-10);
 			
-			//terrain.setOffsetX(-20);
+			//terrain.offsetX(-20);
 		}
 		if (event.isKeyDown(KeyEvent.TSK_X)) {
-			drone.setOffsetX(10);
+			drone.offsetX(10);
 			
-			//terrain.setOffsetX(-20);
+			//terrain.offsetX(-20);
 		}
 		if (event.isKeyDown(KeyEvent.TSK_C)) {
-			//terrain.setOffsetX(+20);
+			//terrain.offsetX(+20);
 		}
 
 		return GUIEvent.NONE;

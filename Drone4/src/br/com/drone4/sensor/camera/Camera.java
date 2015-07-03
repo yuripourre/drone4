@@ -8,8 +8,8 @@ public interface Camera extends Sensor {
 
   public BufferedImage getBufferedImage();
 
-  public void setOffsetAngleX(double offsetAngleX);
-  public void setOffsetAngleY(double offsetAngleY);
-  public void setOffsetAngleZ(double offsetAngleZ);
+  public void offsetAngleX(double offsetAngleX);
+  public void offsetAngleY(double offsetAngleY);
+  public void offsetAngleZ(double offsetAngleZ);
 
 }

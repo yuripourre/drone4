@@ -197,19 +197,19 @@ public class AutonomousEnvironmentWithWind extends GridApplication implements Up
 		controller.updateKeyboard(event);
 
 		if (event.isKeyDown(KeyEvent.TSK_I)) {
-			droneCamera.setOffsetX(+1);
+			droneCamera.offsetX(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_K)) {
-			droneCamera.setOffsetX(-1);
+			droneCamera.offsetX(-1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_L)) {
-			droneCamera.setOffsetZ(+1);
+			droneCamera.offsetZ(+1);
 		}
 
 		if (event.isKeyDown(KeyEvent.TSK_J)) {
-			droneCamera.setOffsetZ(-1);
+			droneCamera.offsetZ(-1);
 		}
 
 		return GUIEvent.NONE;
